@@ -2,6 +2,7 @@
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:mockito/annotations.dart';
 // import 'package:mockito/mockito.dart';
+// import 'package:new_nuntium/core/errors/exceptions.dart';
 // import 'package:new_nuntium/core/models/article.dart';
 // import 'package:new_nuntium/core/network/api_client.dart';
 // import 'package:new_nuntium/core/network/api_constants.dart';
@@ -13,7 +14,7 @@
 // Future<void> main() async {
 //   test('Remote data source outputs List of Articles', () async {
 //     final mockApiClient = MockApiClient();
-//     final newsDataSource = NewsRemoteDataSource(mockApiClient);
+//     final newsDataSource =  (mockApiClient);
 
 //     when(
 //       mockApiClient.get(
@@ -39,26 +40,30 @@
 //     expect(result.length, 1);
 //   });
 
-//   test('UnknowmException', () async {
-//     final apiClient = MockApiClient();
-//     final newsSource = NewsRemoteDataSource(apiClient);
+//   test('Exception', () async {
+//     final mockApiClient = MockApiClient();
+//     final newsSource = NewsRemoteDataSource(mockApiClient);
+
+//     final dioError = DioException(
+//       requestOptions: RequestOptions(path: ApiConstants.topHeadlines),
+//       response: Response(
+//         requestOptions: RequestOptions(path: ApiConstants.topHeadlines),
+//         statusCode: 404,
+//         data: {'message': 'Custom Server Error Message'},
+//       ),
+//       type: DioExceptionType.badResponse,
+//     );
 
 //     when(
-//       apiClient.get(
+//       mockApiClient.get(
 //         ApiConstants.topHeadlines,
 //         queryParams: anyNamed('queryParams'),
 //       ),
-//     ).thenAnswer(
-//       (_) async => Response(
-//         requestOptions: RequestOptions(path: ApiConstants.topHeadlines),
-//         data: {},
-//         statusCode: 500,
-//       ),
-//     );
+//     ).thenThrow(dioError);
 
 //     expect(
-//       newsSource.fetchTopHeadlines(category: 'general'),
-//       throwsA(isA<Exception>()),
+//       newsSource.fetchTopHeadlines(category: 'non existent category'),
+//       throwsA(isA<ServerException>()),
 //     );
 //   });
 // }

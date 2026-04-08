@@ -16,7 +16,7 @@ import 'core/utils/app_logger.dart';
 Future<void> main() async {
   await initApp();
 
-  // Limit app usage to Portrait mode 
+  // Limit app usage to Portrait mode
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -32,20 +32,6 @@ Future<void> main() async {
     crashlytics.recordError(error, stack, fatal: true);
     return true;
   };
-
-  // ضبط إعدادات النظام لتشمل المساحة العلوية والسفلية
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // شفافية الأعلى
-      systemNavigationBarColor: Colors.transparent, // شفافية الأسفل
-      systemNavigationBarIconBrightness:
-          Brightness.dark, // أيقونات الأسفل (سوداء)
-      statusBarIconBrightness: Brightness.dark, // أيقونات الأعلى (سوداء)
-    ),
-  );
-
-  // تفعيل وضع الحافة إلى الحافة (Edge-to-Edge)
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   await ScreenUtil.ensureScreenSize();
 
@@ -80,6 +66,21 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: RouteGenerator.getRoute,
         initialRoute: Routes.splashView,
         builder: (context, child) {
+          // ضبط إعدادات النظام لتشمل المساحة العلوية والسفلية
+          SystemChrome.setSystemUIOverlayStyle(
+            const SystemUiOverlayStyle(
+              systemNavigationBarDividerColor: Colors.transparent,
+              statusBarColor: Colors.transparent, // شفافية الأعلى
+              systemNavigationBarColor: Colors.transparent, // شفافية الأسفل
+              systemNavigationBarIconBrightness:
+                  Brightness.dark, // أيقونات الأسفل (سوداء)
+              statusBarIconBrightness:
+                  Brightness.dark, // أيقونات الأعلى (سوداء)
+            ),
+          );
+
+          // تفعيل وضع الحافة إلى الحافة (Edge-to-Edge)
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
           return Directionality(
             textDirection: LanguageService.getTextDirection(context),
             child: child!,

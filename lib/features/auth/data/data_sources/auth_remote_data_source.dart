@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -78,6 +80,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return userCredential.user!;
     } on GoogleSignInException catch (e) {
+      log(e.description.toString());
+      log(e.details.toString());
+
+      log(e.code.name.toString());
+
       throw AuthException(
         message: e.description ?? "Failed to login with google",
         code: e.code.name,
@@ -139,7 +146,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (e.code == 'wrong-password') {
         throw AuthException(message: "Current password is wrong", code: e.code);
       }
-      
+
       throw AuthException(
         message: e.message ?? "Failed to update password",
         code: e.code,

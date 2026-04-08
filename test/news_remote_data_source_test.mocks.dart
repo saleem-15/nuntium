@@ -64,12 +64,20 @@
 //       ) as _i4.Future<List<_i5.Article>>);
 
 //   @override
-//   _i4.Future<List<_i5.Article>> searchNews({required String? query}) =>
+//   _i4.Future<List<_i5.Article>> searchNews({
+//     required String? query,
+//     int? page = 1,
+//     int? pageSize = 20,
+//   }) =>
 //       (super.noSuchMethod(
 //         Invocation.method(
 //           #searchNews,
 //           [],
-//           {#query: query},
+//           {
+//             #query: query,
+//             #page: page,
+//             #pageSize: pageSize,
+//           },
 //         ),
 //         returnValue: _i4.Future<List<_i5.Article>>.value(<_i5.Article>[]),
 //       ) as _i4.Future<List<_i5.Article>>);
