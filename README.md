@@ -59,6 +59,14 @@ lib/
  ┃ ┗ language/         # i18n runtime switching
  ```
 
+## ⚙️ Automated CI/CD (GitHub Actions)
+
+This project features a robust, automated continuous integration pipeline using GitHub Actions.
+
+- **APK Generation**: Automatically builds a performant, 64-bit (arm64-v8a) `app-release.apk` whenever the `pubspec.yaml` version changes.
+- **GitHub Releases**: Automatically extracts the version tag from `pubspec.yaml` and drafts a new GitHub Release with the compiled APK attached.
+- **Secure Injection**: Safely manages and injects environment variables and Firebase configurations (`google-services.json`) via GitHub Secrets.
+
 ## 🚀 Getting Started
 
 1. **Clone the repository:**
