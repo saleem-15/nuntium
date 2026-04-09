@@ -7,6 +7,8 @@ on:
       - main
       - dev
       - test
+    paths:
+      - 'pubspec.yaml'
 
 permissions:
   contents: write
