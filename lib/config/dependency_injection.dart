@@ -248,7 +248,8 @@ void initHome() {
   );
 
   getIt.safeRegisterLazySingleton<FetchNewsUseCase>(
-    () => FetchNewsUseCase(getIt<NewsRepository>()),
+    () =>
+        FetchNewsUseCase(getIt<NewsRepository>(), getIt<BookmarkRepository>()),
   );
 
   getIt.safeRegisterLazySingleton<ToggleBookmarkUseCase>(
