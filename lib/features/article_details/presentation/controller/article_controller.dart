@@ -29,7 +29,7 @@ class ArticleController extends GetxController {
       final eventArticleId = event.article.id;
 
       if (article.id == eventArticleId) {
-        article.isSaved = isSaved;
+        article = article.copyWith(isSaved: isSaved);
         update([eventArticleId]);
       }
     });
@@ -37,7 +37,7 @@ class ArticleController extends GetxController {
 
   Future<void> onBookmarkPressed() async {
     final newState = await _toggleBookmarkUseCase.call(article: article);
-    article.isSaved = newState;
+    article = article.copyWith(isSaved: newState);
   }
 
   void onSharePressed() {

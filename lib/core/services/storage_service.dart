@@ -21,7 +21,7 @@ class StorageService {
   }
 
   Future<void> saveBookmark(Article bookmark) async {
-    await _bookmarkBox.put(bookmark.id, bookmark..isSaved = true);
+    await _bookmarkBox.put(bookmark.id, bookmark.copyWith(isSaved: true));
   }
 
   List<Article> getAllBookmarks() {

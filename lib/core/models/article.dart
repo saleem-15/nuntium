@@ -20,7 +20,7 @@ class Article extends HiveObject {
   final String imageUrl;
 
   @HiveField(5)
-  bool isSaved;
+  final bool isSaved;
 
   @HiveField(6)
   final String content;
@@ -49,6 +49,28 @@ class Article extends HiveObject {
       'content': content,
       'url': url,
     };
+  }
+
+  Article copyWith({
+    String? id,
+    String? title,
+    String? category,
+    String? sourceName,
+    String? imageUrl,
+    bool? isSaved,
+    String? content,
+    String? url,
+  }) {
+    return Article(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      category: category ?? this.category,
+      sourceName: sourceName ?? this.sourceName,
+      imageUrl: imageUrl ?? this.imageUrl,
+      isSaved: isSaved ?? this.isSaved,
+      content: content ?? this.content,
+      url: url ?? this.url,
+    );
   }
 
   // تحديث factory Article.fromMap

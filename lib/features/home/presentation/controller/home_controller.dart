@@ -131,7 +131,7 @@ class HomeController extends GetxController {
 
       pagingController.mapItems((article) {
         if (article.id == eventArticleId) {
-          article.isSaved = isSaved;
+          article = article.copyWith(isSaved: isSaved);
           update([eventArticleId]);
         }
         return article;
@@ -177,8 +177,9 @@ class HomeController extends GetxController {
       },
       (newArticles) {
         return newArticles.map((article) {
-          article.isSaved = _checkIfArticleSavedUseCase(article.id);
-          return article;
+          return article.copyWith(
+            isSaved: _checkIfArticleSavedUseCase(article.id),
+          );
         }).toList();
       },
     );
@@ -202,7 +203,7 @@ class HomeController extends GetxController {
 
     // Modifying its 'isSaved' property directly updates the instance stored in the
     // pagingController's internal list, ensuring data consistency without redundant loops.
-    pressedArticle.isSaved = isSavedNow;
+    pressedArticle = pressedArticle.copyWith(isSaved: isSavedNow);
 
     update([(pressedArticle.id)]);
   }
