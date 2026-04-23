@@ -1,4 +1,4 @@
-# Miscellaneous
+engineering_insights.md# Miscellaneous
 *.class
 *.log
 *.pyc
@@ -48,3 +48,6 @@ app.*.map.json
 # Security
 .env
 /android/app/google-services.json
+
+
+engineering_insights.md

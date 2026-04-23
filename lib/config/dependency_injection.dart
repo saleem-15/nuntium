@@ -257,7 +257,8 @@ void initHome() {
   );
 
   getIt.safeRegisterLazySingleton<SearchNewsUseCase>(
-    () => SearchNewsUseCase(getIt<NewsRepository>()),
+    () =>
+        SearchNewsUseCase(getIt<NewsRepository>(), getIt<BookmarkRepository>()),
   );
 
   Get.put(HomeController());
