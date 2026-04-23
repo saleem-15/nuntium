@@ -66,6 +66,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../features/auth/domain/use_cases/change_password_use_case.dart';
 import '../features/categories/data/repository/categories_repository_impl.dart';
 import '../features/home/domain/use_cases/search_news_use_case.dart';
+import '../features/home/presentation/bloc/home_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -261,7 +262,16 @@ void initHome() {
         SearchNewsUseCase(getIt<NewsRepository>(), getIt<BookmarkRepository>()),
   );
 
-  Get.put(HomeController());
+
+  getIt.registerFactory(
+    () => HomeBloc(
+      fetchNewsUseCase: getIt<FetchNewsUseCase>(),
+      searchNewsUseCase: getIt<SearchNewsUseCase>(),
+      toggleBookmarkUseCase: getIt<ToggleBookmarkUseCase>(),
+      getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
+      watchBookmarksChangesUseCase: getIt<WatchBookmarksChangesUseCase>(),
+    ),
+  );
 }
 
 void disposeHomePage() {

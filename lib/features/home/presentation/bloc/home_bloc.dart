@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_nuntium/core/models/article.dart';
 import 'package:new_nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/check_if_saved_use_case.dart'
-    show CheckIfSavedUseCase;
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart'
-    show WatchBookmarksChangesUseCase;
+import 'package:new_nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 
 import '../../../categories/domain/use_case/get_cateogories_use_case.dart';
 import '../../domain/use_cases/fetch_news_use_case.dart';
@@ -32,7 +29,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required SearchNewsUseCase searchNewsUseCase,
     required ToggleBookmarkUseCase toggleBookmarkUseCase,
     required GetCategoriesUseCase getCategoriesUseCase,
-    required CheckIfSavedUseCase checkIfSavedUseCase,
     required WatchBookmarksChangesUseCase watchBookmarksChangesUseCase,
   }) : _fetchNewsUseCase = fetchNewsUseCase,
        _searchNewsUseCase = searchNewsUseCase,
@@ -96,8 +92,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     final categories = categoriesResult.fold((_) => null, (c) => c)!;
 
-    // Correctly update state with initial category before fetching
-    emit(state.copyWith(selectedCategory: categories.first));
+    // Correctly update state with ALL categories and set the initial selected category
+    emit(state.copyWith(
+      categories: categories,
+      selectedCategory: categories.first,
+    ));
 
     await _fetchPage(emit, page: 1, replace: true);
   }

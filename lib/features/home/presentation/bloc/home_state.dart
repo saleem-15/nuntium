@@ -7,6 +7,7 @@ enum HomeStatus { initial, loading, loaded, loadingNextPage, error }
 class HomeState extends Equatable {
   final HomeStatus status;
   final List<Article> articles;
+  final List<CategoryEntity> categories;
   final bool hasNextPage;
   final String? errorMessage;
   final CategoryEntity? selectedCategory;
@@ -16,6 +17,7 @@ class HomeState extends Equatable {
   const HomeState({
     this.status = HomeStatus.initial,
     this.articles = const [],
+    this.categories = const [],
     this.hasNextPage = true,
     this.errorMessage,
     this.selectedCategory,
@@ -26,6 +28,7 @@ class HomeState extends Equatable {
   HomeState copyWith({
     HomeStatus? status,
     List<Article>? articles,
+    List<CategoryEntity>? categories,
     bool? hasNextPage,
     String? errorMessage,
     CategoryEntity? selectedCategory,
@@ -35,6 +38,7 @@ class HomeState extends Equatable {
     return HomeState(
       status: status ?? this.status,
       articles: articles ?? this.articles,
+      categories: categories ?? this.categories,
       hasNextPage: hasNextPage ?? this.hasNextPage,
       errorMessage: errorMessage ?? this.errorMessage,
       selectedCategory: selectedCategory ?? this.selectedCategory,
@@ -47,6 +51,7 @@ class HomeState extends Equatable {
   List<Object?> get props => [
         status,
         articles,
+        categories,
         hasNextPage,
         errorMessage,
         selectedCategory,
