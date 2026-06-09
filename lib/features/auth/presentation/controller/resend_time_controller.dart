@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/constants/constanst.dart';
+import 'package:nuntium/core/constants/constanst.dart';
 
 class ResendTimerController extends GetxController {
   RxInt remainingSeconds = Constants.resendEmailTimeInSeconds.obs;

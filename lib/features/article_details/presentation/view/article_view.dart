@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
-import 'package:new_nuntium/features/article_details/presentation/controller/article_controller.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/features/article_details/presentation/controller/article_controller.dart';
 
 class ArticleView extends GetView<ArticleController> {
   const ArticleView({super.key});

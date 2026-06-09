@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/config/routes.dart';
-import 'package:new_nuntium/core/services/shared_prefrences.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/services/shared_prefrences.dart';
 
 class SplashController extends GetxController {
   final _appSharedPref = getIt<AppSharedPrefs>();

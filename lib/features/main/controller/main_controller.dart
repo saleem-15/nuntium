@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/features/bookmarks/presentation/controller/bookmarks_controller.dart';
-import 'package:new_nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
-import 'package:new_nuntium/features/categories/presentation/controller/categories_controller.dart';
-import 'package:new_nuntium/features/categories/presentation/views/categories_view.dart';
-import 'package:new_nuntium/features/home/presentation/view/home_page.dart';
+import 'package:nuntium/features/bookmarks/presentation/controller/bookmarks_controller.dart';
+import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
+import 'package:nuntium/features/categories/presentation/controller/categories_controller.dart';
+import 'package:nuntium/features/categories/presentation/views/categories_view.dart';
+import 'package:nuntium/features/home/presentation/view/home_page.dart';
 
 class MainController extends GetxController {
   var currentPageIndex = 0.obs;

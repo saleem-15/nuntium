@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/core/constants/get_builders_ids.dart';
-import 'package:new_nuntium/core/widgets/error_snack_bar.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/core/constants/get_builders_ids.dart';
+import 'package:nuntium/core/widgets/error_snack_bar.dart';
 
 import '../../domain/use_cases/change_password_use_case.dart';
 

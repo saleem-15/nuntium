@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/core/constants/constanst.dart';
-import 'package:new_nuntium/core/services/shared_prefrences.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/core/constants/constanst.dart';
+import 'package:nuntium/core/services/shared_prefrences.dart';
 
 class LanguageService {
   LanguageService() {

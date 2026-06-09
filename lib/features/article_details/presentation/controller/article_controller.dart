@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/config/routes.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
-import 'package:new_nuntium/features/home/domain/use_cases/toggle_bookmark_use_case.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
+import 'package:nuntium/features/home/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ArticleController extends GetxController {

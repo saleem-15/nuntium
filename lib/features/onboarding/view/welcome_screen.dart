@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/state_manager.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
-import 'package:new_nuntium/features/onboarding/controller/welcome_controller.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/features/onboarding/controller/welcome_controller.dart';
 
 class WelcomeView extends GetView<WelcomeController> {
   const WelcomeView({super.key});

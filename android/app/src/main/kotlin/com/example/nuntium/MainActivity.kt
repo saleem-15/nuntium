@@ -1,4 +1,4 @@
-package com.example.new_nuntium
+package com.example.nuntium
 
 import io.flutter.embedding.android.FlutterActivity
 

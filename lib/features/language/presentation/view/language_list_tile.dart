@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
-import 'package:new_nuntium/features/language/model/language.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/features/language/model/language.dart';
 
 class LanguageListTile extends StatelessWidget {
   const LanguageListTile({

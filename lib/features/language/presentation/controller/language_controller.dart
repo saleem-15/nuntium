@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/services/language_service.dart';
-import 'package:new_nuntium/features/language/model/language.dart';
+import 'package:nuntium/core/services/language_service.dart';
+import 'package:nuntium/features/language/model/language.dart';
 
 class LanguageController extends GetxController {
   LanguageService localeSettings = Get.find<LanguageService>();

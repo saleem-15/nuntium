@@ -1,5 +1,5 @@
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 
 class GetSavedArticlesUseCase {
   final BookmarkRepository _bookmarkRepository;

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/errors/failures.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
 
 import '../../domain/entities/category_entity.dart';
 import '../../domain/repository/cateogries_repository.dart';

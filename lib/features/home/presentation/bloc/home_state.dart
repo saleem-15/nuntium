@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/features/categories/domain/entities/category_entity.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/features/categories/domain/entities/category_entity.dart';
 
 enum HomeStatus { initial, loading, loaded, loadingNextPage, error }
 

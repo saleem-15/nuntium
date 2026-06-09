@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/delete_bookmark_use_case.dart';
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/get_saved_articles_use_case.dart';
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
-import 'package:new_nuntium/config/routes.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/delete_bookmark_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/get_saved_articles_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
+import 'package:nuntium/config/routes.dart';
 
 class BookmarksController extends GetxController {
   // --- Dependencies ---

@@ -29,8 +29,8 @@ class AppLogger {
         'dart:async',
         'dart:isolate',
         // 'dart:',
-        'package:new_nuntium/core/extensions/get_it_extension.dart',
-        'package:new_nuntium/core/utils/app_logger.dart',
+        'package:nuntium/core/extensions/get_it_extension.dart',
+        'package:nuntium/core/utils/app_logger.dart',
       ],
     ),
   );

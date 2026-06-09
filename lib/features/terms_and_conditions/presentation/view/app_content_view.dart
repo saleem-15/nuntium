@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/widgets/nuntium_app_bar.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/widgets/nuntium_app_bar.dart';
 
 /// Used in (Terms & Conditions) View and (Privacy Policy) View 
 class AppContentView extends StatelessWidget {

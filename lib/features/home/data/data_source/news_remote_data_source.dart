@@ -1,7 +1,7 @@
-import 'package:new_nuntium/core/errors/exception_handler.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/core/network/api_client.dart';
-import 'package:new_nuntium/core/network/api_constants.dart';
+import 'package:nuntium/core/errors/exception_handler.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/network/api_client.dart';
+import 'package:nuntium/core/network/api_constants.dart';
 
 /// Contract for the remote data source
 abstract class BaseNewsRemoteDataSource {

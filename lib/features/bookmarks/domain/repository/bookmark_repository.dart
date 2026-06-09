@@ -1,4 +1,4 @@
-import 'package:new_nuntium/core/models/article.dart';
+import 'package:nuntium/core/models/article.dart';
 
 import '../entity/bookmark_event.dart';
 

@@ -1,6 +1,6 @@
-import 'package:new_nuntium/core/errors/exceptions.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
-import 'package:new_nuntium/core/utils/app_logger.dart';
+import 'package:nuntium/core/errors/exceptions.dart';
+import 'package:nuntium/core/errors/failures.dart';
+import 'package:nuntium/core/utils/app_logger.dart';
 
 class ErrorHandler {
   ErrorHandler._();

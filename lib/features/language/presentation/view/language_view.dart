@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/widgets/app_back_button.dart';
-import 'package:new_nuntium/features/language/presentation/controller/language_controller.dart';
-import 'package:new_nuntium/features/language/presentation/view/language_list_tile.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/widgets/app_back_button.dart';
+import 'package:nuntium/features/language/presentation/controller/language_controller.dart';
+import 'package:nuntium/features/language/presentation/view/language_list_tile.dart';
 
 class LanguageView extends GetView<LanguageController> {
   const LanguageView({super.key});

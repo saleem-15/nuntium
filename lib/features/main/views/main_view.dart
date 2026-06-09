@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
-import 'package:new_nuntium/features/categories/presentation/views/categories_view.dart';
-import 'package:new_nuntium/features/home/presentation/view/home_page.dart';
-import 'package:new_nuntium/features/main/controller/main_controller.dart';
-import 'package:new_nuntium/features/profile/presentation/view/profile_view.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
+import 'package:nuntium/features/categories/presentation/views/categories_view.dart';
+import 'package:nuntium/features/home/presentation/view/home_page.dart';
+import 'package:nuntium/features/main/controller/main_controller.dart';
+import 'package:nuntium/features/profile/presentation/view/profile_view.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class MainView extends GetView<MainController> {

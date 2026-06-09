@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
-import 'package:new_nuntium/core/theme/app_text_styles.dart';
-import 'package:new_nuntium/features/home/presentation/controller/home_controller.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/core/theme/app_text_styles.dart';
+import 'package:nuntium/features/home/presentation/controller/home_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ArticleCard extends StatelessWidget {

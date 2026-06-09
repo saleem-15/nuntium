@@ -1,4 +1,4 @@
-import 'package:new_nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
+import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 
 class CheckIfSavedUseCase {
   CheckIfSavedUseCase(this._bookmarkRepository);

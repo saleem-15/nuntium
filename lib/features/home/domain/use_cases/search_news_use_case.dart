@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
-import 'package:new_nuntium/features/home/domain/repository/news_repository.dart';
+import 'package:nuntium/core/errors/failures.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
+import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 
 class SearchNewsUseCase {
   final NewsRepository _newsRepository;

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
-import 'package:new_nuntium/features/auth/domain/repositories/auth_repository.dart';
+import 'package:nuntium/core/errors/failures.dart';
+import 'package:nuntium/features/auth/domain/repositories/auth_repository.dart';
 
 class ChangePasswordUseCase {
   final AuthRepository _repository;

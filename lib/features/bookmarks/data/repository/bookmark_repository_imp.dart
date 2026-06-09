@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/core/services/storage_service.dart';
-import 'package:new_nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
-import 'package:new_nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/services/storage_service.dart';
+import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
+import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 
 class BookmarkRepositoryImpl implements BookmarkRepository {
   BookmarkRepositoryImpl(this._storageService);

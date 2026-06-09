@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/features/home/presentation/controller/home_controller.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/features/home/presentation/controller/home_controller.dart';
 
 class HomeSearchBar extends GetView<HomeController> {
   final Function(String)? onChanged;

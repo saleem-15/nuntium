@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
+import 'package:nuntium/core/errors/failures.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repository/profile_repository.dart';

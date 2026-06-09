@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/state_manager.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/widgets/header.dart';
-import 'package:new_nuntium/features/home/presentation/controller/home_controller.dart';
-import 'package:new_nuntium/features/home/presentation/view/widgets/article_card.dart';
-import 'package:new_nuntium/features/home/presentation/view/widgets/articles_loading_error.dart';
-import 'package:new_nuntium/features/home/presentation/view/widgets/articles_loading_indicator.dart';
-import 'package:new_nuntium/features/home/presentation/view/widgets/category_selector.dart';
-import 'package:new_nuntium/features/home/presentation/view/widgets/home_search_bar.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/widgets/header.dart';
+import 'package:nuntium/features/home/presentation/controller/home_controller.dart';
+import 'package:nuntium/features/home/presentation/view/widgets/article_card.dart';
+import 'package:nuntium/features/home/presentation/view/widgets/articles_loading_error.dart';
+import 'package:nuntium/features/home/presentation/view/widgets/articles_loading_indicator.dart';
+import 'package:nuntium/features/home/presentation/view/widgets/category_selector.dart';
+import 'package:nuntium/features/home/presentation/view/widgets/home_search_bar.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});

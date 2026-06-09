@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/config/routes.dart';
-import 'package:new_nuntium/core/widgets/error_snack_bar.dart';
-import 'package:new_nuntium/features/auth/domain/use_cases/sign_in_with_google_use_case.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/widgets/error_snack_bar.dart';
+import 'package:nuntium/features/auth/domain/use_cases/sign_in_with_google_use_case.dart';
 
 import '../../domain/use_cases/login_use_case.dart';
 

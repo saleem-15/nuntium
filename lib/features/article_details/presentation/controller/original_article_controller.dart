@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/core/network/network_info.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/core/network/network_info.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class OriginalArticleController extends GetxController {

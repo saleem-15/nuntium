@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:new_nuntium/core/models/article.dart';
+import 'package:nuntium/core/models/article.dart';
 
 class StorageService {
   late Box<Article> _bookmarkBox;

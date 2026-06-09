@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/widgets/app_back_button.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/widgets/app_back_button.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../controller/original_article_controller.dart';

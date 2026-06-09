@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
-import 'package:new_nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
+import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 
 import '../../../categories/domain/use_case/get_cateogories_use_case.dart';
 import '../../domain/use_cases/fetch_news_use_case.dart';

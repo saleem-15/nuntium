@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/config/routes.dart';
-import 'package:new_nuntium/core/constants/get_builders_ids.dart';
-import 'package:new_nuntium/core/widgets/snack_bars/error_snack_bar.dart';
-import 'package:new_nuntium/features/auth/domain/use_cases/sign_out_use_case.dart';
-import 'package:new_nuntium/features/profile/domain/use_cases/get_user_data_use_case.dart';
-import 'package:new_nuntium/features/profile/presentation/view/widgets/sign_out_dialog.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/constants/get_builders_ids.dart';
+import 'package:nuntium/core/widgets/snack_bars/error_snack_bar.dart';
+import 'package:nuntium/features/auth/domain/use_cases/sign_out_use_case.dart';
+import 'package:nuntium/features/profile/domain/use_cases/get_user_data_use_case.dart';
+import 'package:nuntium/features/profile/presentation/view/widgets/sign_out_dialog.dart';
 
 import '../../domain/entities/user_entity.dart';
 

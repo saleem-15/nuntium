@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/constants/get_builders_ids.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/utils/app_validator.dart';
-import 'package:new_nuntium/core/widgets/app_back_button.dart';
-import 'package:new_nuntium/core/widgets/custom_text_field.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
-import 'package:new_nuntium/features/auth/presentation/controller/change_password_controller.dart';
+import 'package:nuntium/core/constants/get_builders_ids.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/utils/app_validator.dart';
+import 'package:nuntium/core/widgets/app_back_button.dart';
+import 'package:nuntium/core/widgets/custom_text_field.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/features/auth/presentation/controller/change_password_controller.dart';
 
 import 'widgets/password_icon.dart';
 

@@ -2,9 +2,9 @@
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 // import 'package:get/get.dart';
-// import 'package:new_nuntium/core/constants/app_assets.dart'; // تأكد من أيقوناتك
-// import 'package:new_nuntium/core/theme/app_colors.dart';
-// import 'package:new_nuntium/features/auth/presentation/controller/create_new_password_controller.dart';
+// import 'package:nuntium/core/constants/app_assets.dart'; // تأكد من أيقوناتك
+// import 'package:nuntium/core/theme/app_colors.dart';
+// import 'package:nuntium/features/auth/presentation/controller/create_new_password_controller.dart';
 
 // class CreateNewPasswordView extends GetView<CreateNewPasswordController> {
 //   const CreateNewPasswordView({super.key});

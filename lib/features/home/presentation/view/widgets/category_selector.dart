@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
 
 import '../../../../categories/domain/entities/category_entity.dart';
 import '../../bloc/home_bloc.dart';

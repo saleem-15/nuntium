@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
 
 class CategoriesController extends GetxController {
   var isLoading = false.obs;

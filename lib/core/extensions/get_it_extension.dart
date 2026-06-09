@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:new_nuntium/core/utils/app_logger.dart';
+import 'package:nuntium/core/utils/app_logger.dart';
 
 extension SafeResgister on GetIt {
   void safeRegisterLazySingleton<T extends Object>(T Function() factoryFunc) {

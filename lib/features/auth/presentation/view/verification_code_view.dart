@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/state_manager.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
-import 'package:new_nuntium/core/widgets/custom_rich_text.dart';
-import 'package:new_nuntium/core/widgets/header.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
-import 'package:new_nuntium/core/widgets/scaffold_with_header.dart';
-import 'package:new_nuntium/features/auth/presentation/controller/verification_code_controller.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/core/widgets/custom_rich_text.dart';
+import 'package:nuntium/core/widgets/header.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/core/widgets/scaffold_with_header.dart';
+import 'package:nuntium/features/auth/presentation/controller/verification_code_controller.dart';
 import 'package:pinput/pinput.dart';
 
 class VerificationCodeView extends GetView<VerificationCodeController> {
