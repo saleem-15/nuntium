@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:nuntium/core/constants/get_builders_ids.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
-import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/utils/app_validator.dart';
 import 'package:nuntium/core/widgets/app_back_button.dart';
 import 'package:nuntium/core/widgets/custom_text_field.dart';
@@ -246,66 +245,6 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  // Widget مساعد لتقليل التكرار
-  Widget _buildPasswordField({
-    required String label,
-    required TextEditingController controller,
-    required bool isObscure,
-    required VoidCallback onToggle,
-    TextInputAction? textInputAction,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: isObscure,
-      validator: validator,
-      textInputAction: textInputAction,
-      style: TextStyle(fontSize: 16.sp, color: AppColors.blackPrimary),
-      decoration: InputDecoration(
-        hintText: label, // النص التوضيحي
-        hintStyle: TextStyle(color: AppColors.greyPrimary, fontSize: 16.sp),
-        filled: true,
-        fillColor: const Color(0xFFF3F4F6), // رمادي فاتح جداً حسب تصميم Nuntium
-        contentPadding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
-
-        // الأيقونة الأمامية (القفل)
-        prefixIcon: Padding(
-          padding: EdgeInsets.all(12.w),
-          // ⚠️ تأكد أن اسم الأيقونة لديك هو iconLock (أو password)
-          child: Icon(Icons.lock_outline, color: AppColors.greyPrimary),
-        ),
-
-        // الأيقونة الخلفية (العين)
-        suffixIcon: IconButton(
-          icon: Icon(
-            isObscure
-                ? Icons.visibility_off_outlined
-                : Icons.visibility_outlined,
-            color: AppColors.greyPrimary,
-          ),
-          onPressed: onToggle,
-        ),
-
-        // الحدود (Borders)
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(
-            color: AppColors.purplePrimary,
-            width: 1,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Colors.red, width: 1),
         ),
       ),
     );
