@@ -40,7 +40,7 @@ class HomeState extends Equatable {
       articles: articles ?? this.articles,
       categories: categories ?? this.categories,
       hasNextPage: hasNextPage ?? this.hasNextPage,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: errorMessage,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       searchQuery: searchQuery ?? this.searchQuery,
       currentPage: currentPage ?? this.currentPage,
