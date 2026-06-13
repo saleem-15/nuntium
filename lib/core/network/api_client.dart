@@ -24,11 +24,12 @@ class ApiClient {
       ApiKeyInterceptor(), // Automatically adds the API Key
       if (kDebugMode) // Only log in debug mode to keep release clean
         PrettyDioLogger(
-          requestBody: true,
-          responseBody: true,
-          requestHeader: true,
+          requestHeader: false,
+          requestBody: false,
           responseHeader: false,
+          responseBody: false,
           error: true,
+          maxWidth: 70,
         ),
     ]);
   }

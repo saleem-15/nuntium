@@ -6,7 +6,6 @@ import 'package:nuntium/config/routes.dart';
 import 'package:nuntium/core/models/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
-import 'package:nuntium/core/utils/app_logger.dart';
 import 'package:nuntium/core/widgets/header.dart';
 import 'package:nuntium/features/home/presentation/bloc/home_bloc.dart';
 import 'package:nuntium/features/home/presentation/view/widgets/article_card.dart';
