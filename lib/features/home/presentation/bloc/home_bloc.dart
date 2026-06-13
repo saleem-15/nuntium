@@ -109,13 +109,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeNextPageRequested event,
     Emitter<HomeState> emit,
   ) async {
-    // if (state.status == HomeStatus.loadingNextPage || !state.hasNextPage) {
-    //   AppLogger.i(
-    //     'loadingNextPage ${state.status == HomeStatus.loadingNextPage}',
-    //   );
-    //   AppLogger.i('hasNextPage ${state.hasNextPage}');
-    //   return;
-    // }
+    // droppable() handles the "already loading" case;
+    // hasNextPage guard handles the "nothing more to load" case. They solve different problems.
+
+    if (!state.hasNextPage) return; // Don't fetch if no more pages
 
     emit(state.copyWith(status: HomeStatus.loadingNextPage));
     await _fetchPage(emit, page: state.currentPage + 1, replace: false);
@@ -130,6 +127,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       state.copyWith(
         selectedCategory: event.category,
         status: HomeStatus.loading,
+        searchQuery: null,
+        currentPage: 1,
+        hasNextPage: true,
         articles: [], // Clear old articles for better UI transition
       ),
     );
@@ -145,6 +145,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       state.copyWith(
         searchQuery: event.query,
         status: HomeStatus.loading,
+        currentPage: 1,
+        hasNextPage: true,
         articles: [],
       ),
     );
