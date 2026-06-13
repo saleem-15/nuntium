@@ -273,7 +273,8 @@ void initHome() {
 }
 
 void disposeHomePage() {
-  getIt<HomeBloc>().close();
+  // Nothing needed — BlocProvider closes the BLoC automatically
+  // when the widget is removed from the tree.
 }
 
 void initCategories() {
