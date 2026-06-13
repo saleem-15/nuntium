@@ -8,8 +8,13 @@ import 'package:nuntium/core/widgets/primary_button.dart';
 
 class PageLoadingError extends StatelessWidget {
   final VoidCallback onRefreshPressed;
+  final String errorMessage;
 
-  const PageLoadingError({super.key, required this.onRefreshPressed});
+  const PageLoadingError({
+    super.key,
+    required this.onRefreshPressed,
+    required this.errorMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class PageLoadingError extends StatelessWidget {
           Image.asset(AppAssets.error, width: 216.w),
           SizedBox(height: 20.h),
           Text(
-            AppStrings.errorLoadingNews,
+            errorMessage,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: AppFonts.bold,

@@ -7,9 +7,9 @@ class HomeStarted extends HomeEvent {}
 
 class HomeNextPageRequested extends HomeEvent {}
 
-class HomeSearchChanged extends HomeEvent {
+class HomeSearchSubmitted extends HomeEvent {
   final String query;
-  HomeSearchChanged({required this.query});
+  HomeSearchSubmitted({required this.query});
 }
 
 class HomeCategoryChanged extends HomeEvent {

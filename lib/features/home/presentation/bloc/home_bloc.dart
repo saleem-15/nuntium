@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/utils/app_logger.dart';
 import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 
@@ -22,7 +24,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   StreamSubscription? _bookmarksSubscription;
 
-  static const int _pageSize = 20;
+  static const int _pageSize = 40;
 
   HomeBloc({
     required FetchNewsUseCase fetchNewsUseCase,
@@ -37,9 +39,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
        _watchBookmarksChangesUseCase = watchBookmarksChangesUseCase,
        super(const HomeState()) {
     on<HomeStarted>(_onStarted);
-    on<HomeNextPageRequested>(_onNextPageRequested);
+    on<HomeNextPageRequested>(_onNextPageRequested, transformer: droppable());
     on<HomeCategoryChanged>(_onCategoryChanged);
-    on<HomeSearchChanged>(_onSearchChanged);
+    on<HomeSearchSubmitted>(_onSearchChanged);
     on<HomeBookmarkToggled>(_onBookmarkToggled);
     on<HomeRefreshRequested>(_onRefreshRequested);
     on<HomeBookmarkSyncRequested>(_onBookmarksSyncRequested);
@@ -93,10 +95,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final categories = categoriesResult.fold((_) => null, (c) => c)!;
 
     // Correctly update state with ALL categories and set the initial selected category
-    emit(state.copyWith(
-      categories: categories,
-      selectedCategory: categories.first,
-    ));
+    emit(
+      state.copyWith(
+        categories: categories,
+        selectedCategory: categories.first,
+      ),
+    );
 
     await _fetchPage(emit, page: 1, replace: true);
   }
@@ -105,9 +109,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeNextPageRequested event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.status == HomeStatus.loadingNextPage || !state.hasNextPage) {
-      return;
-    }
+    // if (state.status == HomeStatus.loadingNextPage || !state.hasNextPage) {
+    //   AppLogger.i(
+    //     'loadingNextPage ${state.status == HomeStatus.loadingNextPage}',
+    //   );
+    //   AppLogger.i('hasNextPage ${state.hasNextPage}');
+    //   return;
+    // }
 
     emit(state.copyWith(status: HomeStatus.loadingNextPage));
     await _fetchPage(emit, page: state.currentPage + 1, replace: false);
@@ -129,7 +137,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _onSearchChanged(
-    HomeSearchChanged event,
+    HomeSearchSubmitted event,
     Emitter<HomeState> emit,
   ) async {
     // CRITICAL: Update the state with the NEW query before calling _fetchPage
@@ -204,12 +212,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       pageSize: _pageSize,
     );
 
-    result.fold(
-      (failure) => emit(
+    result.fold((failure) {
+      emit(
         state.copyWith(status: HomeStatus.error, errorMessage: failure.message),
-      ),
-      (articles) => _emitLoaded(emit, articles, replace, page),
-    );
+      );
+
+      AppLogger.e(failure.message);
+    }, (articles) => _emitLoaded(emit, articles, replace, page));
   }
 
   void _emitLoaded(

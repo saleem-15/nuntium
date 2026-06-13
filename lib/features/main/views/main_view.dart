@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:nuntium/config/dependency_injection.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
@@ -10,6 +12,9 @@ import 'package:nuntium/features/home/presentation/view/home_page.dart';
 import 'package:nuntium/features/main/controller/main_controller.dart';
 import 'package:nuntium/features/profile/presentation/view/profile_view.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+
+import '../../home/presentation/bloc/home_bloc.dart';
+import '../../home/presentation/bloc/home_event.dart';
 
 class MainView extends GetView<MainController> {
   const MainView({super.key});
@@ -53,7 +58,10 @@ class MainView extends GetView<MainController> {
     return [
       /// Home Tab Configuration
       PersistentTabConfig(
-        screen: const HomeView(),
+        screen: BlocProvider(
+          create: (_) => getIt<HomeBloc>()..add(HomeStarted()),
+          child: const HomeView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.home,
