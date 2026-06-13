@@ -49,7 +49,6 @@ import 'package:nuntium/features/home/data/repository/news_repository_impl.dart'
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart';
 import 'package:nuntium/features/home/domain/use_cases/toggle_bookmark_use_case.dart';
-import 'package:nuntium/features/home/presentation/controller/home_controller.dart';
 import 'package:nuntium/features/language/presentation/controller/language_controller.dart';
 import 'package:nuntium/features/main/controller/main_controller.dart';
 import 'package:nuntium/features/onboarding/controller/onboarding_controller.dart';
@@ -262,8 +261,6 @@ void initHome() {
         SearchNewsUseCase(getIt<NewsRepository>(), getIt<BookmarkRepository>()),
   );
 
-  Get.put(HomeController());
-
   getIt.registerFactory(
     () => HomeBloc(
       fetchNewsUseCase: getIt<FetchNewsUseCase>(),
@@ -276,7 +273,7 @@ void initHome() {
 }
 
 void disposeHomePage() {
-  Get.delete<HomeController>();
+  getIt<HomeBloc>().close();
 }
 
 void initCategories() {
