@@ -127,11 +127,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       state.copyWith(
         selectedCategory: event.category,
         status: HomeStatus.loading,
-        searchQuery: null,
+        searchQuery: '',
         currentPage: 1,
         hasNextPage: true,
         articles: [], // Clear old articles for better UI transition
         errorMessage: null,
+        
       ),
     );
     await _fetchPage(emit, page: 1, replace: true);
@@ -177,7 +178,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeRefreshRequested event,
     Emitter<HomeState> emit,
   ) async {
-    emit(state.copyWith(status: HomeStatus.loading, errorMessage: null));
+    emit(state.copyWith(status: HomeStatus.loading, errorMessage: null,));
     await _fetchPage(emit, page: 1, replace: true);
   }
 
