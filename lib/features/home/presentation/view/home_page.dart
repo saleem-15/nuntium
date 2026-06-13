@@ -86,101 +86,102 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          return Scaffold(
-            floatingActionButton: AnimatedOpacity(
-              duration: const Duration(milliseconds: 300),
-              opacity: _showScrollUpButton ? 1.0 : 0.0,
-              child: Visibility(
-                visible: _showScrollUpButton,
-                child: FloatingActionButton(
-                  onPressed: _scrollToTop,
-                  backgroundColor: AppColors.purplePrimary,
-                  mini: true,
-                  child: const Icon(Icons.arrow_upward, color: Colors.white),
+      child: Scaffold(
+        floatingActionButton: AnimatedOpacity(
+          duration: const Duration(milliseconds: 300),
+          opacity: _showScrollUpButton ? 1.0 : 0.0,
+          child: Visibility(
+            visible: _showScrollUpButton,
+            child: FloatingActionButton(
+              onPressed: _scrollToTop,
+              backgroundColor: AppColors.purplePrimary,
+              mini: true,
+              child: const Icon(Icons.arrow_upward, color: Colors.white),
+            ),
+          ),
+        ),
+
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            // Page Header
+            SliverToBoxAdapter(
+              child: Header(
+                horizentalPadding: 20.w,
+                title: AppStrings.homePageTitle,
+                subTtitle: AppStrings.homePageSubTitle,
+              ),
+            ),
+
+            // Search
+            SliverToBoxAdapter(
+              child: HomeSearchBar(
+                searchFieldController: _searchFieldController,
+                onSearchPressed: () => context.read<HomeBloc>().add(
+                  HomeSearchSubmitted(query: _searchFieldController.text),
                 ),
               ),
             ),
 
-            body: CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                // Page Header
-                SliverToBoxAdapter(
-                  child: Header(
-                    horizentalPadding: 20.w,
-                    title: AppStrings.homePageTitle,
-                    subTtitle: AppStrings.homePageSubTitle,
-                  ),
-                ),
+            SliverPadding(padding: EdgeInsets.only(top: 24.h)),
 
-                // Search
-                SliverToBoxAdapter(
-                  child: HomeSearchBar(
-                    searchFieldController: _searchFieldController,
-                    onSearchPressed: () => context.read<HomeBloc>().add(
-                      HomeSearchSubmitted(query: _searchFieldController.text),
-                    ),
-                  ),
-                ),
+            // News Categories
+            const SliverToBoxAdapter(child: CategorySelector()),
 
-                SliverPadding(padding: EdgeInsets.only(top: 24.h)),
+            SliverPadding(padding: EdgeInsets.only(top: 24.h)),
 
-                // News Categories
-                const SliverToBoxAdapter(child: CategorySelector()),
-
-                SliverPadding(padding: EdgeInsets.only(top: 24.h)),
-
-                _buildContent(state),
-
-                // //Recent News
-                // SliverToBoxAdapter(
-                //   child: Padding(
-                //     padding: EdgeInsets.only(top: 24.h),
-                //     child: SizedBox(
-                //       height: 256.h,
-                //       child: ListView.builder(
-                //         scrollDirection: Axis.horizontal,
-                //         padding: EdgeInsets.only(left: 20.w),
-                //         itemCount: controller.recentNews.length,
-                //         itemBuilder: (_, index) {
-                //           final news = controller.recentNews[index];
-
-                //           return RecentNewsCard(
-                //             news: news,
-                //             onTap: () => controller.onNewsCardPressed(news),
-                //             onBookmarkTap: () =>
-                //                 controller.onNewsCardBookmarkPressed(news),
-                //           );
-                //         },
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
-                // SliverPadding(padding: EdgeInsets.only(top: 48.h)),
-
-                // _buildRecommendedSectionHeader(context),
-
-                // //Recommended for you
-                // SliverList(
-                //   delegate: SliverChildBuilderDelegate((_, index) {
-                //     final news = controller.recommendedNews[index];
-                //     return RecommendedNewsCard(
-                //       news: news,
-                //       margin: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 16.h),
-                //       onTap: controller.onNewsCardPressed,
-                //     );
-                //   }, childCount: controller.recommendedNews.length),
-                // ),
-
-                // إضافة مسافة في الأسفل لضمان عدم اختفاء الكروت خلف الـ BottomNavBar
-                SliverToBoxAdapter(child: SizedBox(height: 80.h)),
-              ],
+            BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (previous, current) =>
+                  previous.status != current.status ||
+                  previous.articles != current.articles,
+              builder: (context, state) => _buildContent(state),
             ),
-          );
-        },
+
+            // //Recent News
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: EdgeInsets.only(top: 24.h),
+            //     child: SizedBox(
+            //       height: 256.h,
+            //       child: ListView.builder(
+            //         scrollDirection: Axis.horizontal,
+            //         padding: EdgeInsets.only(left: 20.w),
+            //         itemCount: controller.recentNews.length,
+            //         itemBuilder: (_, index) {
+            //           final news = controller.recentNews[index];
+
+            //           return RecentNewsCard(
+            //             news: news,
+            //             onTap: () => controller.onNewsCardPressed(news),
+            //             onBookmarkTap: () =>
+            //                 controller.onNewsCardBookmarkPressed(news),
+            //           );
+            //         },
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
+            // SliverPadding(padding: EdgeInsets.only(top: 48.h)),
+
+            // _buildRecommendedSectionHeader(context),
+
+            // //Recommended for you
+            // SliverList(
+            //   delegate: SliverChildBuilderDelegate((_, index) {
+            //     final news = controller.recommendedNews[index];
+            //     return RecommendedNewsCard(
+            //       news: news,
+            //       margin: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 16.h),
+            //       onTap: controller.onNewsCardPressed,
+            //     );
+            //   }, childCount: controller.recommendedNews.length),
+            // ),
+
+            // إضافة مسافة في الأسفل لضمان عدم اختفاء الكروت خلف الـ BottomNavBar
+            SliverToBoxAdapter(child: SizedBox(height: 80.h)),
+          ],
+        ),
       ),
     );
   }
