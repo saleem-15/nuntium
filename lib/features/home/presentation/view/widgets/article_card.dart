@@ -2,13 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:nuntium/core/models/article.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/theme/app_fonts.dart';
 import 'package:nuntium/core/theme/app_text_styles.dart';
-import 'package:nuntium/features/home/presentation/controller/home_controller.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ArticleCard extends StatelessWidget {
@@ -26,11 +24,11 @@ class ArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 336.w, 
+      width: 336.w,
       alignment: Alignment.center,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       decoration: BoxDecoration(
-        color: AppColors.white, 
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(width: 1.w, color: AppColors.greyLighter),
       ),
@@ -91,18 +89,13 @@ class ArticleCard extends StatelessWidget {
                     ),
 
                     /// Bookmark Icon (Reactive)
-                    GetBuilder<HomeController>(
-                      id: article.id,
-                      builder: (_) {
-                        return IconButton(
-                          onPressed: onBookmarkPressed,
-                          icon: SvgPicture.asset(
-                            article.isSaved
-                                ? AppIcons.bookmarkFilled
-                                : AppIcons.bookmark,
-                          ),
-                        );
-                      },
+                    IconButton(
+                      onPressed: onBookmarkPressed,
+                      icon: SvgPicture.asset(
+                        article.isSaved
+                            ? AppIcons.bookmarkFilled
+                            : AppIcons.bookmark,
+                      ),
                     ),
                   ],
                 ),
