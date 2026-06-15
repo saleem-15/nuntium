@@ -34,7 +34,7 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
       final List<dynamic> articlesJson = response.data['articles'];
 
       return articlesJson
-          .map((json) => _articleFromMap(json, category: category!))
+          .map((json) => _articleFromMap(json, category: category ?? 'General'))
           .where((article) => article.title != '[Removed]')
           .toList();
     } on Exception catch (e) {
@@ -82,7 +82,7 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
       id: map['url'] ?? DateTime.now().toIso8601String(),
       title: map['title'] ?? 'No Title',
       category: category,
-      sourceName: map['source']['name'] ?? '',
+      sourceName: map['source']?['name'] ?? '',
       imageUrl: map['urlToImage'] ?? 'https://placehold.co/600x400',
       content: map['content'] ?? map['description'] ?? '',
       url: map['url'] ?? '',
