@@ -1,8 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:nuntium/core/models/article.dart';
+
+import '../models/article_hive_model.dart';
 
 class StorageService {
-  late Box<Article> _bookmarkBox;
+  late Box<ArticleHiveModel> _bookmarkBox;
   static const String _bookmarkBoxName = 'bookmarks';
 
   /// Must be called when the app starts
@@ -10,21 +11,21 @@ class StorageService {
     await Hive.initFlutter();
 
     if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(ArticleAdapter());
+      Hive.registerAdapter(ArticleHiveModelAdapter());
     }
 
     await _initBookmarkBox();
   }
 
   Future<void> _initBookmarkBox() async {
-    _bookmarkBox = await Hive.openBox<Article>(_bookmarkBoxName);
+    _bookmarkBox = await Hive.openBox<ArticleHiveModel>(_bookmarkBoxName);
   }
 
-  Future<void> saveBookmark(Article bookmark) async {
-    await _bookmarkBox.put(bookmark.id, bookmark.copyWith(isSaved: true));
+  Future<void> saveBookmark(ArticleHiveModel bookmark) async {
+    await _bookmarkBox.put(bookmark.id, bookmark);
   }
 
-  List<Article> getAllBookmarks() {
+  List<ArticleHiveModel> getAllBookmarks() {
     return _bookmarkBox.values.toList();
   }
 

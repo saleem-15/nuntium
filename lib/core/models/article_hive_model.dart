@@ -1,9 +1,11 @@
 import 'package:hive/hive.dart';
 
-part 'article.g.dart';
+import '../entities/article.dart';
+
+part 'article_hive_model.g.dart';
 
 @HiveType(typeId: 0)
-class Article extends HiveObject {
+class ArticleHiveModel extends HiveObject {
   @HiveField(0)
   final String id;
 
@@ -19,22 +21,18 @@ class Article extends HiveObject {
   @HiveField(4)
   final String imageUrl;
 
-  @HiveField(5)
-  final bool isSaved;
-
   @HiveField(6)
   final String content;
 
   @HiveField(7)
   final String url;
 
-  Article({
+  ArticleHiveModel({
     required this.id,
     required this.title,
     required this.category,
     required this.sourceName,
     required this.imageUrl,
-    this.isSaved = false,
     required this.content,
     required this.url,
   });
@@ -45,49 +43,55 @@ class Article extends HiveObject {
       'title': title,
       'category': category,
       'imageUrl': imageUrl,
-      'isSaved': isSaved,
+      'isSaved': true,
       'content': content,
       'url': url,
     };
   }
 
-  Article copyWith({
+  ArticleHiveModel copyWith({
     String? id,
     String? title,
     String? category,
     String? sourceName,
     String? imageUrl,
-    bool? isSaved,
     String? content,
     String? url,
   }) {
-    return Article(
+    return ArticleHiveModel(
       id: id ?? this.id,
       title: title ?? this.title,
       category: category ?? this.category,
       sourceName: sourceName ?? this.sourceName,
       imageUrl: imageUrl ?? this.imageUrl,
-      isSaved: isSaved ?? this.isSaved,
       content: content ?? this.content,
       url: url ?? this.url,
     );
   }
 
-  // تحديث factory Article.fromMap
-  factory Article.fromMap(
-    Map<String, dynamic> map, {
-    String category = 'General',
-  }) {
+  factory ArticleHiveModel.fromEntity(Article article) {
+    return ArticleHiveModel(
+      id: article.id,
+      title: article.title,
+      category: article.category,
+      sourceName: article.sourceName,
+      imageUrl: article.imageUrl,
+      content: article.content,
+      url: article.url,
+    );
+  }
+  Article toEntity() {
     return Article(
-      // بما أن NewsAPI لا تعطي ID، نستخدم الرابط كمفتاح فريد
-      id: map['url'] ?? DateTime.now().toIso8601String(),
-      title: map['title'] ?? 'No Title',
+      id: id,
+      title: title,
       category: category,
-      sourceName: map['source']['name'],
-      imageUrl:
-          map['urlToImage'] ?? 'https://placehold.co/600x400', // صورة افتراضية
-      content: map['content'] ?? map['description'] ?? '',
-      url: map['url'],
+      sourceName: sourceName,
+      imageUrl: imageUrl,
+      content: content,
+      url: url,
+      // If an article is stored in the bookmarks Hive box,
+      // then by definition it is saved
+      isSaved: true,
     );
   }
 }
