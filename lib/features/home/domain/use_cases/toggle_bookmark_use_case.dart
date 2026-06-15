@@ -1,4 +1,4 @@
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 
 class ToggleBookmarkUseCase {
@@ -7,15 +7,17 @@ class ToggleBookmarkUseCase {
   ToggleBookmarkUseCase(this._repository);
 
   Future<bool> call({required Article article}) async {
-    // نتحقق من الحالة الحالية (سواء من الأوبجكت الممرر أو من الداتا بيس)
-    // يفضل الاعتماد على الأوبجكت لسرعة الاستجابة، أو فحصه من الريبو إذا أردت دقة مطلقة
-    if (article.isSaved) {
+    final prevState = article.isSaved;
+
+    if (prevState) {
       await _repository.deleteBookmark(article);
     } else {
       await _repository.saveBookmark(article);
     }
+    
+    final currentState = _repository.isArticleSaved(article.id);
+    final bool isSuccessfullyToggled = currentState != prevState;
 
-    // نرجع الحالة الجديدة للتأكيد
-    return _repository.isArticleSaved(article.id);
+    return isSuccessfullyToggled;
   }
 }
