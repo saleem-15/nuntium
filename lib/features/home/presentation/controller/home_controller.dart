@@ -13,7 +13,7 @@ import 'package:nuntium/features/bookmarks/domain/use_cases/check_if_saved_use_c
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 import 'package:nuntium/features/categories/domain/use_case/get_cateogories_use_case.dart';
 import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart';
-import 'package:nuntium/features/home/domain/use_cases/toggle_bookmark_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 
 import '../../../categories/domain/entities/category_entity.dart';
 import '../../domain/use_cases/search_news_use_case.dart';

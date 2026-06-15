@@ -37,37 +37,6 @@ class ArticleHiveModel extends HiveObject {
     required this.url,
   });
 
-  // دوال التحويل (اختيارية إذا كنت ستستخدم Hive فقط، ولكنها مفيدة للـ API)
-  Map<String, dynamic> toMap() {
-    return {
-      'title': title,
-      'category': category,
-      'imageUrl': imageUrl,
-      'isSaved': true,
-      'content': content,
-      'url': url,
-    };
-  }
-
-  ArticleHiveModel copyWith({
-    String? id,
-    String? title,
-    String? category,
-    String? sourceName,
-    String? imageUrl,
-    String? content,
-    String? url,
-  }) {
-    return ArticleHiveModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      category: category ?? this.category,
-      sourceName: sourceName ?? this.sourceName,
-      imageUrl: imageUrl ?? this.imageUrl,
-      content: content ?? this.content,
-      url: url ?? this.url,
-    );
-  }
 
   factory ArticleHiveModel.fromEntity(Article article) {
     return ArticleHiveModel(

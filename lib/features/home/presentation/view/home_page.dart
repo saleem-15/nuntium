@@ -137,47 +137,6 @@ class _HomeViewState extends State<HomeView> {
               builder: (context, state) => _buildContent(state),
             ),
 
-            // //Recent News
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: EdgeInsets.only(top: 24.h),
-            //     child: SizedBox(
-            //       height: 256.h,
-            //       child: ListView.builder(
-            //         scrollDirection: Axis.horizontal,
-            //         padding: EdgeInsets.only(left: 20.w),
-            //         itemCount: controller.recentNews.length,
-            //         itemBuilder: (_, index) {
-            //           final news = controller.recentNews[index];
-
-            //           return RecentNewsCard(
-            //             news: news,
-            //             onTap: () => controller.onNewsCardPressed(news),
-            //             onBookmarkTap: () =>
-            //                 controller.onNewsCardBookmarkPressed(news),
-            //           );
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
-            // SliverPadding(padding: EdgeInsets.only(top: 48.h)),
-
-            // _buildRecommendedSectionHeader(context),
-
-            // //Recommended for you
-            // SliverList(
-            //   delegate: SliverChildBuilderDelegate((_, index) {
-            //     final news = controller.recommendedNews[index];
-            //     return RecommendedNewsCard(
-            //       news: news,
-            //       margin: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 16.h),
-            //       onTap: controller.onNewsCardPressed,
-            //     );
-            //   }, childCount: controller.recommendedNews.length),
-            // ),
-
             // إضافة مسافة في الأسفل لضمان عدم اختفاء الكروت خلف الـ BottomNavBar
             SliverToBoxAdapter(child: SizedBox(height: 80.h)),
           ],
@@ -186,30 +145,6 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  // Widget _buildRecommendedSectionHeader(BuildContext context) {
-  //   return SliverToBoxAdapter(
-  //     child: Padding(
-  //       padding: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 24.h),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(
-  //             AppStrings.recommendedForYou,
-  //             style: context.headline1.copyWith(fontSize: 20.sp),
-  //           ),
-  //           Text(
-  //             AppStrings.seeAll,
-  //             style: context.body1.copyWith(
-  //               fontSize: 14.sp,
-  //               color: AppColors.greyPrimary,
-  //               fontWeight: AppFonts.medium,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
   Widget _buildContent(HomeState state) {
     final status = state.status;
 
@@ -256,82 +191,18 @@ class _HomeViewState extends State<HomeView> {
         return Padding(
           padding: EdgeInsets.only(bottom: 24.h),
           child: Center(
-            key: ValueKey(article.id), // مهم للأداء
-            child:
-                //  Text('index $index'),
-                ArticleCard(
-                  article: article,
-                  onPressed: () => _onArticlePressed(article),
-                  onBookmarkPressed: () => context.read<HomeBloc>().add(
-                    HomeBookmarkToggled(article: article),
-                  ),
-                ),
+            key: ValueKey(article.id),
+            child: ArticleCard(
+              article: article,
+              onPressed: () => _onArticlePressed(article),
+              onBookmarkPressed: () => context.read<HomeBloc>().add(
+                HomeBookmarkToggled(article: article),
+              ),
+            ),
           ),
         );
       },
     );
-
-    // return PagedSliverList<int, Article>(
-    //   // لاحظ: نمرر state و fetchNextPage بدلاً من controller
-    //   state: state,
-    //   fetchNextPage: fetchNextPage,
-
-    //   builderDelegate: PagedChildBuilderDelegate<Article>(
-    //     animateTransitions: true,
-
-    //     // بناء العنصر
-    //     itemBuilder: (context, article, index) => Padding(
-    //       padding: EdgeInsets.only(bottom: 24.h),
-    //       child: Center(
-    //         key: ValueKey(article.id), // مهم للأداء
-    //         child: ArticleCard(
-    //           article: article,
-    //           onPressed: () => _onArticlePressed(article),
-    //           onBookmarkPressed: () => context.read<HomeBloc>().add(
-    //             HomeBookmarkToggled(article: article),
-    //           ),
-    //         ),
-    //       ),
-    //     ),
-
-    //     // حالة عدم وجود بيانات
-    //     noItemsFoundIndicatorBuilder: (_) =>
-    //         Center(child: Text(AppStrings.noArticlesFound)),
-
-    //     // حالة الخطأ في الصفحة الأولى
-    //     firstPageErrorIndicatorBuilder: (_) => PageLoadingError(
-    //       onRefreshPressed: controller.onRefreshPressed,
-    //     ),
-
-    //     // مؤشر التحميل الأولي
-    //     firstPageProgressIndicatorBuilder: (_) =>
-    //         const ArticlesLoadingIndicator(),
-
-    //     // مؤشر تحميل صفحة جديدة
-    //     newPageProgressIndicatorBuilder: (_) => const Padding(
-    //       padding: EdgeInsets.all(16.0),
-    //       child: Center(child: CircularProgressIndicator.adaptive()),
-    //     ),
-    //   ),
-    // );
-
-    // if (status == HomeStatus.loaded) {
-
-    //   ListView.
-    //   return Padding(
-    //     padding: EdgeInsets.only(bottom: 24.h),
-    //     child: Center(
-    //       key: ValueKey(article.id), // مهم للأداء
-    //       child: ArticleCard(
-    //         article: article,
-    //         onPressed: () => _onArticlePressed(article),
-    //         onBookmarkPressed: () => context
-    //             .read<HomeBloc>()
-    //             .add(HomeBookmarkToggled(article: article)),
-    //       ),
-    //     ),
-    //   );
-    // }
   }
 
   void _onArticlePressed(Article article) {

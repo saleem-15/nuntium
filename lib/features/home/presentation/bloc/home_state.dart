@@ -40,6 +40,9 @@ class HomeState extends Equatable {
       articles: articles ?? this.articles,
       categories: categories ?? this.categories,
       hasNextPage: hasNextPage ?? this.hasNextPage,
+      // Intentionally NOT using `?? this.errorMessage`. errorMessage is a
+      // transient field only relevant when status == error. It auto-clears on
+      // every copyWith call so stale errors don't leak into loading/loaded states.
       errorMessage: errorMessage,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       searchQuery: searchQuery ?? this.searchQuery,
