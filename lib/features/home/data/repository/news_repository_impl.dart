@@ -25,7 +25,6 @@ class NewsRepositoryImpl implements NewsRepository {
       return Left(OfflineFailure());
     }
 
-    // Calling the remote data source defined in previous steps
     try {
       final news = await _remoteDataSource.fetchTopHeadlines(
         category: category,
@@ -33,7 +32,7 @@ class NewsRepositoryImpl implements NewsRepository {
         pageSize: pageSize,
       );
 
-      return Right(news);
+      return Right(_cleanArticlesContent(news));
     } catch (error, stackTrace) {
       return Left(ErrorHandler.handle(error, stackTrace));
     }
@@ -54,9 +53,55 @@ class NewsRepositoryImpl implements NewsRepository {
         page: page,
         pageSize: pageSize,
       );
-      return Right(news);
+
+      return Right(_cleanArticlesContent(news));
     } catch (error, stackTrace) {
       return Left(ErrorHandler.handle(error, stackTrace));
     }
+  }
+
+  List<Article> _cleanArticlesContent(List<Article> articles) {
+    return articles.map((article) {
+      return article.copyWith(content: _cleanContent(article.content));
+    }).toList();
+  }
+
+  String _cleanContent(String content) {
+    if (content.isEmpty) return content;
+
+    // 1. Strip the NewsAPI truncation suffix: [+300 chars]
+    var cleaned = content.replaceFirst(
+      RegExp(r'\s*\[\+\d+\s+char(?:s|acters)?\]'),
+      '',
+    );
+
+    // 2. Replace block HTML tags with spaces/newlines to prevent text clumping
+    cleaned = cleaned.replaceAll(
+      RegExp(r'</?(?:p|div|br|li|ul|ol)\s*/?>', caseSensitive: false),
+      ' ',
+    );
+
+    // 3. Strip all other HTML tags
+    cleaned = cleaned.replaceAll(RegExp(r'<[^>]*>'), '');
+
+    // 4. Decode common HTML entities
+    cleaned = cleaned
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'")
+        .replaceAll('&nbsp;', ' ');
+
+    // 5. Clean up trailing truncated word fragments after an ellipsis (e.g. "... Vie" or "...\nView")
+    cleaned = cleaned.replaceFirst(
+      RegExp(r'(?:\.\.\.|…)\s*\w{1,4}\s*$'),
+      '...',
+    );
+
+    // 6. Collapse multiple spaces and trim
+    cleaned = cleaned.replaceAll(RegExp(r'[ \t]+'), ' ');
+
+    return cleaned.trim();
   }
 }
