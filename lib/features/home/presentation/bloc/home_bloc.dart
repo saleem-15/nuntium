@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/utils/app_logger.dart';
 import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
@@ -160,8 +160,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeBookmarkToggled event,
     Emitter<HomeState> emit,
   ) async {
+
+    final articles = state.articles;
+    
     // Optimistic UI update: Toggle it locally first for instant feedback
-    final optimisticArticles = state.articles.map((a) {
+    final optimisticArticles = articles.map((a) {
       if (a.id == event.article.id) {
         return a.copyWith(isSaved: !a.isSaved);
       }
@@ -170,8 +173,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     emit(state.copyWith(articles: optimisticArticles));
 
-    // Call actual backend/storage
-    await _toggleBookmarkUseCase.call(article: event.article);
+    // Call actual toggle
+    final isToggleSucceeded = await _toggleBookmarkUseCase.call(article: event.article);
+
+    if (!isToggleSucceeded) {
+      emit(state.copyWith(articles: articles));
+    }
   }
 
   Future<void> _onRefreshRequested(
