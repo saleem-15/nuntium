@@ -248,8 +248,7 @@ void initHome() {
   );
 
   getIt.safeRegisterLazySingleton<FetchNewsUseCase>(
-    () =>
-        FetchNewsUseCase(getIt<NewsRepository>(), getIt<BookmarkRepository>()),
+    () => FetchNewsUseCase(getIt<NewsRepository>()),
   );
 
   getIt.safeRegisterLazySingleton<ToggleBookmarkUseCase>(
@@ -257,8 +256,7 @@ void initHome() {
   );
 
   getIt.safeRegisterLazySingleton<SearchNewsUseCase>(
-    () =>
-        SearchNewsUseCase(getIt<NewsRepository>(), getIt<BookmarkRepository>()),
+    () => SearchNewsUseCase(getIt<NewsRepository>()),
   );
 
   getIt.registerFactory(
@@ -268,6 +266,7 @@ void initHome() {
       toggleBookmarkUseCase: getIt<ToggleBookmarkUseCase>(),
       getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
       watchBookmarksChangesUseCase: getIt<WatchBookmarksChangesUseCase>(),
+      checkIfSavedUseCase: getIt<CheckIfSavedUseCase>(),
     ),
   );
 }

@@ -5,12 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/utils/app_logger.dart';
 import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/check_if_saved_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 
 import '../../../categories/domain/use_case/get_cateogories_use_case.dart';
 import '../../domain/use_cases/fetch_news_use_case.dart';
 import '../../domain/use_cases/search_news_use_case.dart';
-import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
@@ -21,10 +22,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ToggleBookmarkUseCase _toggleBookmarkUseCase;
   final GetCategoriesUseCase _getCategoriesUseCase;
   final WatchBookmarksChangesUseCase _watchBookmarksChangesUseCase;
+  final CheckIfSavedUseCase _checkIfSavedUseCase;
 
   StreamSubscription? _bookmarksSubscription;
 
   static const int _pageSize = 40;
+
+  /// Tracks article IDs currently being toggled by _onBookmarkToggled.
+  /// Used to prevent:
+  ///  1. Double-taps from dispatching concurrent toggles for the same article.
+  ///  2. Race conditions where a late stream sync event from
+  ///     BookmarkRepositoryImpl overrides an in-progress optimistic rollback.
+  final _inFlightToggles = <String>{};
 
   HomeBloc({
     required FetchNewsUseCase fetchNewsUseCase,
@@ -32,11 +41,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required ToggleBookmarkUseCase toggleBookmarkUseCase,
     required GetCategoriesUseCase getCategoriesUseCase,
     required WatchBookmarksChangesUseCase watchBookmarksChangesUseCase,
+    required CheckIfSavedUseCase checkIfSavedUseCase,
   }) : _fetchNewsUseCase = fetchNewsUseCase,
        _searchNewsUseCase = searchNewsUseCase,
        _toggleBookmarkUseCase = toggleBookmarkUseCase,
        _getCategoriesUseCase = getCategoriesUseCase,
        _watchBookmarksChangesUseCase = watchBookmarksChangesUseCase,
+       _checkIfSavedUseCase = checkIfSavedUseCase,
        super(const HomeState()) {
     on<HomeStarted>(_onStarted);
     on<HomeNextPageRequested>(_onNextPageRequested, transformer: droppable());
@@ -66,6 +77,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeBookmarkSyncRequested event,
     Emitter<HomeState> emit,
   ) {
+    // Skip sync if this article is currently being toggled by us.
+    // The optimistic UI already shows the correct state, and processing
+    // a stream event mid-toggle could override a rollback on failure.
+    if (_inFlightToggles.contains(event.articleId)) return;
+
     final syncedArticles = state.articles.map((article) {
       if (article.id == event.articleId) {
         return article.copyWith(isSaved: event.isSaved);
@@ -77,7 +93,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _onStarted(HomeStarted event, Emitter<HomeState> emit) async {
-    emit(state.copyWith(status: HomeStatus.loading, errorMessage: null));
+    emit(state.copyWith(status: HomeStatus.loading));
 
     final categoriesResult = await _getCategoriesUseCase.call();
 
@@ -131,8 +147,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         currentPage: 1,
         hasNextPage: true,
         articles: [], // Clear old articles for better UI transition
-        errorMessage: null,
-        
       ),
     );
     await _fetchPage(emit, page: 1, replace: true);
@@ -150,7 +164,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         currentPage: 1,
         hasNextPage: true,
         articles: [],
-        errorMessage: null,
       ),
     );
     await _fetchPage(emit, page: 1, replace: true);
@@ -160,12 +173,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeBookmarkToggled event,
     Emitter<HomeState> emit,
   ) async {
+    final articleId = event.article.id;
 
+    // Prevent double-taps: ignore if this article is already being toggled
+    if (_inFlightToggles.contains(articleId)) return;
+    _inFlightToggles.add(articleId);
+
+    // Capture the pre-toggle list for potential rollback
     final articles = state.articles;
-    
+
     // Optimistic UI update: Toggle it locally first for instant feedback
     final optimisticArticles = articles.map((a) {
-      if (a.id == event.article.id) {
+      if (a.id == articleId) {
         return a.copyWith(isSaved: !a.isSaved);
       }
       return a;
@@ -173,11 +192,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     emit(state.copyWith(articles: optimisticArticles));
 
-    // Call actual toggle
-    final isToggleSucceeded = await _toggleBookmarkUseCase.call(article: event.article);
+    try {
+      // We intentionally pass event.article (the snapshot frozen at dispatch time),
+      // NOT the article from the current state. event.article carries the original
+      // isSaved value, which ToggleBookmarkUseCase needs to decide save vs. delete.
+      final isToggleSucceeded = await _toggleBookmarkUseCase.call(
+        article: event.article,
+      );
 
-    if (!isToggleSucceeded) {
+      if (!isToggleSucceeded) {
+        // Rollback: re-emit the original list. Equatable will detect the
+        // difference (at least one article's isSaved differs) and trigger a rebuild.
+        emit(state.copyWith(articles: articles));
+      }
+    } catch (e) {
+      // On unexpected exceptions, roll back and log
       emit(state.copyWith(articles: articles));
+      AppLogger.e('Bookmark toggle failed: $e');
+    } finally {
+      _inFlightToggles.remove(articleId);
     }
   }
 
@@ -185,7 +218,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     HomeRefreshRequested event,
     Emitter<HomeState> emit,
   ) async {
-    emit(state.copyWith(status: HomeStatus.loading, errorMessage: null,));
+    emit(state.copyWith(status: HomeStatus.loading));
     await _fetchPage(emit, page: 1, replace: true);
   }
 
@@ -241,10 +274,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) {
     final allArticles = replace ? articles : [...state.articles, ...articles];
 
+    // Stamp isSaved from bookmarks storage.
+    // This cross-references each article with the Bookmarks domain to set the
+    // correct saved state. Done here in the BLoC (orchestration layer) rather
+    // than inside FetchNewsUseCase/SearchNewsUseCase to avoid leaking Bookmarks
+    // domain logic into the Home domain layer.
+    final stampedArticles = allArticles.map((article) {
+      return article.copyWith(
+        isSaved: _checkIfSavedUseCase(article.id),
+      );
+    }).toList();
+
     emit(
       state.copyWith(
         status: HomeStatus.loaded,
-        articles: allArticles,
+        articles: stampedArticles,
         currentPage: page,
         hasNextPage: articles.length == _pageSize,
       ),
