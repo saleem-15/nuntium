@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:nuntium/config/routes.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/widgets/header.dart';

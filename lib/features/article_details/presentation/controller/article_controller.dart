@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:nuntium/config/dependency_injection.dart';
 import 'package:nuntium/config/routes.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 import 'package:nuntium/features/home/domain/use_cases/toggle_bookmark_use_case.dart';

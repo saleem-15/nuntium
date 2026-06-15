@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:nuntium/core/errors/failures.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 

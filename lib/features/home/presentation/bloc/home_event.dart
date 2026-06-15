@@ -1,4 +1,4 @@
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/features/categories/domain/entities/category_entity.dart';
 
 sealed class HomeEvent {}

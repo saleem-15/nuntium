@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/features/article_details/presentation/view/article_view.dart';
 import 'package:nuntium/features/auth/presentation/view/change_password_view.dart';

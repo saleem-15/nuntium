@@ -9,7 +9,7 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nuntium/core/constants/constanst.dart';
 import 'package:nuntium/core/extensions/get_it_extension.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/network/api_client.dart';
 import 'package:nuntium/core/network/network_info.dart';
 import 'package:nuntium/core/services/language_service.dart';

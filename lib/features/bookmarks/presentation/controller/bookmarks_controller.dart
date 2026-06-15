@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:nuntium/config/dependency_injection.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/delete_bookmark_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/get_saved_articles_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';

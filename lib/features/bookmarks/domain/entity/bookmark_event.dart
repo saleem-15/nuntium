@@ -1,4 +1,4 @@
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 
 enum BookmarkAction { added, removed }
 

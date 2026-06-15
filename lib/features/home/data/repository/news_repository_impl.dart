@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:nuntium/core/errors/error_handler.dart';
 import 'package:nuntium/core/errors/failures.dart';
-import 'package:nuntium/core/models/article.dart';
+import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/network/network_info.dart';
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 
