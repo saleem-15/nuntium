@@ -48,7 +48,7 @@ import 'package:nuntium/features/home/data/data_source/news_remote_data_source.d
 import 'package:nuntium/features/home/data/repository/news_repository_impl.dart';
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart';
-import 'package:nuntium/features/home/domain/use_cases/toggle_bookmark_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'package:nuntium/features/language/presentation/controller/language_controller.dart';
 import 'package:nuntium/features/main/controller/main_controller.dart';
 import 'package:nuntium/features/onboarding/controller/onboarding_controller.dart';

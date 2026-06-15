@@ -10,7 +10,7 @@ import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_chan
 import '../../../categories/domain/use_case/get_cateogories_use_case.dart';
 import '../../domain/use_cases/fetch_news_use_case.dart';
 import '../../domain/use_cases/search_news_use_case.dart';
-import '../../domain/use_cases/toggle_bookmark_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
