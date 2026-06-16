@@ -9,4 +9,12 @@ extension SafeResgister on GetIt {
       AppLogger.w("'$T' is already registered, skipping Re-regestering...");
     }
   }
+
+  void safeRegisterFactory<T extends Object>(T Function() factoryFunc) {
+    if (!isRegistered<T>()) {
+      registerFactory<T>(factoryFunc);
+    } else {
+      AppLogger.w("'$T' is already registered, skipping Re-regestering...");
+    }
+  }
 }
