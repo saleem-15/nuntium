@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nuntium/features/splash/cubit/splash_cubit.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/features/article_details/presentation/view/article_view.dart';
@@ -58,7 +60,12 @@ class RouteGenerator {
       //************************** Welcoming Views **************************
       case Routes.splashView:
         initSplash();
-        return MaterialPageRoute(builder: (_) => const SplashView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<SplashCubit>()..init(),
+            child: const SplashView(),
+          ),
+        );
 
       case Routes.onBoardingView:
         initOnboarding();

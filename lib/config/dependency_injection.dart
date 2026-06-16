@@ -58,7 +58,7 @@ import 'package:nuntium/features/profile/domain/repository/profile_repository.da
 import 'package:nuntium/features/profile/domain/use_cases/get_user_data_use_case.dart';
 import 'package:nuntium/features/profile/presentation/controller/profile_controller.dart';
 import 'package:nuntium/features/select_favorite_topics/controller/select_favorite_topics_controller.dart';
-import 'package:nuntium/features/splash/controller/splash_controller.dart';
+import 'package:nuntium/features/splash/cubit/splash_cubit.dart';
 import 'package:nuntium/features/terms_and_conditions/presentation/controller/app_content_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -98,15 +98,14 @@ Future<void> initApp() async {
 }
 
 void initSplash() {
-  Get.put(SplashController());
+  getIt.safeRegisterFactory(() => SplashCubit(getIt<AppSharedPrefs>()));
 }
 
 void disposeSplash() {
-  Get.delete<SplashController>();
+  // Factory registration does not need explicit disposal.
 }
 
 void initOnboarding() {
-  disposeSplash();
   Get.put(OnboardingController());
 }
 
