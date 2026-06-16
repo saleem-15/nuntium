@@ -51,8 +51,7 @@ import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart'
 import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'package:nuntium/features/language/presentation/controller/language_controller.dart';
 import 'package:nuntium/features/main/controller/main_controller.dart';
-import 'package:nuntium/features/onboarding/controller/onboarding_controller.dart';
-import 'package:nuntium/features/onboarding/controller/welcome_controller.dart';
+import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/features/profile/data/repository/profile_repository_impl.dart';
 import 'package:nuntium/features/profile/domain/repository/profile_repository.dart';
 import 'package:nuntium/features/profile/domain/use_cases/get_user_data_use_case.dart';
@@ -106,20 +105,11 @@ void disposeSplash() {
 }
 
 void initOnboarding() {
-  Get.put(OnboardingController());
+  getIt.safeRegisterFactory(() => OnboardingCubit());
 }
 
 void disposeOnboarding() {
-  Get.delete<OnboardingController>();
-}
-
-void initWelcome() {
-  disposeOnboarding();
-  Get.put(WelcomeController());
-}
-
-void disposeWelcome() {
-  Get.delete<WelcomeController>();
+  // Factory registration does not need explicit disposal.
 }
 
 void initAuth() {
@@ -136,7 +126,6 @@ void initAuth() {
 }
 
 void initLogin() {
-  disposeWelcome();
   getIt.safeRegisterLazySingleton(() => LoginUseCase(getIt<AuthRepository>()));
 
   getIt.safeRegisterLazySingleton(
