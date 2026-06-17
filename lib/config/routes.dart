@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuntium/features/splash/cubit/splash_cubit.dart';
+import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/features/article_details/presentation/view/article_view.dart';
@@ -69,10 +70,14 @@ class RouteGenerator {
 
       case Routes.onBoardingView:
         initOnboarding();
-        return MaterialPageRoute(builder: (_) => const OnboardingView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<OnboardingCubit>(),
+            child: const OnboardingView(),
+          ),
+        );
 
       case Routes.welcomeView:
-        initWelcome();
         return MaterialPageRoute(builder: (_) => const WelcomeView());
 
       case Routes.selectFavoriteTopicsView:
