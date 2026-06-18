@@ -7,6 +7,7 @@ import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/features/article_details/presentation/view/article_view.dart';
 import 'package:nuntium/features/auth/presentation/view/change_password_view.dart';
 import 'package:nuntium/features/auth/presentation/view/forget_password_view.dart';
+import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nuntium/features/auth/presentation/view/login_view.dart';
 import 'package:nuntium/features/auth/presentation/view/sign_up_view.dart';
 import 'package:nuntium/features/auth/presentation/view/verification_code_view.dart';
@@ -87,7 +88,12 @@ class RouteGenerator {
       //************************** Auth Views **************************
       case Routes.loginView:
         initLogin();
-        return MaterialPageRoute(builder: (_) => const LoginView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<LoginCubit>(),
+            child: const LoginView(),
+          ),
+        );
 
       case Routes.forgetPasswordView:
         initForgetPassword();

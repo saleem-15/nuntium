@@ -29,7 +29,6 @@ import 'package:nuntium/features/auth/domain/use_cases/signup_use_case.dart';
 import 'package:nuntium/features/auth/presentation/controller/change_password_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/create_new_password_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/forget_password_controller.dart';
-import 'package:nuntium/features/auth/presentation/controller/login_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/resend_time_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/sign_up_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/verification_code_controller.dart';
@@ -65,6 +64,8 @@ import '../features/auth/domain/use_cases/change_password_use_case.dart';
 import '../features/categories/data/repository/categories_repository_impl.dart';
 import '../features/home/domain/use_cases/search_news_use_case.dart';
 import '../features/home/presentation/bloc/home_bloc.dart';
+import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
+
 
 final getIt = GetIt.instance;
 
@@ -125,6 +126,7 @@ void initAuth() {
   );
 }
 
+
 void initLogin() {
   getIt.safeRegisterLazySingleton(() => LoginUseCase(getIt<AuthRepository>()));
 
@@ -136,11 +138,16 @@ void initLogin() {
     () => SignInWithFacebookUseCase(getIt<AuthRepository>()),
   );
 
-  Get.put(LoginController());
+  getIt.safeRegisterFactory(
+    () => LoginCubit(
+      loginUseCase: getIt<LoginUseCase>(),
+      signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
+    ),
+  );
 }
 
 void disposeLogin() {
-  Get.delete<LoginController>();
+  // Factory registration does not need explicit disposal.
 }
 
 void initSignUp() {
@@ -247,7 +254,7 @@ void initHome() {
     () => SearchNewsUseCase(getIt<NewsRepository>()),
   );
 
-  getIt.registerFactory(
+  getIt.safeRegisterFactory(
     () => HomeBloc(
       fetchNewsUseCase: getIt<FetchNewsUseCase>(),
       searchNewsUseCase: getIt<SearchNewsUseCase>(),
