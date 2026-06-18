@@ -53,7 +53,7 @@ import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/features/profile/data/repository/profile_repository_impl.dart';
 import 'package:nuntium/features/profile/domain/repository/profile_repository.dart';
 import 'package:nuntium/features/profile/domain/use_cases/get_user_data_use_case.dart';
-import 'package:nuntium/features/profile/presentation/controller/profile_controller.dart';
+import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:nuntium/features/select_favorite_topics/controller/select_favorite_topics_controller.dart';
 import 'package:nuntium/features/splash/cubit/splash_cubit.dart';
 import 'package:nuntium/features/terms_and_conditions/presentation/controller/app_content_controller.dart';
@@ -190,7 +190,6 @@ void initSession() {
   Get.put(MainController());
   Get.put(BookmarksController());
   Get.put(CategoriesController());
-  Get.put(ProfileController());
 }
 
 /// Call this BEFORE navigating away from the main view on logout.
@@ -201,7 +200,6 @@ Future<void> resetSession() async {
   if (Get.isRegistered<MainController>()) Get.delete<MainController>();
   if (Get.isRegistered<BookmarksController>()) Get.delete<BookmarksController>();
   if (Get.isRegistered<CategoriesController>()) Get.delete<CategoriesController>();
-  if (Get.isRegistered<ProfileController>()) Get.delete<ProfileController>();
 
   // 2. Pop the GetIt scope — this disposes ALL session-scoped singletons
   //    (repositories, use cases, etc.) in one atomic operation.
@@ -285,6 +283,12 @@ void _initProfileDeps() {
   );
   getIt.registerLazySingleton(
     () => GetUserDataUseCase(getIt<ProfileRepository>()),
+  );
+  getIt.registerFactory<ProfileCubit>(
+    () => ProfileCubit(
+      signOutUseCase: getIt<SignOutUseCase>(),
+      getUserDataUseCase: getIt<GetUserDataUseCase>(),
+    ),
   );
 }
 

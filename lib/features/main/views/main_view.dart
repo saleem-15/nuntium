@@ -11,6 +11,7 @@ import 'package:nuntium/features/categories/presentation/views/categories_view.d
 import 'package:nuntium/features/home/presentation/view/home_page.dart';
 import 'package:nuntium/features/main/controller/main_controller.dart';
 import 'package:nuntium/features/profile/presentation/view/profile_view.dart';
+import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import '../../home/presentation/bloc/home_bloc.dart';
@@ -131,7 +132,10 @@ class MainView extends GetView<MainController> {
 
       /// Profile Tab Configuration
       PersistentTabConfig(
-        screen: const ProfileView(),
+        screen: BlocProvider(
+          create: (_) => getIt<ProfileCubit>()..getUserData(),
+          child: const ProfileView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.user,

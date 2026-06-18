@@ -19,6 +19,7 @@ import 'package:nuntium/features/main/views/main_view.dart';
 import 'package:nuntium/features/onboarding/view/onboarding_screen.dart';
 import 'package:nuntium/features/onboarding/view/welcome_screen.dart';
 import 'package:nuntium/features/profile/presentation/view/profile_view.dart';
+import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:nuntium/features/select_favorite_topics/view/select_favorite_topics_view.dart';
 import 'package:nuntium/features/terms_and_conditions/presentation/view/app_content_view.dart';
 
@@ -157,8 +158,12 @@ class RouteGenerator {
       //************************** Profile Views **************************
       case Routes.profileView:
         // ProfileView deps are session-scoped — already live from initSession().
-        return MaterialPageRoute(builder: (_) => const ProfileView());
-
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<ProfileCubit>()..getUserData(),
+            child: const ProfileView(),
+          ),
+        );
       case Routes.languageView:
         initLanguage();
         return MaterialPageRoute(builder: (_) => const LanguageView());

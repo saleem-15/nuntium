@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 
-void showSignoutDialog({required void Function()? onSignOutPressed}) {
-  Get.generalDialog(
+void showSignoutDialog(BuildContext context, {required VoidCallback onSignOutPressed}) {
+  showGeneralDialog(
+    context: context,
     barrierDismissible: true,
     barrierLabel: '',
     pageBuilder: (context, anim1, anim2) {
-      return Container();
+      return const SizedBox.shrink();
     },
     transitionBuilder: (context, anim1, anim2, child) {
       return Transform.scale(
@@ -39,9 +39,9 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
             left: 16.w,
           ),
           actions: [
-            // زر الإلغاء
+            // Cancel button
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 AppStrings.cancel,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -51,7 +51,7 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
               ),
             ),
             SizedBox(width: 16.w),
-            // زر التأكيد (نستخدم تصميم مشابه لزر التطبيق الأساسي لكن مصغر)
+            // Confirm button
             SizedBox(
               width: 100.w,
               height: 40.h,
@@ -62,7 +62,10 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
-                onPressed: onSignOutPressed, // استدعاء دالة الخروج الفعلية
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog first
+                  onSignOutPressed();
+                },
                 child: Text(
                   AppStrings.yes,
                   style: TextStyle(
