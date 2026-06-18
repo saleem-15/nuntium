@@ -8,6 +8,7 @@ import 'package:nuntium/features/article_details/presentation/view/article_view.
 import 'package:nuntium/features/auth/presentation/view/change_password_view.dart';
 import 'package:nuntium/features/auth/presentation/view/forget_password_view.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
+import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
 import 'package:nuntium/features/auth/presentation/view/login_view.dart';
 import 'package:nuntium/features/auth/presentation/view/sign_up_view.dart';
 import 'package:nuntium/features/auth/presentation/view/verification_code_view.dart';
@@ -108,7 +109,12 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => const CreateNewPasswordView());
       case Routes.signUpView:
         initSignUp();
-        return MaterialPageRoute(builder: (_) => const SignUpView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<SignUpCubit>(),
+            child: const SignUpView(),
+          ),
+        );
 
       //************************** Main Views **************************
       case Routes.mainView:

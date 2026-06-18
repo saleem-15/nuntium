@@ -29,7 +29,7 @@ import 'package:nuntium/features/auth/presentation/controller/change_password_co
 import 'package:nuntium/features/auth/presentation/controller/create_new_password_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/forget_password_controller.dart';
 import 'package:nuntium/features/auth/presentation/controller/resend_time_controller.dart';
-import 'package:nuntium/features/auth/presentation/controller/sign_up_controller.dart';
+import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
 import 'package:nuntium/features/auth/presentation/controller/verification_code_controller.dart';
 import 'package:nuntium/features/bookmarks/data/repository/bookmark_repository_imp.dart';
 import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
@@ -322,12 +322,16 @@ void initLogin() {
 }
 
 void initSignUp() {
-  // SignupUseCase is registered in _initAuth() — no action needed.
-  Get.put(SignUpController());
+  if (getIt.isRegistered<SignUpCubit>()) getIt.unregister<SignUpCubit>();
+  getIt.registerFactory(
+    () => SignUpCubit(
+      signUpUseCase: getIt<SignupUseCase>(),
+    ),
+  );
 }
 
 void disposeSignUp() {
-  Get.delete<SignUpController>();
+  // SignUpCubit is a factory and disposed by BlocProvider, nothing to unregister here.
 }
 
 void initSelectFavoriteTopics() {
