@@ -7,7 +7,6 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:nuntium/core/constants/constanst.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/network/api_client.dart';
 import 'package:nuntium/core/network/network_info.dart';
@@ -25,12 +24,9 @@ import 'package:nuntium/features/auth/domain/use_cases/sign_in_with_facebook_use
 import 'package:nuntium/features/auth/domain/use_cases/sign_in_with_google_use_case.dart';
 import 'package:nuntium/features/auth/domain/use_cases/sign_out_use_case.dart';
 import 'package:nuntium/features/auth/domain/use_cases/signup_use_case.dart';
-import 'package:nuntium/features/auth/presentation/controller/change_password_controller.dart';
-import 'package:nuntium/features/auth/presentation/controller/create_new_password_controller.dart';
-import 'package:nuntium/features/auth/presentation/controller/forget_password_controller.dart';
-import 'package:nuntium/features/auth/presentation/controller/resend_time_controller.dart';
+import 'package:nuntium/features/auth/presentation/cubit/change_password_cubit.dart';
+import 'package:nuntium/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
-import 'package:nuntium/features/auth/presentation/controller/verification_code_controller.dart';
 import 'package:nuntium/features/bookmarks/data/repository/bookmark_repository_imp.dart';
 import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/check_if_saved_use_case.dart';
@@ -349,36 +345,14 @@ void disposeSelectFavoriteTopics() {
   }
 }
 
-void initVerificationCode() {
-  disposeSignUp();
-  Get.put(VerificationCodeController());
-}
-
-void disposeVerificationCode() {
-  Get.delete<VerificationCodeController>();
-}
-
-void initCreateNewPassword() {
-  disposeVerificationCode();
-  Get.put(CreateNewPasswordController());
-}
-
-void disposeCreateNewPassword() {
-  Get.delete<CreateNewPasswordController>();
-}
-
 void initForgetPassword() {
   // ResetPasswordUseCase is registered in _initAuth() — no action needed.
-  Get.lazyPut(
-    () => ResendTimerController(),
-    tag: Constants.resendDialogControllerId,
-  );
-
-  Get.put(ForgetPasswordController());
+  if (getIt.isRegistered<ForgetPasswordCubit>()) getIt.unregister<ForgetPasswordCubit>();
+  getIt.registerFactory(() => ForgetPasswordCubit(resetPasswordUseCase: getIt()));
 }
 
 void disposeForgetPassword() {
-  Get.delete<ForgetPasswordController>();
+  // ForgetPasswordCubit is a factory and disposed by BlocProvider, nothing to unregister here.
 }
 
 void initLanguage() {
@@ -391,11 +365,12 @@ void disposeLanguagePage() {
 
 void initChangePassword() {
   // ChangePasswordUseCase is registered in _initAuth() — no action needed.
-  Get.put(ChangePasswordController());
+  if (getIt.isRegistered<ChangePasswordCubit>()) getIt.unregister<ChangePasswordCubit>();
+  getIt.registerFactory(() => ChangePasswordCubit(changePasswordUseCase: getIt()));
 }
 
 void disposeChangePasswordPage() {
-  Get.delete<ChangePasswordController>();
+  // ChangePasswordCubit is a factory and disposed by BlocProvider, nothing to unregister here.
 }
 
 void initContentController() {

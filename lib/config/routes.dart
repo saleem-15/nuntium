@@ -9,9 +9,10 @@ import 'package:nuntium/features/auth/presentation/view/change_password_view.dar
 import 'package:nuntium/features/auth/presentation/view/forget_password_view.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
+import 'package:nuntium/features/auth/presentation/cubit/forget_password_cubit.dart';
+import 'package:nuntium/features/auth/presentation/cubit/change_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/view/login_view.dart';
 import 'package:nuntium/features/auth/presentation/view/sign_up_view.dart';
-import 'package:nuntium/features/auth/presentation/view/verification_code_view.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
 import 'package:nuntium/features/home/presentation/view/home_page.dart';
 import 'package:nuntium/features/language/presentation/view/language_view.dart';
@@ -99,15 +100,12 @@ class RouteGenerator {
 
       case Routes.forgetPasswordView:
         initForgetPassword();
-        return MaterialPageRoute(builder: (_) => const ForgetPasswordView());
-
-      case Routes.verificationCodeView:
-        initVerificationCode();
-        return MaterialPageRoute(builder: (_) => const VerificationCodeView());
-
-      // case Routes.createNewPasswordView:
-      //   initCreateNewPassword();
-      //   return MaterialPageRoute(builder: (_) => const CreateNewPasswordView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<ForgetPasswordCubit>(),
+            child: const ForgetPasswordView(),
+          ),
+        );
       case Routes.signUpView:
         initSignUp();
         return MaterialPageRoute(
@@ -170,7 +168,12 @@ class RouteGenerator {
 
       case Routes.changePasswordView:
         initChangePassword();
-        return MaterialPageRoute(builder: (_) => const ChangePasswordView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<ChangePasswordCubit>(),
+            child: const ChangePasswordView(),
+          ),
+        );
 
       case Routes.privacyAndPolicyView:
         initContentController();

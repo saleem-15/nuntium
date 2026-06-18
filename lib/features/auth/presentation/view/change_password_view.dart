@@ -1,252 +1,209 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:nuntium/core/constants/get_builders_ids.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/utils/app_validator.dart';
 import 'package:nuntium/core/widgets/app_back_button.dart';
 import 'package:nuntium/core/widgets/custom_text_field.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
-import 'package:nuntium/features/auth/presentation/controller/change_password_controller.dart';
-
+import 'package:nuntium/features/auth/presentation/cubit/change_password_cubit.dart';
+import 'package:nuntium/features/auth/presentation/cubit/change_password_state.dart';
 import 'widgets/password_icon.dart';
 
-class ChangePasswordView extends GetView<ChangePasswordController> {
+class ChangePasswordView extends StatefulWidget {
   const ChangePasswordView({super.key});
 
   @override
+  State<ChangePasswordView> createState() => _ChangePasswordViewState();
+}
+
+class _ChangePasswordViewState extends State<ChangePasswordView> {
+  final _formKey = GlobalKey<FormState>();
+
+  late final TextEditingController _currentPasswordController;
+  late final TextEditingController _newPasswordController;
+  late final TextEditingController _repeatPasswordController;
+
+  late final FocusNode _currentPasswordFocus;
+  late final FocusNode _newPasswordFocus;
+  late final FocusNode _repeatPasswordFocus;
+
+  bool _isCurrentHidden = true;
+  bool _isNewHidden = true;
+
+  bool _isCurrentPasswordEmpty = true;
+  bool _isNewPasswordEmpty = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPasswordController = TextEditingController();
+    _newPasswordController = TextEditingController();
+    _repeatPasswordController = TextEditingController();
+
+    _currentPasswordFocus = FocusNode();
+    _newPasswordFocus = FocusNode();
+    _repeatPasswordFocus = FocusNode();
+
+    _currentPasswordController.addListener(() {
+      final isEmpty = _currentPasswordController.text.isEmpty;
+      if (_isCurrentPasswordEmpty != isEmpty) {
+        setState(() {
+          _isCurrentPasswordEmpty = isEmpty;
+        });
+      }
+    });
+
+    _newPasswordController.addListener(() {
+      final isEmpty = _newPasswordController.text.isEmpty;
+      if (_isNewPasswordEmpty != isEmpty) {
+        setState(() {
+          _isNewPasswordEmpty = isEmpty;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _currentPasswordController.dispose();
+    _newPasswordController.dispose();
+    _repeatPasswordController.dispose();
+
+    _currentPasswordFocus.dispose();
+    _newPasswordFocus.dispose();
+    _repeatPasswordFocus.dispose();
+    super.dispose();
+  }
+
+  void _onSubmit(BuildContext context) {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    context.read<ChangePasswordCubit>().updatePassword(
+          currentPassword: _currentPasswordController.text,
+          newPassword: _newPasswordController.text,
+        );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: AppBackButton(),
-        title: Text(AppStrings.changePassword),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            children: [
-              // // Current Password
-              // Obx(
-              //   () => _buildPasswordField(
-              //     label: AppStrings.currentPassword,
-              //     controller: controller.currentPasswordController,
-              //     isObscure: controller.isCurrentHidden.value,
-              //     onToggle: controller.toggleCurrentVisibility,
-              //     textInputAction: TextInputAction.next,
-              //     validator: (val) => (val == null || val.isEmpty)
-              //         ? AppStrings.requiredField
-              //         : null,
-              //   ),
-              // ),
+    return BlocConsumer<ChangePasswordCubit, ChangePasswordState>(
+      listener: (context, state) {
+        if (state is ChangePasswordError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+        } else if (state is ChangePasswordSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("Password updated successfully"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.of(context).pop();
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is ChangePasswordLoading;
 
-              // SizedBox(height: 16.h),
-
-              // //Password Field
-              // Obx(
-              //   () => CustomTextField(
-              //     controller: controller.currentPasswordController,
-              //     hintText: AppStrings.password,
-              //     prefixIcon: AppIcons.lock,
-              //     isPassword: controller.isCurrentHidden.value,
-              //     suffixIcon: PasswordIcon(
-              //       isPasswordEmpty: controller.isPasswordEmpty,
-              //       isPasswordHidden: controller.isPasswordHidden,
-              //       onPressed: controller.togglePasswordVisibility,
-              //     ),
-              //     validator: AppValidator.validatePassword,
-              //   ),
-              // ),
-              // // New Password
-              // Obx(
-              //   () => _buildPasswordField(
-              //     label: AppStrings.newPassword,
-              //     controller: controller.newPasswordController,
-              //     isObscure: controller.isNewHidden.value,
-              //     onToggle: controller.toggleNewVisibility,
-              //     textInputAction: TextInputAction.next,
-
-              //     validator: (val) {
-              //       if (val == null || val.length < 6) {
-              //         return AppStrings.tooShort;
-              //       }
-              //       return null;
-              //     },
-              //   ),
-              // ),
-
-              // SizedBox(height: 16.h),
-
-              // // Repeat New Password
-              // Obx(
-              //   () => _buildPasswordField(
-              //     label: AppStrings.repeateNewPassword,
-              //     controller: controller.repeatPasswordController,
-              //     isObscure: controller.isRepeatHidden.value,
-              //     onToggle: controller.toggleRepeatVisibility,
-              //     textInputAction: TextInputAction.done,
-
-              //     validator: (val) {
-              //       if (val != controller.newPasswordController.text) {
-              //         return AppStrings.passwordsDontMatch;
-              //       }
-              //       return null;
-              //     },
-              //   ),
-              // ),
-
-              // 1. Current Password Field
-              // Obx(
-              //   () => CustomTextField(
-              //     controller: controller.currentPasswordController,
-              //     hintText: AppStrings.currentPassword,
-              //     prefixIcon: AppIcons.lock,
-              //     isPassword: controller.isCurrentHidden.value,
-              //     keyboardType: TextInputType.visiblePassword,
-              //     textInputAction: TextInputAction.next,
-              //     suffixIcon: PasswordIcon(
-              //       isPasswordEmpty: controller.isCurrentPasswordEmpty.value,
-              //       isPasswordHidden: controller.isCurrentHidden.value,
-              //       onPressed: controller.toggleCurrentVisibility,
-              //     ),
-              //     validator: AppValidator.validatePassword,
-              //   ),
-              // ),
-
-              // SizedBox(height: 16.h),
-
-              // // 2. New Password Field
-              // Obx(
-              //   () => CustomTextField(
-              //     controller: controller.newPasswordController,
-              //     hintText: AppStrings.newPassword,
-              //     prefixIcon: AppIcons.lock,
-              //     isPassword: controller.isNewHidden.value,
-              //     keyboardType: TextInputType.visiblePassword,
-              //     textInputAction: TextInputAction.next,
-              //     suffixIcon: PasswordIcon(
-              //       isPasswordEmpty: controller.isNewPasswordEmpty.value,
-              //       isPasswordHidden: controller.isNewHidden.value,
-              //       onPressed: controller.toggleNewVisibility,
-              //     ),
-              //     validator: AppValidator.validatePassword,
-              //   ),
-              // ),
-
-              // SizedBox(height: 16.h),
-
-              // // 3. Repeat New Password Field (بدون أيقونة إظهار)
-              // Obx(
-              //   () => CustomTextField(
-              //     controller: controller.repeatPasswordController,
-              //     hintText: AppStrings.repeateNewPassword,
-              //     prefixIcon: AppIcons.lock,
-              //     // نجعلها مخفية دائماً أو مربوطة بالمتغير الافتراضي
-              //     isPassword: controller.isRepeatHidden.value,
-              //     // لا نمرر suffixIcon هنا ليظهر الحقل بدون أيقونة العين
-              // validator: (value) => AppValidator.validateMatchPassword(
-              //   value,
-              //   controller.newPasswordController.text.trim(),
-              // ),
-              // keyboardType: TextInputType.visiblePassword,
-              // textInputAction: TextInputAction.done,
-              //   ),
-              // ),
-
-              // 1. Current Password Field
-              GetBuilder<ChangePasswordController>(
-                id: AppGetBuildersIds.changePasswordCurrentVisibility,
-                builder: (controller) {
-                  return CustomTextField(
-                    controller: controller.currentPasswordController,
-                    focusNode: controller.currentPasswordFocus,
+        return Scaffold(
+          appBar: AppBar(
+            leading: const AppBackButton(),
+            title: Text(AppStrings.changePassword),
+          ),
+          body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  // 1. Current Password Field
+                  CustomTextField(
+                    controller: _currentPasswordController,
+                    focusNode: _currentPasswordFocus,
                     hintText: AppStrings.currentPassword,
                     prefixIcon: AppIcons.lock,
-                    isPassword: controller.isCurrentHidden,
+                    isPassword: _isCurrentHidden,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
-                      FocusScope.of(
-                        context,
-                      ).requestFocus(controller.newPasswordFocus);
+                      FocusScope.of(context).requestFocus(_newPasswordFocus);
                     },
                     suffixIcon: PasswordIcon(
-                      isPasswordEmpty: controller.isCurrentPasswordEmpty,
-                      isPasswordHidden: controller.isCurrentHidden,
-                      onPressed: controller.toggleCurrentVisibility,
+                      isPasswordEmpty: _isCurrentPasswordEmpty,
+                      isPasswordHidden: _isCurrentHidden,
+                      onPressed: () {
+                        setState(() {
+                          _isCurrentHidden = !_isCurrentHidden;
+                        });
+                      },
                     ),
                     validator: AppValidator.validatePassword,
-                  );
-                },
-              ),
+                  ),
 
-              SizedBox(height: 16.h),
+                  SizedBox(height: 16.h),
 
-              // 2. New Password Field
-              GetBuilder<ChangePasswordController>(
-                id: AppGetBuildersIds.changePasswordNewVisibility,
-                builder: (controller) {
-                  return CustomTextField(
-                    controller: controller.newPasswordController,
-                    focusNode: controller.newPasswordFocus,
+                  // 2. New Password Field
+                  CustomTextField(
+                    controller: _newPasswordController,
+                    focusNode: _newPasswordFocus,
                     hintText: AppStrings.newPassword,
                     prefixIcon: AppIcons.lock,
-                    isPassword: controller.isNewHidden,
+                    isPassword: _isNewHidden,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) {
-                      FocusScope.of(
-                        context,
-                      ).requestFocus(controller.repeatPasswordFocus);
+                      FocusScope.of(context).requestFocus(_repeatPasswordFocus);
                     },
                     suffixIcon: PasswordIcon(
-                      isPasswordEmpty: controller.isNewPasswordEmpty,
-                      isPasswordHidden: controller.isNewHidden,
-                      onPressed: controller.toggleNewVisibility,
+                      isPasswordEmpty: _isNewPasswordEmpty,
+                      isPasswordHidden: _isNewHidden,
+                      onPressed: () {
+                        setState(() {
+                          _isNewHidden = !_isNewHidden;
+                        });
+                      },
                     ),
                     validator: AppValidator.validatePassword,
-                  );
-                },
-              ),
+                  ),
 
-              SizedBox(height: 16.h),
+                  SizedBox(height: 16.h),
 
-              // 3. Repeat New Password Field
-              CustomTextField(
-                controller: controller.repeatPasswordController,
-                focusNode: controller.repeatPasswordFocus,
-                hintText: AppStrings.repeateNewPassword,
-                prefixIcon: AppIcons.lock,
-                isPassword: true,
-                validator: (value) => AppValidator.validateMatchPassword(
-                  value,
-                  controller.newPasswordController.text.trim(),
-                ),
-                keyboardType: TextInputType.visiblePassword,
-                textInputAction: TextInputAction.done,
-              ),
-              SizedBox(height: 16.h),
+                  // 3. Repeat New Password Field
+                  CustomTextField(
+                    controller: _repeatPasswordController,
+                    focusNode: _repeatPasswordFocus,
+                    hintText: AppStrings.repeateNewPassword,
+                    prefixIcon: AppIcons.lock,
+                    isPassword: true,
+                    validator: (value) => AppValidator.validateMatchPassword(
+                      value,
+                      _newPasswordController.text.trim(),
+                    ),
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) => _onSubmit(context),
+                  ),
 
-              // PrimaryButton(
-              //   text: AppStrings.changePassword,
-              //   onPressed: controller.updatePassword,
-              // ),
-              GetBuilder<ChangePasswordController>(
-                id: AppGetBuildersIds.changePasswordButton,
-                builder: (controller) {
-                  return PrimaryButton(
+                  SizedBox(height: 16.h),
+
+                  PrimaryButton(
                     text: AppStrings.changePassword,
-                    isLoading: controller.isLoading,
-                    onPressed: controller.updatePassword,
-                  );
-                },
+                    isLoading: isLoading,
+                    onPressed: () => _onSubmit(context),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
