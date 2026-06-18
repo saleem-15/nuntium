@@ -112,11 +112,14 @@ class RouteGenerator {
 
       //************************** Main Views **************************
       case Routes.mainView:
-        initMain();
+        // initSession() pushes a new GetIt scope for all user-specific deps.
+        // It guards internally against being called twice (hasScope check).
+        initSession();
         return MaterialPageRoute(builder: (_) => const MainView());
 
       case Routes.homeView:
-        initHome();
+        // HomeView is part of the main shell — its deps are already initialized
+        // by initSession() when mainView was entered. No extra init needed.
         return MaterialPageRoute(builder: (_) => const HomeView());
 
       case Routes.articleView:
@@ -142,12 +145,12 @@ class RouteGenerator {
         );
 
       case Routes.bookmarksView:
-        initBookmarks();
+        // BookmarksView deps are session-scoped — already live from initSession().
         return MaterialPageRoute(builder: (_) => const BookmarksView());
 
       //************************** Profile Views **************************
       case Routes.profileView:
-        initProfile();
+        // ProfileView deps are session-scoped — already live from initSession().
         return MaterialPageRoute(builder: (_) => const ProfileView());
 
       case Routes.languageView:

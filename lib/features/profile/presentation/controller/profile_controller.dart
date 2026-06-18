@@ -72,7 +72,15 @@ class ProfileController extends GetxController {
 
     result.fold(
       (failure) => showErrorSnackBar(failure.message),
-      (right) => Get.offAllNamed(Routes.loginView),
+      (right) async {
+        // IMPORTANT: Reset session BEFORE navigating away.
+        // This disposes all session-scoped GetIt deps (repos, use cases, BLoCs)
+        // so that the next login gets a completely fresh set of instances.
+        // If we navigated first, widgets still on screen would try to resolve
+        // already-disposed dependencies during their teardown — bad.
+        await resetSession();
+        Get.offAllNamed(Routes.loginView);
+      },
     );
   }
 }

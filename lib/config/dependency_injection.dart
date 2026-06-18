@@ -8,7 +8,6 @@ import 'package:get/route_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nuntium/core/constants/constanst.dart';
-import 'package:nuntium/core/extensions/get_it_extension.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/network/api_client.dart';
 import 'package:nuntium/core/network/network_info.dart';
@@ -66,9 +65,24 @@ import '../features/home/domain/use_cases/search_news_use_case.dart';
 import '../features/home/presentation/bloc/home_bloc.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Scope name constant — avoids magic strings scattered across the codebase
+// ─────────────────────────────────────────────────────────────────────────────
+const _sessionScopeName = 'user_session';
 
 final getIt = GetIt.instance;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// APP-LEVEL INIT
+// Called once in main(). Registers deps that live for the entire app lifetime:
+//   - Infrastructure: SharedPrefs, Firebase, ApiClient, NetworkInfo
+//   - Auth wrappers: FirebaseAuth, AuthRemoteDataSource, AuthRepository
+//     (these are STATELESS adapters — they hold no user-specific data)
+//
+// WHY NOT session-level?
+//   AuthRepository just wraps FirebaseAuth calls. It carries no mutable state,
+//   so it's safe to reuse across sessions. Rebuilding it every login is waste.
+// ─────────────────────────────────────────────────────────────────────────────
 Future<void> initApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -84,75 +98,231 @@ Future<void> initApp() async {
 
   Get.put(LanguageService(), permanent: true);
 
-  // local storage dependecy
+  // local storage dependency
   final storageService = StorageService();
   await storageService.init();
   getIt.registerSingleton<StorageService>(storageService);
 
-  initAuth();
+  // Infrastructure
   getIt.registerSingleton(ApiClient());
-
   getIt.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(InternetConnectionChecker()),
   );
+
+  // Auth layer — stateless wrappers, safe to keep at app level
+  _initAuth();
 }
 
-void initSplash() {
-  getIt.safeRegisterFactory(() => SplashCubit(getIt<AppSharedPrefs>()));
-}
+/// Registers the auth infrastructure once at app startup.
+/// These are pure adapters (no mutable user state), so they stay alive
+/// across multiple login/logout cycles without leaking data.
+void _initAuth() {
+  getIt.registerLazySingleton(() => FirebaseAuth.instance);
 
-void disposeSplash() {
-  // Factory registration does not need explicit disposal.
-}
-
-void initOnboarding() {
-  getIt.safeRegisterFactory(() => OnboardingCubit());
-}
-
-void disposeOnboarding() {
-  // Factory registration does not need explicit disposal.
-}
-
-void initAuth() {
-  getIt.safeRegisterLazySingleton(() => FirebaseAuth.instance);
-
-  getIt.safeRegisterLazySingleton<AuthRemoteDataSource>(
+  getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(getIt()),
   );
 
-  getIt.safeRegisterLazySingleton<AuthRepository>(
-    () =>
-        AuthRepositoryImpl(getIt<AuthRemoteDataSource>(), getIt<NetworkInfo>()),
+  getIt.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(getIt<AuthRemoteDataSource>(), getIt<NetworkInfo>()),
+  );
+
+  // Auth use cases — stateless, depend only on AuthRepository.
+  // Registered once here so every screen in the auth flow (login, sign-up,
+  // forget-password) can resolve them without worrying about re-registration.
+  getIt.registerLazySingleton(() => LoginUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(
+    () => SignInWithGoogleUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => SignInWithFacebookUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton(() => SignupUseCase(getIt<AuthRepository>()));
+  getIt.registerLazySingleton(
+    () => ResetPasswordUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => ChangePasswordUseCase(getIt<AuthRepository>()),
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SESSION-LEVEL INIT / RESET
+//
+// A "session" is one user's active login period (login → logout).
+// Everything that could hold user-specific state lives here.
+//
+// HOW GETIT SCOPES WORK:
+//   GetIt has a built-in scope stack. pushNewScope() adds a layer on top.
+//   Everything registered after pushNewScope() belongs to that layer.
+//   popScope() removes that layer and DISPOSES all its registrations.
+//   The app-level deps below are untouched — they're on the bottom layer.
+//
+//   Stack after initSession():
+//   ┌─────────────────────────────┐  ← session scope (repositories, BLoCs)
+//   │   user_session scope        │
+//   ├─────────────────────────────┤
+//   │   app-level scope (default) │  ← Firebase, ApiClient, AuthRepository...
+//   └─────────────────────────────┘
+//
+//   After resetSession():
+//   ┌─────────────────────────────┐
+//   │   app-level scope (default) │  ← same as before login, untouched
+//   └─────────────────────────────┘
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Call this when navigating to the main view (after login).
+/// Pushes a new named scope and registers all user-session dependencies.
+void initSession() {
+  // Guard: if a session scope already exists (e.g. deep-link edge case),
+  // do nothing. A scope should only be pushed once.
+  if (getIt.hasScope(_sessionScopeName)) return;
+
+  getIt.pushNewScope(scopeName: _sessionScopeName);
+
+  _initBookmarksDeps();
+  _initHomeDeps();
+  _initProfileDeps();
+
+  // GetX controllers for the main shell — still using Get.put because
+  // they depend on GetX's reactive system (GetBuilder/Obx).
+  // They are cleaned up in resetSession() via Get.deleteAll().
+  Get.put(MainController());
+  Get.put(BookmarksController());
+  Get.put(CategoriesController());
+  Get.put(ProfileController());
+}
+
+/// Call this BEFORE navigating away from the main view on logout.
+/// Pops the session scope — all registered deps are unregistered and disposed.
+/// GetX controllers are explicitly deleted too.
+Future<void> resetSession() async {
+  // 1. Clean up GetX controllers that were placed in the session
+  if (Get.isRegistered<MainController>()) Get.delete<MainController>();
+  if (Get.isRegistered<BookmarksController>()) Get.delete<BookmarksController>();
+  if (Get.isRegistered<CategoriesController>()) Get.delete<CategoriesController>();
+  if (Get.isRegistered<ProfileController>()) Get.delete<ProfileController>();
+
+  // 2. Pop the GetIt scope — this disposes ALL session-scoped singletons
+  //    (repositories, use cases, etc.) in one atomic operation.
+  if (getIt.hasScope(_sessionScopeName)) {
+    await getIt.popScope();
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Private session-scope helpers
+// These are called only from initSession(). They are private (_prefix) to
+// prevent accidental calls from outside, which would break scope ownership.
+// ─────────────────────────────────────────────────────────────────────────────
+
+void _initBookmarksDeps() {
+  getIt.registerLazySingleton<BookmarkRepository>(
+    () => BookmarkRepositoryImpl(getIt<StorageService>()),
+  );
+  getIt.registerLazySingleton<SaveBookmarkUseCase>(
+    () => SaveBookmarkUseCase(getIt<BookmarkRepository>()),
+  );
+  getIt.registerLazySingleton<DeleteBookmarkUseCase>(
+    () => DeleteBookmarkUseCase(getIt<BookmarkRepository>()),
+  );
+  getIt.registerLazySingleton<CheckIfSavedUseCase>(
+    () => CheckIfSavedUseCase(getIt<BookmarkRepository>()),
+  );
+  getIt.registerLazySingleton<GetSavedArticlesUseCase>(
+    () => GetSavedArticlesUseCase(getIt<BookmarkRepository>()),
+  );
+  getIt.registerLazySingleton<WatchBookmarksChangesUseCase>(
+    () => WatchBookmarksChangesUseCase(getIt<BookmarkRepository>()),
+  );
+}
+
+void _initHomeDeps() {
+  // Data layer
+  getIt.registerLazySingleton<CategoriesRepository>(
+    () => CategoriesRepositoryImpl(),
+  );
+  getIt.registerLazySingleton<NewsRemoteDataSource>(
+    () => NewsRemoteDataSource(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<NewsRepository>(
+    () => NewsRepositoryImpl(getIt<NewsRemoteDataSource>(), getIt<NetworkInfo>()),
+  );
+
+  // Domain layer
+  getIt.registerLazySingleton<GetCategoriesUseCase>(
+    () => GetCategoriesUseCase(getIt<CategoriesRepository>()),
+  );
+  getIt.registerLazySingleton<FetchNewsUseCase>(
+    () => FetchNewsUseCase(getIt<NewsRepository>()),
+  );
+  getIt.registerLazySingleton<ToggleBookmarkUseCase>(
+    () => ToggleBookmarkUseCase(getIt<BookmarkRepository>()),
+  );
+  getIt.registerLazySingleton<SearchNewsUseCase>(
+    () => SearchNewsUseCase(getIt<NewsRepository>()),
+  );
+
+  // Presentation layer — factory so each BlocProvider gets a fresh instance
+  getIt.registerFactory<HomeBloc>(
+    () => HomeBloc(
+      fetchNewsUseCase: getIt<FetchNewsUseCase>(),
+      searchNewsUseCase: getIt<SearchNewsUseCase>(),
+      toggleBookmarkUseCase: getIt<ToggleBookmarkUseCase>(),
+      getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
+      watchBookmarksChangesUseCase: getIt<WatchBookmarksChangesUseCase>(),
+      checkIfSavedUseCase: getIt<CheckIfSavedUseCase>(),
+    ),
+  );
+}
+
+void _initProfileDeps() {
+  getIt.registerLazySingleton(
+    () => SignOutUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(FirebaseAuth.instance),
+  );
+  getIt.registerLazySingleton(
+    () => GetUserDataUseCase(getIt<ProfileRepository>()),
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SCREEN-LEVEL INITS (Auth flow, standalone screens)
+// These use registerFactory so a fresh instance is created each visit,
+// and they don't need a scope because they're inherently short-lived.
+// ─────────────────────────────────────────────────────────────────────────────
+
+void initSplash() {
+  // SplashCubit is a factory — but the splash route might theoretically be
+  // revisited in edge cases. Unregister first to be safe.
+  if (getIt.isRegistered<SplashCubit>()) getIt.unregister<SplashCubit>();
+  getIt.registerFactory(() => SplashCubit(getIt<AppSharedPrefs>()));
+}
+
+void initOnboarding() {
+  if (getIt.isRegistered<OnboardingCubit>()) getIt.unregister<OnboardingCubit>();
+  getIt.registerFactory(() => OnboardingCubit());
+}
 
 void initLogin() {
-  getIt.safeRegisterLazySingleton(() => LoginUseCase(getIt<AuthRepository>()));
-
-  getIt.safeRegisterLazySingleton(
-    () => SignInWithGoogleUseCase(getIt<AuthRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton(
-    () => SignInWithFacebookUseCase(getIt<AuthRepository>()),
-  );
-
-  getIt.safeRegisterFactory(
+  // LoginCubit is a factory — each visit to the login screen gets a fresh cubit.
+  // Unregister first: the user can visit login multiple times per app session
+  // (first launch, after logout, etc.).
+  if (getIt.isRegistered<LoginCubit>()) getIt.unregister<LoginCubit>();
+  getIt.registerFactory(
     () => LoginCubit(
       loginUseCase: getIt<LoginUseCase>(),
       signInWithGoogleUseCase: getIt<SignInWithGoogleUseCase>(),
     ),
   );
-}
-
-void disposeLogin() {
-  // Factory registration does not need explicit disposal.
+  // Note: LoginUseCase, SignInWithGoogleUseCase, SignInWithFacebookUseCase
+  // are already registered as lazySingletons in _initAuth(). No action needed.
 }
 
 void initSignUp() {
-  disposeLogin();
-  getIt.safeRegisterLazySingleton(() => SignupUseCase(getIt<AuthRepository>()));
+  // SignupUseCase is registered in _initAuth() — no action needed.
   Get.put(SignUpController());
 }
 
@@ -161,13 +331,14 @@ void disposeSignUp() {
 }
 
 void initSelectFavoriteTopics() {
-  disposeLogin();
   disposeSignUp();
   Get.put(SelectFavoriteTopicsController());
 }
 
 void disposeSelectFavoriteTopics() {
-  Get.delete<SelectFavoriteTopicsController>();
+  if (Get.isRegistered<SelectFavoriteTopicsController>()) {
+    Get.delete<SelectFavoriteTopicsController>();
+  }
 }
 
 void initVerificationCode() {
@@ -189,10 +360,7 @@ void disposeCreateNewPassword() {
 }
 
 void initForgetPassword() {
-  getIt.safeRegisterLazySingleton(
-    () => ResetPasswordUseCase(getIt<AuthRepository>()),
-  );
-
+  // ResetPasswordUseCase is registered in _initAuth() — no action needed.
   Get.lazyPut(
     () => ResendTimerController(),
     tag: Constants.resendDialogControllerId,
@@ -202,131 +370,7 @@ void initForgetPassword() {
 }
 
 void disposeForgetPassword() {
-  disposeLogin();
   Get.delete<ForgetPasswordController>();
-}
-
-void initMain() {
-  disposeSelectFavoriteTopics();
-  initBookmarks();
-  initHome();
-  initCategories();
-  initProfile();
-  Get.put(MainController());
-}
-
-void disposeMainPage() {
-  disposeHomePage();
-  disposeCategoriesPage();
-
-  Get.delete<MainController>();
-}
-
-void initHome() {
-  // 1. Data Layer
-  getIt.safeRegisterLazySingleton<CategoriesRepository>(
-    () => CategoriesRepositoryImpl(),
-  );
-
-  getIt.safeRegisterLazySingleton<NewsRemoteDataSource>(
-    () => NewsRemoteDataSource(getIt<ApiClient>()),
-  );
-
-  getIt.safeRegisterLazySingleton<NewsRepository>(
-    () =>
-        NewsRepositoryImpl(getIt<NewsRemoteDataSource>(), getIt<NetworkInfo>()),
-  );
-
-  // 2. Domain Layer
-  getIt.safeRegisterLazySingleton<GetCategoriesUseCase>(
-    () => GetCategoriesUseCase(getIt<CategoriesRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton<FetchNewsUseCase>(
-    () => FetchNewsUseCase(getIt<NewsRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton<ToggleBookmarkUseCase>(
-    () => ToggleBookmarkUseCase(getIt<BookmarkRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton<SearchNewsUseCase>(
-    () => SearchNewsUseCase(getIt<NewsRepository>()),
-  );
-
-  getIt.safeRegisterFactory(
-    () => HomeBloc(
-      fetchNewsUseCase: getIt<FetchNewsUseCase>(),
-      searchNewsUseCase: getIt<SearchNewsUseCase>(),
-      toggleBookmarkUseCase: getIt<ToggleBookmarkUseCase>(),
-      getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
-      watchBookmarksChangesUseCase: getIt<WatchBookmarksChangesUseCase>(),
-      checkIfSavedUseCase: getIt<CheckIfSavedUseCase>(),
-    ),
-  );
-}
-
-void disposeHomePage() {
-  // Nothing needed — BlocProvider closes the BLoC automatically
-  // when the widget is removed from the tree.
-}
-
-void initCategories() {
-  Get.put(CategoriesController());
-}
-
-void disposeCategoriesPage() {
-  Get.delete<CategoriesController>();
-}
-
-void initBookmarks() {
-  getIt.safeRegisterLazySingleton<BookmarkRepository>(
-    () => BookmarkRepositoryImpl(getIt<StorageService>()),
-  );
-
-  getIt.safeRegisterLazySingleton<SaveBookmarkUseCase>(
-    () => SaveBookmarkUseCase(getIt<BookmarkRepository>()),
-  );
-  getIt.safeRegisterLazySingleton<DeleteBookmarkUseCase>(
-    () => DeleteBookmarkUseCase(getIt<BookmarkRepository>()),
-  );
-  getIt.safeRegisterLazySingleton<CheckIfSavedUseCase>(
-    () => CheckIfSavedUseCase(getIt<BookmarkRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton<GetSavedArticlesUseCase>(
-    () => GetSavedArticlesUseCase(getIt<BookmarkRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton(
-    () => WatchBookmarksChangesUseCase(getIt<BookmarkRepository>()),
-  );
-
-  Get.put(BookmarksController());
-}
-
-void disposeBookmarksPage() {
-  Get.delete<BookmarksController>();
-}
-
-void initProfile() {
-  getIt.safeRegisterLazySingleton(
-    () => SignOutUseCase(getIt<AuthRepository>()),
-  );
-
-  getIt.safeRegisterLazySingleton<ProfileRepository>(
-    () => ProfileRepositoryImpl(FirebaseAuth.instance),
-  );
-
-  getIt.safeRegisterLazySingleton(
-    () => GetUserDataUseCase(getIt<ProfileRepository>()),
-  );
-
-  Get.put(ProfileController());
-}
-
-void disposeProfilePage() {
-  Get.delete<ProfileController>();
 }
 
 void initLanguage() {
@@ -338,10 +382,7 @@ void disposeLanguagePage() {
 }
 
 void initChangePassword() {
-  getIt.safeRegisterLazySingleton(
-    () => ChangePasswordUseCase(getIt<AuthRepository>()),
-  );
-
+  // ChangePasswordUseCase is registered in _initAuth() — no action needed.
   Get.put(ChangePasswordController());
 }
 
@@ -357,14 +398,10 @@ void disposeContentControllerPage() {
   Get.delete<AppContentController>();
 }
 
-// عدل الدالة لتستقبل Article
 void initArticle(Article article) {
-  // نحذف الكنترلر القديم (إن وجد) لضمان عدم بقاء بيانات مقال سابق
   if (Get.isRegistered<ArticleController>()) {
     Get.delete<ArticleController>();
   }
-
-  // نحقن الكنترلر ونعطيه المقال مباشرة عبر الـ Constructor
   Get.put(ArticleController(article: article));
 }
 
@@ -373,12 +410,9 @@ void disposeArticlePage() {
 }
 
 void initOriginalArticle(String articleUrl) {
-  // نحذف الكنترلر القديم (إن وجد) لضمان عدم بقاء بيانات مقال سابق
   if (Get.isRegistered<OriginalArticleController>()) {
     Get.delete<OriginalArticleController>();
   }
-
-  // نحقن الكنترلر ونعطيه المقال مباشرة عبر الـ Constructor
   Get.put(OriginalArticleController(articleUrl));
 }
 
