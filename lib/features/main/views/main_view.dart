@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:nuntium/config/dependency_injection.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
-import 'package:nuntium/features/categories/presentation/controller/categories_controller.dart';
+import 'package:nuntium/features/categories/presentation/cubit/categories_cubit.dart';
 import 'package:nuntium/features/categories/presentation/views/categories_view.dart';
 import 'package:nuntium/features/home/presentation/view/home_page.dart';
 import 'package:nuntium/features/main/cubit/main_cubit.dart';
@@ -49,13 +48,7 @@ class _MainViewState extends State<MainView> {
   }
 
   void _fetchTabDataIfNeeded(int index) {
-    switch (index) {
-      case 1: // Categories
-        if (Get.isRegistered<CategoriesController>()) {
-          Get.find<CategoriesController>().fetchCategoriesIfNeeded();
-        }
-        break;
-    }
+    // Categories data fetching is initiated automatically inside CategoriesCubit constructor.
   }
 
   @override
@@ -134,7 +127,10 @@ class _MainViewState extends State<MainView> {
 
       /// Categories Tab Configuration
       PersistentTabConfig(
-        screen: const CategoriesView(),
+        screen: BlocProvider.value(
+          value: getIt<CategoriesCubit>(),
+          child: const CategoriesView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.category,

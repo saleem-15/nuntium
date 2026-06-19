@@ -1,15 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:nuntium/core/extensions/theme_extension.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/theme/app_fonts.dart';
 import 'package:nuntium/core/widgets/header.dart';
-import 'package:nuntium/features/categories/presentation/controller/categories_controller.dart';
+import 'package:nuntium/features/categories/domain/entities/category_entity.dart';
+import '../cubit/categories_cubit.dart';
+import '../cubit/categories_state.dart';
 
-class CategoriesView extends GetView<CategoriesController> {
+class CategoriesView extends StatelessWidget {
   const CategoriesView({super.key});
 
   @override
@@ -25,25 +27,60 @@ class CategoriesView extends GetView<CategoriesController> {
                 title: AppStrings.categoriesPageTitle,
                 subTtitle: AppStrings.categoriesPageSubTitle,
               ),
-
-              GridView.builder(
-                shrinkWrap: true,
-                itemCount: controller.categories.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16.w, // مسافة عمودية بين كل عنصر
-                  crossAxisSpacing: 16.w, // مسافة أفقية بين كل عنصر
-                  childAspectRatio:
-                      2.5, // للتحكم في ارتفاع المربع بالنسبة لعرضه
-                ),
-
-                itemBuilder: (context, index) {
-                  final topic = controller.categories[index];
-
-                  return categoryItem(topic, context);
+              BlocBuilder<CategoriesCubit, CategoriesState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    CategoriesInitial() || CategoriesLoading() => const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.purplePrimary,
+                        ),
+                      ),
+                    CategoriesError(message: final msg) => Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              msg,
+                              style: context.body1.copyWith(color: Colors.red),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 16.h),
+                            ElevatedButton(
+                              onPressed: () => context
+                                  .read<CategoriesCubit>()
+                                  .fetchCategories(),
+                              child: Text(AppStrings.retry),
+                            ),
+                          ],
+                        ),
+                      ),
+                    CategoriesLoaded(categories: final categories) =>
+                      categories.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No categories found',
+                                style: context.body1,
+                              ),
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: categories.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 16.w,
+                                crossAxisSpacing: 16.w,
+                                childAspectRatio: 2.5,
+                              ),
+                              itemBuilder: (context, index) {
+                                final category = categories[index];
+                                return categoryItem(category, context);
+                              },
+                            ),
+                  };
                 },
               ),
-
               SizedBox(height: 16.h),
             ],
           ),
@@ -52,29 +89,25 @@ class CategoriesView extends GetView<CategoriesController> {
     );
   }
 
-  GestureDetector categoryItem(String topic, BuildContext context) {
+  Widget categoryItem(CategoryEntity category, BuildContext context) {
     return GestureDetector(
-      onTap: controller.onCategoryPressed,
-      child: GetBuilder<CategoriesController>(
-        assignId: true,
-        id: topic,
-        builder: (controller) {
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            decoration: BoxDecoration(
-              color: AppColors.greyLighter,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              tr(topic),
-              style: context.body1.copyWith(
-                color: AppColors.greyDarker,
-                fontWeight: AppFonts.semiBold,
-              ),
-            ),
-          );
-        },
+      onTap: () {
+        // Handle category selection or details page navigation if needed in the future
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        decoration: BoxDecoration(
+          color: AppColors.greyLighter,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          tr(category.name),
+          style: context.body1.copyWith(
+            color: AppColors.greyDarker,
+            fontWeight: AppFonts.semiBold,
+          ),
+        ),
       ),
     );
   }
