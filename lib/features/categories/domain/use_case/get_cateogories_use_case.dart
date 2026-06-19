@@ -9,7 +9,7 @@ class GetCategoriesUseCase {
 
   GetCategoriesUseCase(this.categoriesRepository);
 
-  Future<Either<Failure, List<CategoryEntity>>> call() async {
-    return categoriesRepository.getCategories();
+  Future<Either<Failure, List<CategoryEntity>>> call({bool isForHome = false}) async {
+    return categoriesRepository.getCategories(isForHome: isForHome);
   }
 }

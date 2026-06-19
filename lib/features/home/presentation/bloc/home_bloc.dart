@@ -95,7 +95,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onStarted(HomeStarted event, Emitter<HomeState> emit) async {
     emit(state.copyWith(status: HomeStatus.loading));
 
-    final categoriesResult = await _getCategoriesUseCase.call();
+    final categoriesResult = await _getCategoriesUseCase.call(isForHome: true);
 
     if (categoriesResult.isLeft()) {
       final failure = categoriesResult.fold((f) => f, (_) => null);
