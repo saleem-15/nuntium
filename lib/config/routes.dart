@@ -16,6 +16,7 @@ import 'package:nuntium/features/auth/presentation/cubit/email_verification_cubi
 import 'package:nuntium/features/auth/presentation/view/login_view.dart';
 import 'package:nuntium/features/auth/presentation/view/sign_up_view.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
+import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.dart';
 import 'package:nuntium/features/home/presentation/view/home_page.dart';
 import 'package:nuntium/features/language/presentation/view/language_view.dart';
 import 'package:nuntium/features/main/cubit/main_cubit.dart';
@@ -169,7 +170,12 @@ class RouteGenerator {
 
       case Routes.bookmarksView:
         // BookmarksView deps are session-scoped — already live from initSession().
-        return MaterialPageRoute(builder: (_) => const BookmarksView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: getIt<BookmarksCubit>(),
+            child: const BookmarksView(),
+          ),
+        );
 
       //************************** Profile Views **************************
       case Routes.profileView:

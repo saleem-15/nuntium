@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:nuntium/config/dependency_injection.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
-import 'package:nuntium/features/bookmarks/presentation/controller/bookmarks_controller.dart';
+import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
 import 'package:nuntium/features/categories/presentation/controller/categories_controller.dart';
 import 'package:nuntium/features/categories/presentation/views/categories_view.dart';
@@ -53,11 +53,6 @@ class _MainViewState extends State<MainView> {
       case 1: // Categories
         if (Get.isRegistered<CategoriesController>()) {
           Get.find<CategoriesController>().fetchCategoriesIfNeeded();
-        }
-        break;
-      case 2: // Bookmarks
-        if (Get.isRegistered<BookmarksController>()) {
-          Get.find<BookmarksController>().fetchBookmarksIfNeeded();
         }
         break;
     }
@@ -162,7 +157,10 @@ class _MainViewState extends State<MainView> {
 
       // Bookmarks Tab Configuration
       PersistentTabConfig(
-        screen: const BookmarksView(),
+        screen: BlocProvider.value(
+          value: getIt<BookmarksCubit>(),
+          child: const BookmarksView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.bookmark,

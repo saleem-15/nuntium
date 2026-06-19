@@ -35,7 +35,7 @@ import 'package:nuntium/features/bookmarks/domain/use_cases/delete_bookmark_use_
 import 'package:nuntium/features/bookmarks/domain/use_cases/get_saved_articles_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/save_bookmark_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
-import 'package:nuntium/features/bookmarks/presentation/controller/bookmarks_controller.dart';
+import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.dart';
 import 'package:nuntium/features/categories/domain/repository/cateogries_repository.dart';
 import 'package:nuntium/features/categories/domain/use_case/get_cateogories_use_case.dart';
 import 'package:nuntium/features/categories/presentation/controller/categories_controller.dart';
@@ -208,7 +208,6 @@ void initSession() {
   // GetX controllers for the main shell — still using Get.put because
   // they depend on GetX's reactive system (GetBuilder/Obx).
   // They are cleaned up in resetSession() via Get.deleteAll().
-  Get.put(BookmarksController());
   Get.put(CategoriesController());
 }
 
@@ -217,7 +216,6 @@ void initSession() {
 /// GetX controllers are explicitly deleted too.
 Future<void> resetSession() async {
   // 1. Clean up GetX controllers that were placed in the session
-  if (Get.isRegistered<BookmarksController>()) Get.delete<BookmarksController>();
   if (Get.isRegistered<CategoriesController>()) Get.delete<CategoriesController>();
 
   // 2. Pop the GetIt scope — this disposes ALL session-scoped singletons
@@ -251,6 +249,13 @@ void _initBookmarksDeps() {
   );
   getIt.registerLazySingleton<WatchBookmarksChangesUseCase>(
     () => WatchBookmarksChangesUseCase(getIt<BookmarkRepository>()),
+  );
+  getIt.registerLazySingleton<BookmarksCubit>(
+    () => BookmarksCubit(
+      getSavedArticlesUseCase: getIt<GetSavedArticlesUseCase>(),
+      deleteBookmarkUseCase: getIt<DeleteBookmarkUseCase>(),
+      watchBookmarksChangesUseCase: getIt<WatchBookmarksChangesUseCase>(),
+    ),
   );
 }
 
