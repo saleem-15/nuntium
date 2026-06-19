@@ -39,6 +39,13 @@ class SplashView extends StatelessWidget {
               Routes.signUpView,
               (route) => false,
             );
+
+          case SplashNavigateToVerification():
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.emailVerificationView,
+              (route) => false,
+            );
         }
       },
       child: AnnotatedRegion<SystemUiOverlayStyle>(

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,7 +31,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final GlobalKey<FormState> _formKey;
-  
+
   bool _isPasswordHidden = true;
   bool _isPasswordEmpty = true;
 
@@ -71,11 +72,20 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            Routes.mainView,
-            (route) => false,
-          );
+          final user = FirebaseAuth.instance.currentUser;
+          if (user != null && !user.emailVerified) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.emailVerificationView,
+              (route) => false,
+            );
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              Routes.mainView,
+              (route) => false,
+            );
+          }
         } else if (state is LoginError) {
           showErrorSnackBar(state.message);
         }
@@ -140,9 +150,9 @@ class _LoginViewState extends State<LoginView> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         context.read<LoginCubit>().signIn(
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                            );
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        );
                       }
                     },
                   );

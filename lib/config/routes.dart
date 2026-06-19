@@ -11,6 +11,8 @@ import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/change_password_cubit.dart';
+import 'package:nuntium/features/auth/presentation/view/email_verification_view.dart';
+import 'package:nuntium/features/auth/presentation/cubit/email_verification_cubit.dart';
 import 'package:nuntium/features/auth/presentation/view/login_view.dart';
 import 'package:nuntium/features/auth/presentation/view/sign_up_view.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
@@ -41,6 +43,7 @@ class Routes {
   static const String loginView = '/login_view';
   static const String signUpView = '/sign_up_view';
   static const String forgetPasswordView = '/forget_password_view';
+  static const String emailVerificationView = '/email_verification_view';
   static const String createNewPasswordView = '/create_new_password_view';
   static const String verificationCodeView = '/verification_code_view';
 
@@ -104,6 +107,15 @@ class RouteGenerator {
           builder: (_) => BlocProvider(
             create: (_) => getIt<ForgetPasswordCubit>(),
             child: const ForgetPasswordView(),
+          ),
+        );
+
+      case Routes.emailVerificationView:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) =>
+                getIt<EmailVerificationCubit>()..startVerificationCheck(),
+            child: const EmailVerificationView(),
           ),
         );
       case Routes.signUpView:

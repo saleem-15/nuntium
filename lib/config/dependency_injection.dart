@@ -27,6 +27,7 @@ import 'package:nuntium/features/auth/domain/use_cases/signup_use_case.dart';
 import 'package:nuntium/features/auth/presentation/cubit/change_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
+import 'package:nuntium/features/auth/presentation/cubit/email_verification_cubit.dart';
 import 'package:nuntium/features/bookmarks/data/repository/bookmark_repository_imp.dart';
 import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/check_if_saved_use_case.dart';
@@ -56,6 +57,8 @@ import 'package:nuntium/features/terms_and_conditions/presentation/controller/ap
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/auth/domain/use_cases/change_password_use_case.dart';
+import '../features/auth/domain/use_cases/send_email_verification_use_case.dart';
+import '../features/auth/domain/use_cases/check_email_verified_use_case.dart';
 import '../features/categories/data/repository/categories_repository_impl.dart';
 import '../features/home/domain/use_cases/search_news_use_case.dart';
 import '../features/home/presentation/bloc/home_bloc.dart';
@@ -139,6 +142,25 @@ void _initAuth() {
   );
   getIt.registerLazySingleton(
     () => ChangePasswordUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => SignOutUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => SendEmailVerificationUseCase(getIt<AuthRepository>()),
+  );
+  getIt.registerLazySingleton(
+    () => CheckEmailVerifiedUseCase(getIt<AuthRepository>()),
+  );
+
+  // EmailVerificationCubit — factory because a new instance is needed each time
+  // the verification screen is opened (avoids stale timer state from a prior session).
+  getIt.registerFactory<EmailVerificationCubit>(
+    () => EmailVerificationCubit(
+      sendEmailVerificationUseCase: getIt<SendEmailVerificationUseCase>(),
+      checkEmailVerifiedUseCase: getIt<CheckEmailVerifiedUseCase>(),
+      signOutUseCase: getIt<SignOutUseCase>(),
+    ),
   );
 }
 
@@ -402,3 +424,5 @@ void initOriginalArticle(String articleUrl) {
 void disposeOriginalArticlePage() {
   Get.delete<OriginalArticleController>();
 }
+
+

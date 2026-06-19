@@ -20,12 +20,17 @@ class SplashCubit extends Cubit<SplashState> {
       _appSharedPref.setIsFirstTimeToFalse();
     }
 
-    final isUserLoggedIn = FirebaseAuth.instance.currentUser != null;
+    final user = FirebaseAuth.instance.currentUser;
+    final isUserLoggedIn = user != null;
 
     if (isFirstTime) {
       emit(SplashNavigateToOnboarding());
     } else if (isUserLoggedIn) {
-      emit(SplashNavigateToMain());
+      if (!user.emailVerified) {
+        emit(SplashNavigateToVerification());
+      } else {
+        emit(SplashNavigateToMain());
+      }
     } else {
       emit(SplashNavigateToSignUp());
     }

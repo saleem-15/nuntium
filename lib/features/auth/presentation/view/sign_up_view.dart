@@ -71,10 +71,10 @@ class _SignUpViewState extends State<SignUpView> {
   void _onSignUpPressed() {
     if (_formKey.currentState!.validate()) {
       context.read<SignUpCubit>().signUp(
-            email: _emailController.text,
-            password: _passwordController.text,
-            name: _userNameController.text,
-          );
+        email: _emailController.text,
+        password: _passwordController.text,
+        name: _userNameController.text,
+      );
     }
   }
 
@@ -85,7 +85,7 @@ class _SignUpViewState extends State<SignUpView> {
         if (state is SignUpSuccess) {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            Routes.mainView,
+            Routes.emailVerificationView,
             (route) => false,
           );
         } else if (state is SignUpError) {
@@ -170,7 +170,7 @@ class _SignUpViewState extends State<SignUpView> {
                 },
               ),
 
-              SizedBox(height: 180.h),
+              SizedBox(height: 150.h),
 
               CustomRichText(
                 firstText: AppStrings.haveAnAccount,
