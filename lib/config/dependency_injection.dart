@@ -38,7 +38,7 @@ import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_chan
 import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.dart';
 import 'package:nuntium/features/categories/domain/repository/cateogries_repository.dart';
 import 'package:nuntium/features/categories/domain/use_case/get_cateogories_use_case.dart';
-import 'package:nuntium/features/categories/presentation/controller/categories_controller.dart';
+import 'package:nuntium/features/categories/presentation/cubit/categories_cubit.dart';
 import 'package:nuntium/features/home/data/data_source/news_remote_data_source.dart';
 import 'package:nuntium/features/home/data/repository/news_repository_impl.dart';
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
@@ -201,25 +201,18 @@ void initSession() {
   _initBookmarksDeps();
   _initHomeDeps();
   _initProfileDeps();
+  _initCategoriesDeps();
 
   // Register MainCubit inside the user_session scope
   getIt.registerLazySingleton<MainCubit>(() => MainCubit());
-
-  // GetX controllers for the main shell — still using Get.put because
-  // they depend on GetX's reactive system (GetBuilder/Obx).
-  // They are cleaned up in resetSession() via Get.deleteAll().
-  Get.put(CategoriesController());
 }
 
 /// Call this BEFORE navigating away from the main view on logout.
 /// Pops the session scope — all registered deps are unregistered and disposed.
 /// GetX controllers are explicitly deleted too.
 Future<void> resetSession() async {
-  // 1. Clean up GetX controllers that were placed in the session
-  if (Get.isRegistered<CategoriesController>()) Get.delete<CategoriesController>();
-
-  // 2. Pop the GetIt scope — this disposes ALL session-scoped singletons
-  //    (repositories, use cases, etc.) in one atomic operation.
+  // Pop the GetIt scope — this disposes ALL session-scoped singletons
+  // (repositories, use cases, etc.) in one atomic operation.
   if (getIt.hasScope(_sessionScopeName)) {
     await getIt.popScope();
   }
@@ -313,6 +306,15 @@ void _initProfileDeps() {
       signOutUseCase: getIt<SignOutUseCase>(),
       getUserDataUseCase: getIt<GetUserDataUseCase>(),
     ),
+  );
+}
+
+void _initCategoriesDeps() {
+  getIt.registerLazySingleton<CategoriesCubit>(
+    () => CategoriesCubit(
+      getCategoriesUseCase: getIt<GetCategoriesUseCase>(),
+    ),
+    dispose: (cubit) => cubit.close(),
   );
 }
 
