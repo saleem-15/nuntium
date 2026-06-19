@@ -45,7 +45,7 @@ import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
 import 'package:nuntium/features/language/presentation/controller/language_controller.dart';
-import 'package:nuntium/features/main/controller/main_controller.dart';
+import 'package:nuntium/features/main/cubit/main_cubit.dart';
 import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/features/profile/data/repository/profile_repository_impl.dart';
 import 'package:nuntium/features/profile/domain/repository/profile_repository.dart';
@@ -202,10 +202,12 @@ void initSession() {
   _initHomeDeps();
   _initProfileDeps();
 
+  // Register MainCubit inside the user_session scope
+  getIt.registerLazySingleton<MainCubit>(() => MainCubit());
+
   // GetX controllers for the main shell — still using Get.put because
   // they depend on GetX's reactive system (GetBuilder/Obx).
   // They are cleaned up in resetSession() via Get.deleteAll().
-  Get.put(MainController());
   Get.put(BookmarksController());
   Get.put(CategoriesController());
 }
@@ -215,7 +217,6 @@ void initSession() {
 /// GetX controllers are explicitly deleted too.
 Future<void> resetSession() async {
   // 1. Clean up GetX controllers that were placed in the session
-  if (Get.isRegistered<MainController>()) Get.delete<MainController>();
   if (Get.isRegistered<BookmarksController>()) Get.delete<BookmarksController>();
   if (Get.isRegistered<CategoriesController>()) Get.delete<CategoriesController>();
 

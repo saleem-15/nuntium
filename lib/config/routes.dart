@@ -18,6 +18,7 @@ import 'package:nuntium/features/auth/presentation/view/sign_up_view.dart';
 import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
 import 'package:nuntium/features/home/presentation/view/home_page.dart';
 import 'package:nuntium/features/language/presentation/view/language_view.dart';
+import 'package:nuntium/features/main/cubit/main_cubit.dart';
 import 'package:nuntium/features/main/views/main_view.dart';
 import 'package:nuntium/features/onboarding/view/onboarding_screen.dart';
 import 'package:nuntium/features/onboarding/view/welcome_screen.dart';
@@ -132,7 +133,12 @@ class RouteGenerator {
         // initSession() pushes a new GetIt scope for all user-specific deps.
         // It guards internally against being called twice (hasScope check).
         initSession();
-        return MaterialPageRoute(builder: (_) => const MainView());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<MainCubit>(
+            create: (_) => getIt<MainCubit>(),
+            child: const MainView(),
+          ),
+        );
 
       case Routes.homeView:
         // HomeView is part of the main shell — its deps are already initialized
