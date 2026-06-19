@@ -144,4 +144,27 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ErrorHandler.handle(e, s));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> sendEmailVerification() async {
+    if (!await _networkInfo.isConnected) {
+      return Left(OfflineFailure());
+    }
+    try {
+      await _remoteDataSource.sendEmailVerification();
+      return const Right(null);
+    } catch (e, s) {
+      return Left(ErrorHandler.handle(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkEmailVerified() async {
+    try {
+      final isVerified = await _remoteDataSource.checkEmailVerified();
+      return Right(isVerified);
+    } catch (e, s) {
+      return Left(ErrorHandler.handle(e, s));
+    }
+  }
 }

@@ -11,10 +11,9 @@ abstract class AuthRemoteDataSource {
   Future<User> signInWithGoogle();
   Future<void> signOut();
   Future<void> resetPassword(String email);
-  Future<void> changePassword(
-    String currentPassword,
-    String newPassword,
-  ); // أضف هذا السطر
+  Future<void> changePassword(String currentPassword, String newPassword);
+  Future<void> sendEmailVerification();
+  Future<bool> checkEmailVerified();
   Stream<User?> get userStream;
 }
 
@@ -100,6 +99,37 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Stream<User?> get userStream => _firebaseAuth.authStateChanges();
+
+  @override
+  Future<void> sendEmailVerification() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) {
+        throw AuthException(message: 'No user logged in', code: 'user-not-found');
+      }
+      await user.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(
+        message: e.message ?? 'Failed to send verification email',
+        code: e.code,
+      );
+    } on Exception catch (e) {
+      throw ServerException('$e');
+    }
+  }
+
+  @override
+  Future<bool> checkEmailVerified() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) return false;
+      await user.reload();
+      return user.emailVerified;
+    } on Exception {
+      // Silently ignore reload errors (e.g. temporary network offline)
+      return false;
+    }
+  }
 
   @override
   Future<void> resetPassword(String email) async {

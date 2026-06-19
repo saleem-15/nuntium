@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nuntium/features/auth/domain/use_cases/signup_use_case.dart';
 import 'sign_up_state.dart';
@@ -25,7 +26,14 @@ class SignUpCubit extends Cubit<SignUpState> {
 
     result.fold(
       (failure) => emit(SignUpError(failure.message)),
-      (right) => emit(const SignUpSuccess()),
+      (right) async {
+        try {
+          await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+        } catch (_) {
+          // Ignore verification email sending errors so we still proceed to signup success
+        }
+        emit(const SignUpSuccess());
+      },
     );
   }
 }

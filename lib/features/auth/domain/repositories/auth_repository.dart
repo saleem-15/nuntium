@@ -11,5 +11,7 @@ abstract class AuthRepository {
   Future<Either<Failure,void>> signOut();
   Future<Either<Failure,void>> resetPassword(String email);
   Future<Either<Failure, void>> changePassword(String currentPassword, String newPassword);
+  Future<Either<Failure, void>> sendEmailVerification();
+  Future<Either<Failure, bool>> checkEmailVerified();
   Stream<UserEntity?> get authStateChanges;
 }
