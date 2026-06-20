@@ -49,7 +49,7 @@ import 'package:nuntium/features/profile/data/repository/profile_repository_impl
 import 'package:nuntium/features/profile/domain/repository/profile_repository.dart';
 import 'package:nuntium/features/profile/domain/use_cases/get_user_data_use_case.dart';
 import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
-import 'package:nuntium/features/select_favorite_topics/controller/select_favorite_topics_controller.dart';
+import 'package:nuntium/features/select_favorite_topics/cubit/select_favorite_topics_cubit.dart';
 import 'package:nuntium/features/splash/cubit/splash_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -165,6 +165,8 @@ void _initAuth() {
       signOutUseCase: getIt<SignOutUseCase>(),
     ),
   );
+
+  getIt.registerFactory<SelectFavoriteTopicsCubit>(() => SelectFavoriteTopicsCubit());
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -367,16 +369,7 @@ void disposeSignUp() {
   // SignUpCubit is a factory and disposed by BlocProvider, nothing to unregister here.
 }
 
-void initSelectFavoriteTopics() {
-  disposeSignUp();
-  Get.put(SelectFavoriteTopicsController());
-}
 
-void disposeSelectFavoriteTopics() {
-  if (Get.isRegistered<SelectFavoriteTopicsController>()) {
-    Get.delete<SelectFavoriteTopicsController>();
-  }
-}
 
 void initForgetPassword() {
   // ResetPasswordUseCase is registered in _initAuth() — no action needed.

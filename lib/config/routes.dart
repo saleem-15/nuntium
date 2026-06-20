@@ -28,6 +28,7 @@ import 'package:nuntium/features/onboarding/view/onboarding_screen.dart';
 import 'package:nuntium/features/onboarding/view/welcome_screen.dart';
 import 'package:nuntium/features/profile/presentation/view/profile_view.dart';
 import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:nuntium/features/select_favorite_topics/cubit/select_favorite_topics_cubit.dart';
 import 'package:nuntium/features/select_favorite_topics/view/select_favorite_topics_view.dart';
 import 'package:nuntium/features/terms_and_conditions/presentation/view/app_content_view.dart';
 
@@ -93,8 +94,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const WelcomeView());
 
       case Routes.selectFavoriteTopicsView:
-        initSelectFavoriteTopics();
-        return MaterialPageRoute(builder: (_) => const SelectFavoriteTopics());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<SelectFavoriteTopicsCubit>(),
+            child: const SelectFavoriteTopics(),
+          ),
+        );
 
       //************************** Auth Views **************************
       case Routes.loginView:
