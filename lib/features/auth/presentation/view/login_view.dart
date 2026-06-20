@@ -14,7 +14,7 @@ import 'package:nuntium/core/widgets/custom_text_field.dart';
 import 'package:nuntium/core/widgets/header.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:nuntium/core/widgets/scaffold_with_header.dart';
-import 'package:nuntium/core/widgets/error_snack_bar.dart';
+import 'package:nuntium/core/widgets/snack_bars/error_snack_bar.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_state.dart';
 import 'package:nuntium/features/auth/presentation/view/widgets/password_icon.dart';

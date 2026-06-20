@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/route_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nuntium/core/network/api_client.dart';
@@ -92,9 +90,7 @@ Future<void> initApp() async {
   await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
 
-  final languageService = LanguageService();
-  getIt.registerSingleton<LanguageService>(languageService);
-  Get.put(languageService, permanent: true);
+  getIt.registerSingleton<LanguageService>(LanguageService());
 
   getIt.registerFactory<LanguageCubit>(
     () => LanguageCubit(getIt<LanguageService>()),

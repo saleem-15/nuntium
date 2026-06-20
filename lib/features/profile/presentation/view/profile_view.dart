@@ -6,7 +6,7 @@ import 'package:nuntium/config/routes.dart';
 import 'package:nuntium/core/extensions/theme_extension.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
-import 'package:nuntium/core/widgets/error_snack_bar.dart';
+import 'package:nuntium/core/widgets/snack_bars/error_snack_bar.dart';
 import 'package:nuntium/features/profile/domain/entities/user_entity.dart';
 import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:nuntium/features/profile/presentation/cubit/profile_state.dart';

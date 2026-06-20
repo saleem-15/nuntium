@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:nuntium/config/dependency_injection.dart';
 import 'package:nuntium/config/routes.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
@@ -51,9 +50,9 @@ Future<void> main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: Get.find<LanguageService>().supportedLocales,
+      supportedLocales: getIt<LanguageService>().supportedLocales,
       path: kTranslationPath,
-      fallbackLocale: Get.find<LanguageService>().fallBackLocale,
+      fallbackLocale: getIt<LanguageService>().fallBackLocale,
       child: const MyApp(),
     ),
   );
