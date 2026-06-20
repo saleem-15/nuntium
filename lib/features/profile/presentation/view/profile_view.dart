@@ -43,12 +43,12 @@ class ProfileView extends StatelessWidget {
               // Persistent bottom navigation bar has it's own navigator.
               // And it has its own stack of screens.
               // So we need to use the root Navigator to navigate to the login view.
-              // You can use the Persistent botton view navigator to navigate 
+              // You can use the Persistent botton view navigator to navigate
               // to push a view in the persistent botton view stack.
-              Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-                Routes.loginView,
-                (route) => false,
-              );
+              Navigator.of(
+                context,
+                rootNavigator: true,
+              ).pushNamedAndRemoveUntil(Routes.loginView, (route) => false);
             }
           });
         } else if (state is ProfileSignOutError) {
@@ -104,28 +104,37 @@ class ProfileView extends StatelessWidget {
                       SettingsListTile(
                         title: AppStrings.language,
                         onPressed: () {
-                          Navigator.pushNamed(context, Routes.languageView);
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(Routes.languageView);
                         },
                       ),
                       SettingsListTile(
                         title: AppStrings.changePassword,
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, Routes.changePasswordView);
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(Routes.changePasswordView);
                         },
                       ),
                       SettingsListTile(
                         title: AppStrings.privacy,
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, Routes.privacyAndPolicyView);
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(Routes.privacyAndPolicyView);
                         },
                       ),
                       SettingsListTile(
                         title: AppStrings.termsAndConditions,
                         onPressed: () {
-                          Navigator.pushNamed(
-                              context, Routes.termsAndConditionsView);
+                          Navigator.of(
+                            context,
+                            rootNavigator: true,
+                          ).pushNamed(Routes.termsAndConditionsView);
                         },
                       ),
                       SettingsListTile(
