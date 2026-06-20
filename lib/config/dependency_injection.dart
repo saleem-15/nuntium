@@ -51,7 +51,6 @@ import 'package:nuntium/features/profile/domain/use_cases/get_user_data_use_case
 import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:nuntium/features/select_favorite_topics/controller/select_favorite_topics_controller.dart';
 import 'package:nuntium/features/splash/cubit/splash_cubit.dart';
-import 'package:nuntium/features/terms_and_conditions/presentation/controller/app_content_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/auth/domain/use_cases/change_password_use_case.dart';
@@ -400,12 +399,3 @@ void initChangePassword() {
 void disposeChangePasswordPage() {
   // ChangePasswordCubit is a factory and disposed by BlocProvider, nothing to unregister here.
 }
-
-void initContentController() {
-  Get.put(AppContentController());
-}
-
-void disposeContentControllerPage() {
-  Get.delete<AppContentController>();
-}
-

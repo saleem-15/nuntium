@@ -202,7 +202,6 @@ class RouteGenerator {
         );
 
       case Routes.privacyAndPolicyView:
-        initContentController();
         return MaterialPageRoute(
           builder: (_) => AppContentView(
             title: AppStrings.privacyPolicyTitle,
@@ -211,7 +210,6 @@ class RouteGenerator {
         );
 
       case Routes.termsAndConditionsView:
-        initContentController();
         return MaterialPageRoute(
           builder: (_) => AppContentView(
             title: AppStrings.termsAndConditions,
