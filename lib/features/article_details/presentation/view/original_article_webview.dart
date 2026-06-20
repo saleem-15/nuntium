@@ -7,6 +7,7 @@ import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/widgets/app_back_button.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OriginalArticleWebView extends StatefulWidget {
   final String url;
@@ -156,7 +157,7 @@ class _OriginalArticleWebViewState extends State<OriginalArticleWebView> {
       appBar: AppBar(
         leading: const AppBackButton(),
         title: Text(
-          AppStrings.originalArticle,
+          context.tr(AppStrings.originalArticle),
           style: const TextStyle(color: Colors.black, fontSize: 16),
         ),
         centerTitle: true,
@@ -183,7 +184,7 @@ class _OriginalArticleWebViewState extends State<OriginalArticleWebView> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: PrimaryButton(
-                      text: AppStrings.retry,
+                      text: context.tr(AppStrings.retry),
                       onPressed: onRefresh,
                     ),
                   ),

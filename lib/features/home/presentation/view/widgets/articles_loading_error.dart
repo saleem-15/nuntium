@@ -5,6 +5,7 @@ import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/theme/app_fonts.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PageLoadingError extends StatelessWidget {
   final VoidCallback onRefreshPressed;
@@ -38,7 +39,7 @@ class PageLoadingError extends StatelessWidget {
             width: 160.w,
             child: PrimaryButton(
               onPressed: onRefreshPressed,
-              text: AppStrings.tryAgain,
+              text: context.tr(AppStrings.tryAgain),
             ),
           ),
         ],

@@ -12,6 +12,7 @@ import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:nuntium/config/routes.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ArticleView extends StatelessWidget {
   const ArticleView({super.key});
@@ -195,7 +196,7 @@ class ArticleView extends StatelessWidget {
                         vertical: 16.h,
                       ),
                       child: PrimaryButton(
-                        text: AppStrings.viewOriginalArticle,
+                        text: context.tr(AppStrings.viewOriginalArticle),
                         onPressed: () {
                           if (article.url.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(

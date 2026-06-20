@@ -11,6 +11,7 @@ import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/features/onboarding/cubit/onboarding_state.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
@@ -85,8 +86,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 400),
                   child: Text(
-                    key: ValueKey<String>(cubit.titles[state.index]),
-                    cubit.titles[state.index],
+                    key: ValueKey<String>(context.tr(cubit.titles[state.index])),
+                    context.tr(cubit.titles[state.index]),
                     textAlign: TextAlign.center,
                     style: context.headline1,
                   ),
@@ -103,8 +104,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                   return AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: Text(
-                      key: ValueKey<String>(cubit.subTitles[state.index]),
-                      cubit.subTitles[state.index],
+                      key: ValueKey<String>(context.tr(cubit.subTitles[state.index])),
+                      context.tr(cubit.subTitles[state.index]),
                       textAlign: TextAlign.center,
                       style: context.body1,
                     ),
@@ -116,7 +117,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             Padding(
               padding: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 35.h),
               child: PrimaryButton(
-                text: AppStrings.next,
+                text: context.tr(AppStrings.next),
                 onPressed: () {
                   final currentIndex = cubit.state.index;
                   if (currentIndex < cubit.titles.length - 1) {

@@ -10,6 +10,7 @@ import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:nuntium/features/auth/presentation/cubit/change_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/change_password_state.dart';
 import 'widgets/password_icon.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ChangePasswordView extends StatefulWidget {
   const ChangePasswordView({super.key});
@@ -115,7 +116,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         return Scaffold(
           appBar: AppBar(
             leading: const AppBackButton(),
-            title: Text(AppStrings.changePassword),
+            title: Text(context.tr(AppStrings.changePassword)),
           ),
           body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -127,7 +128,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   CustomTextField(
                     controller: _currentPasswordController,
                     focusNode: _currentPasswordFocus,
-                    hintText: AppStrings.currentPassword,
+                    hintText: context.tr(AppStrings.currentPassword),
                     prefixIcon: AppIcons.lock,
                     isPassword: _isCurrentHidden,
                     keyboardType: TextInputType.visiblePassword,
@@ -144,7 +145,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         });
                       },
                     ),
-                    validator: AppValidator.validatePassword,
+                    validator: (value) => AppValidator.validatePassword(value, context),
                   ),
 
                   SizedBox(height: 16.h),
@@ -153,7 +154,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   CustomTextField(
                     controller: _newPasswordController,
                     focusNode: _newPasswordFocus,
-                    hintText: AppStrings.newPassword,
+                    hintText: context.tr(AppStrings.newPassword),
                     prefixIcon: AppIcons.lock,
                     isPassword: _isNewHidden,
                     keyboardType: TextInputType.visiblePassword,
@@ -170,7 +171,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                         });
                       },
                     ),
-                    validator: AppValidator.validatePassword,
+                    validator: (value) => AppValidator.validatePassword(value, context),
                   ),
 
                   SizedBox(height: 16.h),
@@ -179,12 +180,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   CustomTextField(
                     controller: _repeatPasswordController,
                     focusNode: _repeatPasswordFocus,
-                    hintText: AppStrings.repeateNewPassword,
+                    hintText: context.tr(AppStrings.repeateNewPassword),
                     prefixIcon: AppIcons.lock,
                     isPassword: true,
                     validator: (value) => AppValidator.validateMatchPassword(
-                      value,
-                      _newPasswordController.text.trim(),
+                      value, _newPasswordController.text.trim(), context,
                     ),
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.done,
@@ -194,7 +194,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                   SizedBox(height: 16.h),
 
                   PrimaryButton(
-                    text: AppStrings.changePassword,
+                    text: context.tr(AppStrings.changePassword),
                     isLoading: isLoading,
                     onPressed: () => _onSubmit(context),
                   ),

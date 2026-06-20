@@ -6,6 +6,7 @@ import '/core/extensions/theme_extension.dart';
 import '/core/resources/app_assets.dart';
 import '/core/resources/app_strings.dart';
 import '/core/theme/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeSearchBar extends StatefulWidget {
   final Function(String)? onChanged;
@@ -67,7 +68,7 @@ class _HomeSearchBarState extends State<HomeSearchBar> {
           controller: widget.searchFieldController,
           onChanged: widget.onChanged,
           decoration: InputDecoration(
-            hintText: AppStrings.search,
+            hintText: context.tr(AppStrings.search),
             hintStyle: context.body1.copyWith(color: AppColors.greyPrimary),
             prefixIcon: IconButton(
               padding: EdgeInsets.all(14.w),

@@ -9,6 +9,7 @@ import 'package:nuntium/core/theme/app_fonts.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:nuntium/features/select_favorite_topics/cubit/select_favorite_topics_cubit.dart';
 import 'package:nuntium/features/select_favorite_topics/cubit/select_favorite_topics_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SelectFavoriteTopics extends StatelessWidget {
   const SelectFavoriteTopics({super.key});
@@ -26,7 +27,7 @@ class SelectFavoriteTopics extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                AppStrings.selectFavoriteTopicsTitle,
+                context.tr(AppStrings.selectFavoriteTopicsTitle),
                 style: context.headline1,
                 textAlign: TextAlign.left,
               ),
@@ -35,7 +36,7 @@ class SelectFavoriteTopics extends StatelessWidget {
             SizedBox(height: 8.h),
 
             Text(
-              AppStrings.selectFavoriteTopicsSubTitle,
+              context.tr(AppStrings.selectFavoriteTopicsSubTitle),
               style: context.body1,
             ),
 
@@ -70,8 +71,8 @@ class SelectFavoriteTopics extends StatelessWidget {
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          topic,
-                          style: context.body1.copyWith(
+                            context.tr(topic),
+                            style: context.body1.copyWith(
                             color: isSelected
                                 ? Colors.white
                                 : AppColors.greyDarker,
@@ -88,7 +89,7 @@ class SelectFavoriteTopics extends StatelessWidget {
             SizedBox(height: 16.h),
 
             PrimaryButton(
-              text: AppStrings.next,
+              text: context.tr(AppStrings.next),
               onPressed: () => Navigator.pushReplacementNamed(context, Routes.homeView),
             ),
           ],

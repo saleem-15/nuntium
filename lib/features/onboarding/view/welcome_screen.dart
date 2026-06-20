@@ -5,6 +5,7 @@ import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/extensions/theme_extension.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
@@ -23,14 +24,14 @@ class WelcomeView extends StatelessWidget {
           ),
           SizedBox(height: 60.h),
           Text(
-            AppStrings.nuntium,
+            context.tr(AppStrings.nuntium),
             style: context.headline1.copyWith(fontSize: 34.sp),
           ),
           SizedBox(height: 24.h),
           SizedBox(
             width: 260.w,
             child: Text(
-              AppStrings.welcomeBody,
+              context.tr(AppStrings.welcomeBody),
               textAlign: TextAlign.center,
               style: context.body1,
             ),
@@ -39,7 +40,7 @@ class WelcomeView extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 35.h),
             child: PrimaryButton(
-              text: AppStrings.getStarted,
+              text: context.tr(AppStrings.getStarted),
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,

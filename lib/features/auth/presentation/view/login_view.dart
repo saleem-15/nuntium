@@ -19,6 +19,7 @@ import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_state.dart';
 import 'package:nuntium/features/auth/presentation/view/widgets/password_icon.dart';
 import 'package:nuntium/features/auth/presentation/view/widgets/social_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -92,8 +93,8 @@ class _LoginViewState extends State<LoginView> {
       },
       child: ScaffoldWithHeader(
         header: Header(
-          title: AppStrings.loginTitle,
-          subTtitle: AppStrings.loginSubTitle,
+          title: context.tr(AppStrings.loginTitle),
+          subTtitle: context.tr(AppStrings.loginSubTitle),
         ),
         body: Form(
           key: _formKey,
@@ -102,11 +103,11 @@ class _LoginViewState extends State<LoginView> {
               //Email Field
               CustomTextField(
                 controller: _emailController,
-                hintText: AppStrings.emailAdress,
+                hintText: context.tr(AppStrings.emailAdress),
                 prefixIcon: AppIcons.email,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                validator: AppValidator.validateEmail,
+                validator: (value) => AppValidator.validateEmail(value, context),
               ),
 
               SizedBox(height: 16.h),
@@ -114,7 +115,7 @@ class _LoginViewState extends State<LoginView> {
               //Password Field
               CustomTextField(
                 controller: _passwordController,
-                hintText: AppStrings.password,
+                hintText: context.tr(AppStrings.password),
                 prefixIcon: AppIcons.lock,
                 isPassword: _isPasswordHidden,
                 suffixIcon: PasswordIcon(
@@ -122,7 +123,7 @@ class _LoginViewState extends State<LoginView> {
                   isPasswordHidden: _isPasswordHidden,
                   onPressed: _togglePasswordVisibility,
                 ),
-                validator: AppValidator.validatePassword,
+                validator: (value) => AppValidator.validatePassword(value, context),
               ),
 
               SizedBox(height: 16.h),
@@ -134,7 +135,7 @@ class _LoginViewState extends State<LoginView> {
                     Navigator.pushNamed(context, Routes.forgetPasswordView);
                   },
                   child: Text(
-                    AppStrings.forgotPassword,
+                    context.tr(AppStrings.forgotPassword),
                     style: context.body1.copyWith(fontWeight: AppFonts.medium),
                   ),
                 ),
@@ -145,7 +146,7 @@ class _LoginViewState extends State<LoginView> {
               BlocBuilder<LoginCubit, LoginState>(
                 builder: (context, state) {
                   return PrimaryButton(
-                    text: AppStrings.signIn,
+                    text: context.tr(AppStrings.signIn),
                     isLoading: state is LoginLoading,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -162,14 +163,14 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(height: 48.h),
 
               Text(
-                AppStrings.or,
+                context.tr(AppStrings.or),
                 style: context.body1.copyWith(fontWeight: AppFonts.semiBold),
               ),
 
               SizedBox(height: 48.h),
 
               SocialButton(
-                text: AppStrings.signInwithGoogle,
+                text: context.tr(AppStrings.signInwithGoogle),
                 icon: AppAssets.google,
                 onPressed: () {
                   context.read<LoginCubit>().signInWithGoogle();
@@ -179,7 +180,7 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(height: 16.h),
 
               SocialButton(
-                text: AppStrings.signInwithFacebook,
+                text: context.tr(AppStrings.signInwithFacebook),
                 icon: AppAssets.facebook,
                 onPressed: () {
                   // Facebook sign-in isn't implemented in the remote datasource/controller code
@@ -189,8 +190,8 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(height: 50.h),
 
               CustomRichText(
-                firstText: AppStrings.dontHaveAccount,
-                secondText: AppStrings.signUp,
+                firstText: context.tr(AppStrings.dontHaveAccount),
+                secondText: context.tr(AppStrings.signUp),
                 onTap: () {
                   Navigator.pushReplacementNamed(context, Routes.signUpView);
                 },

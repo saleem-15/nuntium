@@ -6,6 +6,7 @@ import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/forget_password_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void showSuccessDialog(
   BuildContext context, {
@@ -51,7 +52,7 @@ void showSuccessDialog(
 
                 // 2. Title
                 Text(
-                  AppStrings.checkYourMail,
+                  context.tr(AppStrings.checkYourMail),
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
@@ -62,7 +63,7 @@ void showSuccessDialog(
                 SizedBox(height: 10.h),
 
                 Text(
-                  "${AppStrings.emailSentDescription}\n$email",
+                  "${context.tr(AppStrings.emailSentDescription)}\n$email",
                   style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
@@ -87,7 +88,7 @@ void showSuccessDialog(
                       );
                     },
                     child: Text(
-                      AppStrings.doneBackToLogin,
+                      context.tr(AppStrings.doneBackToLogin),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.sp,
@@ -122,8 +123,8 @@ void showSuccessDialog(
                           children: [
                             TextSpan(
                               text: isRunning
-                                  ? "${AppStrings.resendLink} "
-                                  : AppStrings.resendLink,
+                                  ? "${context.tr(AppStrings.resendLink)} "
+                                  : context.tr(AppStrings.resendLink),
                               style: TextStyle(
                                 color: isRunning
                                     ? Colors.grey

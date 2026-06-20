@@ -14,6 +14,7 @@ import 'package:nuntium/core/widgets/snack_bars/error_snack_bar.dart';
 import 'package:nuntium/features/auth/presentation/cubit/sign_up_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/sign_up_state.dart';
 import 'package:nuntium/features/auth/presentation/view/widgets/password_icon.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -94,8 +95,8 @@ class _SignUpViewState extends State<SignUpView> {
       },
       child: ScaffoldWithHeader(
         header: Header(
-          title: AppStrings.signUpTitle,
-          subTtitle: AppStrings.signUpSubTitle,
+          title: context.tr(AppStrings.signUpTitle),
+          subTtitle: context.tr(AppStrings.signUpSubTitle),
         ),
         body: Form(
           key: _formKey,
@@ -106,11 +107,11 @@ class _SignUpViewState extends State<SignUpView> {
               //User Name Field
               CustomTextField(
                 controller: _userNameController,
-                hintText: AppStrings.userName,
+                hintText: context.tr(AppStrings.userName),
                 prefixIcon: AppIcons.user,
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
-                validator: AppValidator.validateName,
+                validator: (value) => AppValidator.validateName(value, context),
               ),
 
               SizedBox(height: 16.h),
@@ -118,11 +119,11 @@ class _SignUpViewState extends State<SignUpView> {
               //Email Field
               CustomTextField(
                 controller: _emailController,
-                hintText: AppStrings.emailAdress,
+                hintText: context.tr(AppStrings.emailAdress),
                 prefixIcon: AppIcons.email,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                validator: AppValidator.validateEmail,
+                validator: (value) => AppValidator.validateEmail(value, context),
               ),
 
               SizedBox(height: 16.h),
@@ -130,7 +131,7 @@ class _SignUpViewState extends State<SignUpView> {
               //Password Field
               CustomTextField(
                 controller: _passwordController,
-                hintText: AppStrings.password,
+                hintText: context.tr(AppStrings.password),
                 prefixIcon: AppIcons.lock,
                 isPassword: _isPasswordHidden,
                 onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
@@ -140,7 +141,7 @@ class _SignUpViewState extends State<SignUpView> {
                   isPasswordHidden: _isPasswordHidden,
                   onPressed: _togglePasswordVisibility,
                 ),
-                validator: AppValidator.validatePassword,
+                validator: (value) => AppValidator.validatePassword(value, context),
               ),
 
               SizedBox(height: 16.h),
@@ -148,13 +149,12 @@ class _SignUpViewState extends State<SignUpView> {
               //Repeat Password Field
               CustomTextField(
                 controller: _repeatPasswordController,
-                hintText: AppStrings.repeatPassword,
+                hintText: context.tr(AppStrings.repeatPassword),
                 prefixIcon: AppIcons.lock,
                 isPassword: true,
                 textInputAction: TextInputAction.done,
                 validator: (value) => AppValidator.validateMatchPassword(
-                  value,
-                  _passwordController.text.trim(),
+                  value, _passwordController.text.trim(), context,
                 ),
               ),
 
@@ -163,7 +163,7 @@ class _SignUpViewState extends State<SignUpView> {
               BlocBuilder<SignUpCubit, SignUpState>(
                 builder: (context, state) {
                   return PrimaryButton(
-                    text: AppStrings.signUp,
+                    text: context.tr(AppStrings.signUp),
                     isLoading: state is SignUpLoading,
                     onPressed: _onSignUpPressed,
                   );
@@ -173,8 +173,8 @@ class _SignUpViewState extends State<SignUpView> {
               SizedBox(height: 150.h),
 
               CustomRichText(
-                firstText: AppStrings.haveAnAccount,
-                secondText: AppStrings.signIn,
+                firstText: context.tr(AppStrings.haveAnAccount),
+                secondText: context.tr(AppStrings.signIn),
                 onTap: () {
                   Navigator.pushReplacementNamed(context, Routes.loginView);
                 },

@@ -24,8 +24,8 @@ class CategoriesView extends StatelessWidget {
           child: Column(
             children: [
               Header(
-                title: AppStrings.categoriesPageTitle,
-                subTtitle: AppStrings.categoriesPageSubTitle,
+                title: context.tr(AppStrings.categoriesPageTitle),
+                subTtitle: context.tr(AppStrings.categoriesPageSubTitle),
               ),
               BlocBuilder<CategoriesCubit, CategoriesState>(
                 builder: (context, state) {
@@ -49,7 +49,7 @@ class CategoriesView extends StatelessWidget {
                               onPressed: () => context
                                   .read<CategoriesCubit>()
                                   .fetchCategories(),
-                              child: Text(AppStrings.retry),
+                              child: Text(context.tr(AppStrings.retry)),
                             ),
                           ],
                         ),
@@ -102,7 +102,7 @@ class CategoriesView extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: Text(
-          tr(category.name),
+          context.tr(category.name),
           style: context.body1.copyWith(
             color: AppColors.greyDarker,
             fontWeight: AppFonts.semiBold,

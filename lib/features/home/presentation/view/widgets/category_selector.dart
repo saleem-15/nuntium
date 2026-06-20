@@ -68,7 +68,7 @@ class _CategoryItem extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Text(
-              tr(category.name),
+              context.tr(category.name),
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isSelected ? AppColors.white : AppColors.greyPrimary,

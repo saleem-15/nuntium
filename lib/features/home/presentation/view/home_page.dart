@@ -16,6 +16,7 @@ import 'package:nuntium/features/home/presentation/view/widgets/home_search_bar.
 
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -108,8 +109,8 @@ class _HomeViewState extends State<HomeView> {
             SliverToBoxAdapter(
               child: Header(
                 horizentalPadding: 20.w,
-                title: AppStrings.homePageTitle,
-                subTtitle: AppStrings.homePageSubTitle,
+                title: context.tr(AppStrings.homePageTitle),
+                subTtitle: context.tr(AppStrings.homePageSubTitle),
               ),
             ),
 
@@ -157,7 +158,7 @@ class _HomeViewState extends State<HomeView> {
     if (status == HomeStatus.error && state.articles.isEmpty) {
       return SliverFillRemaining(
         child: PageLoadingError(
-          errorMessage: state.errorMessage ?? AppStrings.errorLoadingNews,
+          errorMessage: state.errorMessage ?? context.tr(AppStrings.errorLoadingNews),
           onRefreshPressed: () {
             context.read<HomeBloc>().add(HomeRefreshRequested());
           },
@@ -168,7 +169,7 @@ class _HomeViewState extends State<HomeView> {
     // Empty result
     if (status == HomeStatus.loaded && state.articles.isEmpty) {
       return SliverFillRemaining(
-        child: Center(child: Text(AppStrings.noArticlesFound)),
+        child: Center(child: Text(context.tr(AppStrings.noArticlesFound))),
       );
     }
 

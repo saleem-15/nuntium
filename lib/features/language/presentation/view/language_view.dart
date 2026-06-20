@@ -24,7 +24,7 @@ class LanguageView extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
-            title: Text(AppStrings.language),
+            title: Text(context.tr(AppStrings.language)),
             leading: const AppBackButton(),
           ),
           body: Padding(

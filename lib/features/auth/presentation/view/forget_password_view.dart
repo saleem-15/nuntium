@@ -12,6 +12,7 @@ import 'package:nuntium/core/widgets/primary_button.dart';
 import 'package:nuntium/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:nuntium/features/auth/presentation/cubit/forget_password_state.dart';
 import 'widgets/email_link_is_sent_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ForgetPasswordView extends StatefulWidget {
   const ForgetPasswordView({super.key});
@@ -37,7 +38,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
 
   void _onNextPressed(BuildContext context) {
     final email = _emailController.text.trim();
-    final validateEmail = AppValidator.validateEmail(email);
+    final validateEmail = AppValidator.validateEmail(email, context);
 
     if (validateEmail != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -86,13 +87,13 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
               child: Column(
                 children: [
                   Header(
-                    title: AppStrings.forgetPasswordTitle,
-                    subTtitle: AppStrings.forgetPasswordSubTitle,
+                    title: context.tr(AppStrings.forgetPasswordTitle),
+                    subTtitle: context.tr(AppStrings.forgetPasswordSubTitle),
                   ),
                   //Email Field
                   CustomTextField(
                     controller: _emailController,
-                    hintText: AppStrings.emailAdress,
+                    hintText: context.tr(AppStrings.emailAdress),
                     prefixIcon: AppIcons.email,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
@@ -101,7 +102,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   SizedBox(height: 16.h),
 
                   PrimaryButton(
-                    text: AppStrings.next,
+                    text: context.tr(AppStrings.next),
                     isLoading: isLoading,
                     onPressed: () => _onNextPressed(context),
                   ),
@@ -109,8 +110,8 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   const Spacer(),
 
                   CustomRichText(
-                    firstText: AppStrings.remmeberPassword,
-                    secondText: AppStrings.tryAgain,
+                    firstText: context.tr(AppStrings.remmeberPassword),
+                    secondText: context.tr(AppStrings.tryAgain),
                     onTap: () {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         Routes.loginView,

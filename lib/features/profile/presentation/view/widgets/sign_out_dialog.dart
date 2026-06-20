@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void showSignoutDialog(BuildContext context, {required VoidCallback onSignOutPressed}) {
   showGeneralDialog(
@@ -25,7 +26,7 @@ void showSignoutDialog(BuildContext context, {required VoidCallback onSignOutPre
             color: AppColors.purplePrimary,
           ),
           content: Text(
-            AppStrings.logoutConfirmation,
+            context.tr(AppStrings.logoutConfirmation),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: AppColors.blackPrimary,
@@ -43,7 +44,7 @@ void showSignoutDialog(BuildContext context, {required VoidCallback onSignOutPre
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                AppStrings.cancel,
+                context.tr(AppStrings.cancel),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.greyPrimary,
                   fontWeight: FontWeight.bold,
@@ -67,7 +68,7 @@ void showSignoutDialog(BuildContext context, {required VoidCallback onSignOutPre
                   onSignOutPressed();
                 },
                 child: Text(
-                  AppStrings.yes,
+                  context.tr(AppStrings.yes),
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

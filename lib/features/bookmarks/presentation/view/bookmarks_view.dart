@@ -12,6 +12,7 @@ import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.da
 import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_state.dart';
 import 'package:nuntium/features/home/presentation/view/widgets/recommended_news_card.dart';
 import 'package:nuntium/config/routes.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class BookmarksView extends StatelessWidget {
   const BookmarksView({super.key});
@@ -26,8 +27,8 @@ class BookmarksView extends StatelessWidget {
           child: Column(
             children: [
               Header(
-                title: AppStrings.bookmarksPageTitle,
-                subTtitle: AppStrings.bookmarksPageSubTitle,
+                title: context.tr(AppStrings.bookmarksPageTitle),
+                subTtitle: context.tr(AppStrings.bookmarksPageSubTitle),
               ),
               Expanded(
                 child: BlocBuilder<BookmarksCubit, BookmarksState>(
@@ -83,7 +84,7 @@ class BookmarksView extends StatelessWidget {
                                           ),
                                           SizedBox(width: 8.w),
                                           Text(
-                                            AppStrings.delete,
+                                            context.tr(AppStrings.delete),
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -155,7 +156,7 @@ class BookmarksView extends StatelessWidget {
         SizedBox(
           width: 300.w,
           child: Text(
-            AppStrings.noSavedArticles,
+            context.tr(AppStrings.noSavedArticles),
             textAlign: TextAlign.center,
             style: context.body2.copyWith(
               color: AppColors.blackPrimary,

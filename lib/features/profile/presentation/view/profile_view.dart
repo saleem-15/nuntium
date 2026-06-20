@@ -12,6 +12,7 @@ import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:nuntium/features/profile/presentation/cubit/profile_state.dart';
 import 'package:nuntium/features/profile/presentation/view/widgets/settings_list_tile.dart';
 import 'package:nuntium/features/profile/presentation/view/widgets/sign_out_dialog.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -78,7 +79,7 @@ class ProfileView extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       SettingsListTile(
-                        title: AppStrings.notifications,
+                        title: context.tr(AppStrings.notifications),
                         trailing: Transform.scale(
                           scale: 0.8,
                           child: BlocBuilder<ProfileCubit, ProfileState>(
@@ -102,7 +103,7 @@ class ProfileView extends StatelessWidget {
                         ),
                       ),
                       SettingsListTile(
-                        title: AppStrings.language,
+                        title: context.tr(AppStrings.language),
                         onPressed: () {
                           Navigator.of(
                             context,
@@ -111,7 +112,7 @@ class ProfileView extends StatelessWidget {
                         },
                       ),
                       SettingsListTile(
-                        title: AppStrings.changePassword,
+                        title: context.tr(AppStrings.changePassword),
                         onPressed: () {
                           Navigator.of(
                             context,
@@ -120,7 +121,7 @@ class ProfileView extends StatelessWidget {
                         },
                       ),
                       SettingsListTile(
-                        title: AppStrings.privacy,
+                        title: context.tr(AppStrings.privacy),
                         onPressed: () {
                           Navigator.of(
                             context,
@@ -129,7 +130,7 @@ class ProfileView extends StatelessWidget {
                         },
                       ),
                       SettingsListTile(
-                        title: AppStrings.termsAndConditions,
+                        title: context.tr(AppStrings.termsAndConditions),
                         onPressed: () {
                           Navigator.of(
                             context,
@@ -138,7 +139,7 @@ class ProfileView extends StatelessWidget {
                         },
                       ),
                       SettingsListTile(
-                        title: AppStrings.signOut,
+                        title: context.tr(AppStrings.signOut),
                         trailing: Icon(
                           Icons.logout,
                           color: AppColors.greyDarker,
@@ -161,7 +162,7 @@ class ProfileView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppStrings.profile, style: context.headline1),
+        Text(context.tr(AppStrings.profile), style: context.headline1),
         SizedBox(height: 32.h, width: double.infinity),
         if (user != null)
           Row(

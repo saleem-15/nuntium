@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuntium/core/extensions/theme_extension.dart';
 import 'package:nuntium/core/widgets/nuntium_app_bar.dart';
 
-/// Used in (Terms & Conditions) View and (Privacy Policy) View 
+/// Used in (Terms & Conditions) View and (Privacy Policy) View
 class AppContentView extends StatelessWidget {
   final String title;
   final String content;
@@ -13,11 +14,11 @@ class AppContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: NuntiumAppBar(title: title),
+      appBar: NuntiumAppBar(title: context.tr(title)),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
         child: Text(
-          content,
+          context.tr(content),
           style: context.body1.copyWith(height: 1.6),
           textAlign: TextAlign.start,
         ),
