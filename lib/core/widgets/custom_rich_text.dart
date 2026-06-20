@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
 
 class CustomRichText extends StatelessWidget {
   final String firstText;

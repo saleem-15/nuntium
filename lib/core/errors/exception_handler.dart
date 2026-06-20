@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:new_nuntium/core/errors/exceptions.dart';
+import 'package:nuntium/core/errors/exceptions.dart';
 
 /// Handle Dio Exceptions and convert them into App defined Exceptions.
 AppException handleDioError(Exception error) {

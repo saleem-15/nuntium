@@ -1,51 +1,99 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
-import 'package:new_nuntium/features/categories/presentation/views/categories_view.dart';
-import 'package:new_nuntium/features/home/presentation/view/home_page.dart';
-import 'package:new_nuntium/features/main/controller/main_controller.dart';
-import 'package:new_nuntium/features/profile/presentation/view/profile_view.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/features/bookmarks/presentation/cubit/bookmarks_cubit.dart';
+import 'package:nuntium/features/bookmarks/presentation/view/bookmarks_view.dart';
+import 'package:nuntium/features/categories/presentation/cubit/categories_cubit.dart';
+import 'package:nuntium/features/categories/presentation/views/categories_view.dart';
+import 'package:nuntium/features/home/presentation/view/home_page.dart';
+import 'package:nuntium/features/main/cubit/main_cubit.dart';
+import 'package:nuntium/features/main/cubit/main_state.dart';
+import 'package:nuntium/features/profile/presentation/view/profile_view.dart';
+import 'package:nuntium/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
-class MainView extends GetView<MainController> {
+import '../../home/presentation/bloc/home_bloc.dart';
+import '../../home/presentation/bloc/home_event.dart';
+
+class MainView extends StatefulWidget {
   const MainView({super.key});
 
   @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  late final PersistentTabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialIndex = context.read<MainCubit>().state.tabIndex;
+    _tabController = PersistentTabController(initialIndex: initialIndex);
+
+    // Fetch initial tab data if necessary
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchTabDataIfNeeded(initialIndex);
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  void _fetchTabDataIfNeeded(int index) {
+    // Categories data fetching is initiated automatically inside CategoriesCubit constructor.
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      // The list of tabs and their configurations
-      tabs: _tabs(),
+    return BlocListener<MainCubit, MainState>(
+      listener: (context, state) {
+        // Sync visual tab only if it differs from the cubit's state index.
+        // This avoids recursive loops when user taps on tabs manually.
+        if (_tabController.index != state.tabIndex) {
+          _tabController.jumpToTab(state.tabIndex);
+        }
+        _fetchTabDataIfNeeded(state.tabIndex);
+      },
+      child: PersistentTabView(
+        controller: _tabController,
+        tabs: _tabs(),
 
-      // Using navBarBuilder to customize the decoration of Style 12
-      navBarBuilder: (navBarConfig) => Style10BottomNavBar(
-        navBarConfig: navBarConfig,
-        height: 60.h,
-        itemAnimationProperties: ItemAnimation(
-          duration: Duration(milliseconds: 400),
-        ),
-        navBarDecoration: NavBarDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
+        // Using navBarBuilder to customize the decoration of Style 10
+        navBarBuilder: (navBarConfig) => Style10BottomNavBar(
+          navBarConfig: navBarConfig,
+          height: 60.h,
+          itemAnimationProperties: const ItemAnimation(
+            duration: Duration(milliseconds: 400),
           ),
-
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, -1),
-              color: AppColors.greyLight.withValues(alpha: 0.32),
-              blurRadius: 0,
-              spreadRadius: 0,
+          navBarDecoration: NavBarDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.r),
+              topRight: Radius.circular(12.r),
             ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, -1),
+                color: AppColors.greyLight.withValues(alpha: 0.32),
+                blurRadius: 0,
+                spreadRadius: 0,
+              ),
+            ],
+          ),
         ),
-      ),
 
-      onTabChanged: controller.onNavigationBarItemTapped,
+        onTabChanged: (index) {
+          context.read<MainCubit>().changeTab(index);
+        },
+      ),
     );
   }
 
@@ -53,7 +101,10 @@ class MainView extends GetView<MainController> {
     return [
       /// Home Tab Configuration
       PersistentTabConfig(
-        screen: const HomeView(),
+        screen: BlocProvider(
+          create: (_) => getIt<HomeBloc>()..add(HomeStarted()),
+          child: const HomeView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.home,
@@ -76,7 +127,10 @@ class MainView extends GetView<MainController> {
 
       /// Categories Tab Configuration
       PersistentTabConfig(
-        screen: const CategoriesView(),
+        screen: BlocProvider.value(
+          value: getIt<CategoriesCubit>(),
+          child: const CategoriesView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.category,
@@ -85,7 +139,6 @@ class MainView extends GetView<MainController> {
               BlendMode.srcIn,
             ),
           ),
-
           inactiveIcon: SvgPicture.asset(
             AppIcons.category,
             colorFilter: const ColorFilter.mode(
@@ -100,7 +153,10 @@ class MainView extends GetView<MainController> {
 
       // Bookmarks Tab Configuration
       PersistentTabConfig(
-        screen: const BookmarksView(),
+        screen: BlocProvider.value(
+          value: getIt<BookmarksCubit>(),
+          child: const BookmarksView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.bookmark,
@@ -123,7 +179,10 @@ class MainView extends GetView<MainController> {
 
       /// Profile Tab Configuration
       PersistentTabConfig(
-        screen: const ProfileView(),
+        screen: BlocProvider(
+          create: (_) => getIt<ProfileCubit>()..getUserData(),
+          child: const ProfileView(),
+        ),
         item: ItemConfig(
           icon: SvgPicture.asset(
             AppIcons.user,

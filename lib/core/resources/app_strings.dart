@@ -1,160 +1,153 @@
-import 'package:easy_localization/easy_localization.dart';
-
 class AppStrings {
   AppStrings._();
 
   // Onboarding
-  static String get onboardingTitle1 => tr('firstToKnow');
-  static String get onboardingSubtitle1 => tr('paragraph');
-  static String get onboardingTitle2 => tr('onboarding_title_2');
-  static String get onboardingSubtitle2 => tr('onboarding_subtitle_2');
-  static String get onboardingTitle3 => tr('onboarding_title_3');
-  static String get onboardingSubtitle3 => tr('onboarding_subtitle_3');
-  static String get next => tr('next');
+  static const String onboardingTitle1 = 'firstToKnow';
+  static const String onboardingSubtitle1 = 'paragraph';
+  static const String onboardingTitle2 = 'onboarding_title_2';
+  static const String onboardingSubtitle2 = 'onboarding_subtitle_2';
+  static const String onboardingTitle3 = 'onboarding_title_3';
+  static const String onboardingSubtitle3 = 'onboarding_subtitle_3';
+  static const String next = 'next';
 
   // Welcome
-  static String get nuntium => tr('nuntium');
-  static String get welcomeBody => tr('paragraph');
-  static String get getStarted => tr('getStarted');
+  static const String nuntium = 'nuntium';
+  static const String welcomeBody = 'paragraph';
+  static const String getStarted = 'getStarted';
 
   // Login
-  static String get loginTitle => tr('welcomeTitle');
-  static String get loginSubTitle => tr('loginParagraph');
-  static String get emailAdress => tr('emailAddress');
-  static String get password => tr('password');
-  static String get forgotPassword => tr('forgetPassword');
-  static String get signIn => tr('signIn');
-  static String get invalidEmail => tr('invalidEmail');
-  static String get or => tr('or');
-  static String get signInwithGoogle => tr('google');
-  static String get signInwithFacebook => tr('facebook');
-  static String get dontHaveAccount => tr('dontHaveAnAccount');
-  static String get signUp => tr('signUp');
-  static String get googleSignInFailed => tr('googleSignInFailed');
+  static const String loginTitle = 'welcomeTitle';
+  static const String loginSubTitle = 'loginParagraph';
+  static const String emailAdress = 'emailAddress';
+  static const String password = 'password';
+  static const String forgotPassword = 'forgetPassword';
+  static const String signIn = 'signIn';
+  static const String invalidEmail = 'invalidEmail';
+  static const String or = 'or';
+  static const String signInwithGoogle = 'google';
+  static const String signInwithFacebook = 'facebook';
+  static const String dontHaveAccount = 'dontHaveAnAccount';
+  static const String signUp = 'signUp';
+  static const String googleSignInFailed = 'googleSignInFailed';
 
   // SignUp
-  static String get signUpTitle => tr('signUpTitle');
-  static String get signUpSubTitle => tr('signUpParagraph');
-  static String get userName => tr('username');
-  static String get repeatPassword => tr('confirmPasswordHint');
-  static String get haveAnAccount => tr('signUpFooterMessage');
+  static const String signUpTitle = 'signUpTitle';
+  static const String signUpSubTitle = 'signUpParagraph';
+  static const String userName = 'username';
+  static const String repeatPassword = 'confirmPasswordHint';
+  static const String haveAnAccount = 'signUpFooterMessage';
 
   // Forget Password
-  static String get forgetPasswordTitle => tr('forget');
-  static String get forgetPasswordSubTitle => tr('forgetParagraph');
-  static String get remmeberPassword => tr('remember_password');
-  static String get tryAgain => tr('try_again');
-  static String get checkYourMail => tr('checkYourMail');
-  static String get emailSentDescription => tr('emailSentDescription');
-  static String get doneBackToLogin => tr('doneBackToLogin');
-  static String get resendLink => tr('resendLink');
-  static String get emailSendFailed => tr('emailSendFailed');
+  static const String forgetPasswordTitle = 'forget';
+  static const String forgetPasswordSubTitle = 'forgetParagraph';
+  static const String remmeberPassword = 'remember_password';
+  static const String tryAgain = 'try_again';
+  static const String checkYourMail = 'checkYourMail';
+  static const String emailSentDescription = 'emailSentDescription';
+  static const String doneBackToLogin = 'doneBackToLogin';
+  static const String resendLink = 'resendLink';
+  static const String emailSendFailed = 'emailSendFailed';
 
   // Create New Password && Change Password Pages
-  static String get createNewPasswordTitle => tr('createNewPasswordTitle');
-  static String get createNewPasswordSubTitle =>
-      tr('createNewPasswordSubTitle');
-  static String get newPassword => tr('newPasswordHint');
-  static String get repeateNewPassword => tr('repeatNewPassword');
-  static String get currentPassword => tr('currentPassword');
-  static String get requiredField => tr('requiredField');
-  static String get passwordsDontMatch => tr('passwordsDontMatch');
-  static String get tooShort => tr('tooShort');
+  static const String createNewPasswordTitle = 'createNewPasswordTitle';
+  static const String createNewPasswordSubTitle = 'createNewPasswordSubTitle';
+  static const String newPassword = 'newPasswordHint';
+  static const String repeateNewPassword = 'repeatNewPassword';
+  static const String currentPassword = 'currentPassword';
+  static const String requiredField = 'requiredField';
+  static const String passwordsDontMatch = 'passwordsDontMatch';
+  static const String tooShort = 'tooShort';
 
   // Verification Code
-  static String get verificatonCodeTitle => tr('verificationCodeTitle');
-  static String get verificatonCodeSubTitle => tr('verificationCodeParagraph');
-  static String get confirm => tr('confirm');
-  static String get didntReciveEmail => tr('didntRecieveEmail?');
-  static String get sendAgain => tr('sendAgain');
+  static const String verificatonCodeTitle = 'verificationCodeTitle';
+  static const String verificatonCodeSubTitle = 'verificationCodeParagraph';
+  static const String confirm = 'confirm';
+  static const String didntReciveEmail = 'didntRecieveEmail?';
+  static const String sendAgain = 'sendAgain';
 
   // Select favorite topics
-  static String get selectFavoriteTopicsTitle =>
-      tr('selectYourFavouriteTopics');
-  static String get selectFavoriteTopicsSubTitle =>
-      tr('selectYourFavouriteTopicsParagraph');
+  static const String selectFavoriteTopicsTitle = 'selectYourFavouriteTopics';
+  static const String selectFavoriteTopicsSubTitle = 'selectYourFavouriteTopicsParagraph';
   // Topics (With Emoji)
-  static String get fashionWithEmoji => 'fashionWithEmoji';
-  static String get artWithEmoji => 'artWithEmoji';
-  static String get natureWithEmoji => 'natureWithEmoji';
-  static String get gamingWithEmoji => 'gamingWithEmoji';
-  static String get politicsWithEmoji => 'politicsWithEmoji';
-  static String get historyWithEmoji => 'historyWithEmoji';
-  static String get foodWithEmoji => 'foodWithEmoji';
-  static String get animalsWithEmoji => 'animalsWithEmoji';
-  static String get lifeWithEmoji => 'lifeWithEmoji';
-  static String get sportsWithEmoji => 'sportsWithEmoji';
+  static const String fashionWithEmoji = 'fashionWithEmoji';
+  static const String artWithEmoji = 'artWithEmoji';
+  static const String natureWithEmoji = 'natureWithEmoji';
+  static const String gamingWithEmoji = 'gamingWithEmoji';
+  static const String politicsWithEmoji = 'politicsWithEmoji';
+  static const String historyWithEmoji = 'historyWithEmoji';
+  static const String foodWithEmoji = 'foodWithEmoji';
+  static const String animalsWithEmoji = 'animalsWithEmoji';
+  static const String lifeWithEmoji = 'lifeWithEmoji';
+  static const String sportsWithEmoji = 'sportsWithEmoji';
 
   // Home Page
-  static String get homePageTitle => tr('browse');
-  static String get homePageSubTitle => tr('homeParagraph');
-  static String get search => tr('search');
-  static String get recommendedForYou => tr('recommended_for_you');
-  static String get seeAll => tr('seeAll');
-  static String get noArticlesFound => tr('No articles found');
+  static const String homePageTitle = 'browse';
+  static const String homePageSubTitle = 'homeParagraph';
+  static const String search = 'search';
+  static const String recommendedForYou = 'recommended_for_you';
+  static const String seeAll = 'seeAll';
+  static const String noArticlesFound = 'No articles found';
 
   // Article Page
-  static String get viewOriginalArticle => tr('viewOriginalArticle');
-  static String get originalArticle => tr('originalArticle');
-  static String get retry => tr('retry');
+  static const String viewOriginalArticle = 'viewOriginalArticle';
+  static const String originalArticle = 'originalArticle';
+  static const String retry = 'retry';
 
-
-  static String get fashion => 'fashion';
-  static String get art => 'art';
-  static String get nature => 'nature';
-  static String get gaming => 'gaming';
-  static String get politics => 'politics';
-  static String get history => 'history';
-  static String get food => 'food';
-  static String get animals => 'animals';
-  static String get life => 'life';
-  static String get sports => 'sports';
-  static String get general => 'general';
-  static String get business => 'business';
-  static String get entertainment => 'entertainment';
-  static String get technology => 'technology';
-  static String get science => 'science';
+  static const String fashion = 'fashion';
+  static const String art = 'art';
+  static const String nature = 'nature';
+  static const String gaming = 'gaming';
+  static const String politics = 'politics';
+  static const String history = 'history';
+  static const String food = 'food';
+  static const String animals = 'animals';
+  static const String life = 'life';
+  static const String sports = 'sports';
+  static const String general = 'general';
+  static const String business = 'business';
+  static const String entertainment = 'entertainment';
+  static const String technology = 'technology';
+  static const String science = 'science';
 
   // Categories Page
-  static String get categoriesPageTitle => tr('categories');
-  static String get categoriesPageSubTitle => tr('categoriesParagraph');
+  static const String categoriesPageTitle = 'categories';
+  static const String categoriesPageSubTitle = 'categoriesParagraph';
 
   // Bookmarks Page
-  static String get bookmarksPageTitle => tr('bookmarks');
-  static String get delete => tr("Delete");
-  static String get bookmarksPageSubTitle => tr('bookmarksParagraph');
-  static String get noSavedArticles => tr('youHaventSavedAnyArticles');
+  static const String bookmarksPageTitle = 'bookmarks';
+  static const String delete = "Delete";
+  static const String bookmarksPageSubTitle = 'bookmarksParagraph';
+  static const String noSavedArticles = 'youHaventSavedAnyArticles';
 
   // Profile Page
-  static String get profile => tr('profile');
-  static String get notifications => tr('notifications');
-  static String get language => tr('language');
-  static String get changePassword => tr('changePassword');
-  static String get privacy => tr('privacy');
-  static String get termsAndConditions => tr('termsAndConditions');
-  static String get signOut => tr('signout');
-  static String get signOutFailed => tr('signoutFailed');
-  static String get logoutConfirmation => tr('logoutConfirmation');
-  static String get yes => tr('logoutConfirmationYes');
-  static String get cancel => tr('logoutConfirmationNo');
+  static const String profile = 'profile';
+  static const String notifications = 'notifications';
+  static const String language = 'language';
+  static const String changePassword = 'changePassword';
+  static const String privacy = 'privacy';
+  static const String termsAndConditions = 'termsAndConditions';
+  static const String signOut = 'signout';
+  static const String signOutFailed = 'signoutFailed';
+  static const String logoutConfirmation = 'logoutConfirmation';
+  static const String yes = 'logoutConfirmationYes';
+  static const String cancel = 'logoutConfirmationNo';
 
   // Language Page
-  static String get english => tr('english');
-  static String get arabic => tr('arabic');
+  static const String english = 'english';
+  static const String arabic = 'arabic';
 
   //Terms And Conditions Page
-  static String get termsAndConditionsBody => tr('terms_and_conditions');
+  static const String termsAndConditionsBody = 'terms_and_conditions';
 
   // Privacy And Policy
-  static String get privacyPolicyTitle => tr('privacy_policy_title');
-  static String get privacyPolicyContent => tr('privacy_policy_content');
+  static const String privacyPolicyTitle = 'privacy_policy_title';
+  static const String privacyPolicyContent = 'privacy_policy_content';
 
   // Validation Messages
-  static String get usernameLengthError => tr('usernameLengthError');
-  static String get usernameLettersError => tr('usernameLettersError');
+  static const String usernameLengthError = 'usernameLengthError';
+  static const String usernameLettersError = 'usernameLettersError';
 
   // Error Messages
-  static String get errorLoadingNews => tr('errorLoadingNews');
-  static String get error => tr("error");
-
+  static const String errorLoadingNews = 'errorLoadingNews';
+  static const String error = "error";
 }

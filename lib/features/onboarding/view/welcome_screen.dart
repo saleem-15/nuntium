@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/state_manager.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
-import 'package:new_nuntium/features/onboarding/controller/welcome_controller.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-class WelcomeView extends GetView<WelcomeController> {
+class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
 
   @override
@@ -24,28 +24,30 @@ class WelcomeView extends GetView<WelcomeController> {
           ),
           SizedBox(height: 60.h),
           Text(
-            AppStrings.nuntium,
+            context.tr(AppStrings.nuntium),
             style: context.headline1.copyWith(fontSize: 34.sp),
           ),
           SizedBox(height: 24.h),
           SizedBox(
             width: 260.w,
             child: Text(
-              AppStrings.welcomeBody,
+              context.tr(AppStrings.welcomeBody),
               textAlign: TextAlign.center,
               style: context.body1,
             ),
           ),
           Spacer(),
           Padding(
-            padding: EdgeInsets.only(
-              right: 20.w,
-              left: 20.w,
-              bottom: 35.h,
-            ),
+            padding: EdgeInsets.only(right: 20.w, left: 20.w, bottom: 35.h),
             child: PrimaryButton(
-              text: AppStrings.getStarted,
-              onPressed: controller.onButtonPressed,
+              text: context.tr(AppStrings.getStarted),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.loginView,
+                  (route) => false,
+                );
+              },
             ),
           ),
         ],

@@ -4,11 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:new_nuntium/config/dependency_injection.dart';
-import 'package:new_nuntium/config/routes.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/services/language_service.dart';
+import 'package:nuntium/config/dependency_injection.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/services/language_service.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_logger.dart';
@@ -51,9 +50,9 @@ Future<void> main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: Get.find<LanguageService>().supportedLocales,
+      supportedLocales: getIt<LanguageService>().supportedLocales,
       path: kTranslationPath,
-      fallbackLocale: Get.find<LanguageService>().fallBackLocale,
+      fallbackLocale: getIt<LanguageService>().fallBackLocale,
       child: const MyApp(),
     ),
   );
@@ -68,7 +67,7 @@ class MyApp extends StatelessWidget {
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
-      child: GetMaterialApp(
+      child: MaterialApp(
         title: 'Nuntium',
         // Translation settings
         localizationsDelegates: context.localizationDelegates,

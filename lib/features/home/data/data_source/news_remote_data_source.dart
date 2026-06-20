@@ -1,7 +1,7 @@
-import 'package:new_nuntium/core/errors/exception_handler.dart';
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/core/network/api_client.dart';
-import 'package:new_nuntium/core/network/api_constants.dart';
+import 'package:nuntium/core/errors/exception_handler.dart';
+import 'package:nuntium/core/entities/article.dart';
+import 'package:nuntium/core/network/api_client.dart';
+import 'package:nuntium/core/network/api_constants.dart';
 
 /// Contract for the remote data source
 abstract class BaseNewsRemoteDataSource {
@@ -34,7 +34,7 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
       final List<dynamic> articlesJson = response.data['articles'];
 
       return articlesJson
-          .map((json) => Article.fromMap(json, category: category!))
+          .map((json) => _articleFromMap(json, category: category ?? 'General'))
           .where((article) => article.title != '[Removed]')
           .toList();
     } on Exception catch (e) {
@@ -62,7 +62,7 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
       if (response.data != null && response.data['articles'] != null) {
         final List<dynamic> articlesJson = response.data['articles'];
         return articlesJson
-            .map((json) => Article.fromMap(json, category: 'Search Results'))
+            .map((json) => _articleFromMap(json, category: 'Search Results'))
             .where((article) => article.title != '[Removed]')
             .toList();
       } else {
@@ -71,5 +71,21 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
     } on Exception catch (e) {
       throw handleDioError(e);
     }
+  }
+
+  Article _articleFromMap(
+    Map<String, dynamic> map, {
+    String category = 'General',
+  }) {
+    return Article(
+      // بما أن NewsAPI لا تعطي ID، نستخدم الرابط كمفتاح فريد
+      id: map['url'] ?? DateTime.now().toIso8601String(),
+      title: map['title'] ?? 'No Title',
+      category: category,
+      sourceName: map['source']?['name'] ?? '',
+      imageUrl: map['urlToImage'] ?? 'https://placehold.co/600x400',
+      content: map['content'] ?? map['description'] ?? '',
+      url: map['url'] ?? '',
+    );
   }
 }

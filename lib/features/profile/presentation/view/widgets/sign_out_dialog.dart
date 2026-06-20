@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-void showSignoutDialog({required void Function()? onSignOutPressed}) {
-  Get.generalDialog(
+void showSignoutDialog(BuildContext context, {required VoidCallback onSignOutPressed}) {
+  showGeneralDialog(
+    context: context,
     barrierDismissible: true,
     barrierLabel: '',
     pageBuilder: (context, anim1, anim2) {
-      return Container();
+      return const SizedBox.shrink();
     },
     transitionBuilder: (context, anim1, anim2, child) {
       return Transform.scale(
@@ -25,7 +26,7 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
             color: AppColors.purplePrimary,
           ),
           content: Text(
-            AppStrings.logoutConfirmation,
+            context.tr(AppStrings.logoutConfirmation),
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: AppColors.blackPrimary,
@@ -39,11 +40,11 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
             left: 16.w,
           ),
           actions: [
-            // زر الإلغاء
+            // Cancel button
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                AppStrings.cancel,
+                context.tr(AppStrings.cancel),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.greyPrimary,
                   fontWeight: FontWeight.bold,
@@ -51,7 +52,7 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
               ),
             ),
             SizedBox(width: 16.w),
-            // زر التأكيد (نستخدم تصميم مشابه لزر التطبيق الأساسي لكن مصغر)
+            // Confirm button
             SizedBox(
               width: 100.w,
               height: 40.h,
@@ -62,9 +63,12 @@ void showSignoutDialog({required void Function()? onSignOutPressed}) {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
-                onPressed: onSignOutPressed, // استدعاء دالة الخروج الفعلية
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close dialog first
+                  onSignOutPressed();
+                },
                 child: Text(
-                  AppStrings.yes,
+                  context.tr(AppStrings.yes),
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

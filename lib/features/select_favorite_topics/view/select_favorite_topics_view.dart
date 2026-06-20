@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:new_nuntium/core/extensions/theme_extension.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
-import 'package:new_nuntium/features/select_favorite_topics/controller/select_favorite_topics_controller.dart';
+import 'package:nuntium/config/routes.dart';
+import 'package:nuntium/core/extensions/theme_extension.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/features/select_favorite_topics/cubit/select_favorite_topics_cubit.dart';
+import 'package:nuntium/features/select_favorite_topics/cubit/select_favorite_topics_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-class SelectFavoriteTopics
-    extends GetView<SelectFavoriteTopicsController> {
+class SelectFavoriteTopics extends StatelessWidget {
   const SelectFavoriteTopics({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<SelectFavoriteTopicsCubit>();
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -24,7 +27,7 @@ class SelectFavoriteTopics
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                AppStrings.selectFavoriteTopicsTitle,
+                context.tr(AppStrings.selectFavoriteTopicsTitle),
                 style: context.headline1,
                 textAlign: TextAlign.left,
               ),
@@ -33,7 +36,7 @@ class SelectFavoriteTopics
             SizedBox(height: 8.h),
 
             Text(
-              AppStrings.selectFavoriteTopicsSubTitle,
+              context.tr(AppStrings.selectFavoriteTopicsSubTitle),
               style: context.body1,
             ),
 
@@ -41,7 +44,7 @@ class SelectFavoriteTopics
 
             GridView.builder(
               shrinkWrap: true,
-              itemCount: controller.topics.length,
+              itemCount: cubit.topics.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 mainAxisSpacing: 16.w, // مسافة عمودية بين كل عنصر
@@ -51,16 +54,13 @@ class SelectFavoriteTopics
               ),
 
               itemBuilder: (context, index) {
-                final topic = controller.topics[index];
+                final topic = cubit.topics[index];
 
                 return GestureDetector(
-                  onTap: () => controller.toggleTopic(topic),
-                  child: GetBuilder<SelectFavoriteTopicsController>(
-                    assignId: true,
-                    id: topic,
-                    builder: (controller) {
-                      final isSelected = controller.selectedTopics
-                          .contains(topic);
+                  onTap: () => cubit.toggleTopic(topic),
+                  child: BlocBuilder<SelectFavoriteTopicsCubit, SelectFavoriteTopicsState>(
+                    builder: (context, state) {
+                      final isSelected = state.selectedTopics.contains(topic);
                       return AnimatedContainer(
                         duration: const Duration(milliseconds: 300),
                         decoration: BoxDecoration(
@@ -71,8 +71,8 @@ class SelectFavoriteTopics
                         ),
                         alignment: Alignment.center,
                         child: Text(
-                          topic,
-                          style: context.body1.copyWith(
+                            context.tr(topic),
+                            style: context.body1.copyWith(
                             color: isSelected
                                 ? Colors.white
                                 : AppColors.greyDarker,
@@ -89,8 +89,8 @@ class SelectFavoriteTopics
             SizedBox(height: 16.h),
 
             PrimaryButton(
-              text: AppStrings.next,
-              onPressed: controller.onNextPressed,
+              text: context.tr(AppStrings.next),
+              onPressed: () => Navigator.pushReplacementNamed(context, Routes.homeView),
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nuntium/core/utils/app_logger.dart';
 
 import '../../../../core/errors/exceptions.dart';
 
@@ -10,10 +11,9 @@ abstract class AuthRemoteDataSource {
   Future<User> signInWithGoogle();
   Future<void> signOut();
   Future<void> resetPassword(String email);
-  Future<void> changePassword(
-    String currentPassword,
-    String newPassword,
-  ); // أضف هذا السطر
+  Future<void> changePassword(String currentPassword, String newPassword);
+  Future<void> sendEmailVerification();
+  Future<bool> checkEmailVerified();
   Stream<User?> get userStream;
 }
 
@@ -78,6 +78,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       return userCredential.user!;
     } on GoogleSignInException catch (e) {
+      AppLogger.e("Google Sign In Error: ${e.description}");
       throw AuthException(
         message: e.description ?? "Failed to login with google",
         code: e.code.name,
@@ -98,6 +99,37 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Stream<User?> get userStream => _firebaseAuth.authStateChanges();
+
+  @override
+  Future<void> sendEmailVerification() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) {
+        throw AuthException(message: 'No user logged in', code: 'user-not-found');
+      }
+      await user.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(
+        message: e.message ?? 'Failed to send verification email',
+        code: e.code,
+      );
+    } on Exception catch (e) {
+      throw ServerException('$e');
+    }
+  }
+
+  @override
+  Future<bool> checkEmailVerified() async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user == null) return false;
+      await user.reload();
+      return user.emailVerified;
+    } on Exception {
+      // Silently ignore reload errors (e.g. temporary network offline)
+      return false;
+    }
+  }
 
   @override
   Future<void> resetPassword(String email) async {
@@ -139,7 +171,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (e.code == 'wrong-password') {
         throw AuthException(message: "Current password is wrong", code: e.code);
       }
-      
+
       throw AuthException(
         message: e.message ?? "Failed to update password",
         code: e.code,

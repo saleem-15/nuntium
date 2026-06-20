@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
 
 class PasswordIcon extends StatelessWidget {
   const PasswordIcon({

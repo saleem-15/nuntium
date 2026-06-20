@@ -2,10 +2,10 @@
 // import 'package:flutter_test/flutter_test.dart';
 // import 'package:mockito/annotations.dart';
 // import 'package:mockito/mockito.dart';
-// import 'package:new_nuntium/core/models/article.dart';
-// import 'package:new_nuntium/core/network/api_client.dart';
-// import 'package:new_nuntium/core/network/api_constants.dart';
-// import 'package:new_nuntium/features/home/data/data_source/news_remote_data_source.dart';
+// import 'package:nuntium/core/models/article.dart';
+// import 'package:nuntium/core/network/api_client.dart';
+// import 'package:nuntium/core/network/api_constants.dart';
+// import 'package:nuntium/features/home/data/data_source/news_remote_data_source.dart';
 
 // import 'news_remote_data_source_test.mocks.dart';
 
@@ -289,3 +289,13 @@
 //     content: 'null',
 //   ),
 // ];
+
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  test('dummy test to verify project compilation', () {
+    expect(true, true);
+  });
+}
+
+

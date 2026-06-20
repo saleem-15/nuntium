@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:new_nuntium/core/errors/error_handler.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
-import 'package:new_nuntium/core/network/network_info.dart';
+import 'package:nuntium/core/errors/error_handler.dart';
+import 'package:nuntium/core/errors/failures.dart';
+import 'package:nuntium/core/network/network_info.dart';
 
 import '../../domain/entities/user_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -140,6 +140,29 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _remoteDataSource.changePassword(currentPassword, newPassword);
       return const Right(null);
+    } catch (e, s) {
+      return Left(ErrorHandler.handle(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> sendEmailVerification() async {
+    if (!await _networkInfo.isConnected) {
+      return Left(OfflineFailure());
+    }
+    try {
+      await _remoteDataSource.sendEmailVerification();
+      return const Right(null);
+    } catch (e, s) {
+      return Left(ErrorHandler.handle(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkEmailVerified() async {
+    try {
+      final isVerified = await _remoteDataSource.checkEmailVerified();
+      return Right(isVerified);
     } catch (e, s) {
       return Left(ErrorHandler.handle(e, s));
     }

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:new_nuntium/core/errors/failures.dart';
-import 'package:new_nuntium/features/categories/domain/repository/cateogries_repository.dart';
+import 'package:nuntium/core/errors/failures.dart';
+import 'package:nuntium/features/categories/domain/repository/cateogries_repository.dart';
 
 import '../entities/category_entity.dart';
 
@@ -9,7 +9,7 @@ class GetCategoriesUseCase {
 
   GetCategoriesUseCase(this.categoriesRepository);
 
-  Future<Either<Failure, List<CategoryEntity>>> call() async {
-    return categoriesRepository.getCategories();
+  Future<Either<Failure, List<CategoryEntity>>> call({bool isForHome = false}) async {
+    return categoriesRepository.getCategories(isForHome: isForHome);
   }
 }

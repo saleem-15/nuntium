@@ -71,8 +71,8 @@ This project features a robust, automated continuous integration pipeline using 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/saleem-15/new_nuntium.git
-   cd new_nuntium
+   git clone https://github.com/saleem-15/nuntium.git
+   cd nuntium
    ```
 
 2. **Install Dependencies:**

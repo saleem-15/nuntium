@@ -1,4 +1,4 @@
-import 'package:new_nuntium/core/constants/constanst.dart';
+import 'package:nuntium/core/constants/constanst.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSharedPrefs {

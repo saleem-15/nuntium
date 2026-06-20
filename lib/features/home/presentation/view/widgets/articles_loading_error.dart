@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:new_nuntium/core/resources/app_assets.dart';
-import 'package:new_nuntium/core/resources/app_strings.dart';
-import 'package:new_nuntium/core/theme/app_colors.dart';
-import 'package:new_nuntium/core/theme/app_fonts.dart';
-import 'package:new_nuntium/core/widgets/primary_button.dart';
+import 'package:nuntium/core/resources/app_assets.dart';
+import 'package:nuntium/core/resources/app_strings.dart';
+import 'package:nuntium/core/theme/app_colors.dart';
+import 'package:nuntium/core/theme/app_fonts.dart';
+import 'package:nuntium/core/widgets/primary_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class PageLoadingError extends StatelessWidget {
   final VoidCallback onRefreshPressed;
+  final String errorMessage;
 
-  const PageLoadingError({super.key, required this.onRefreshPressed});
+  const PageLoadingError({
+    super.key,
+    required this.onRefreshPressed,
+    required this.errorMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class PageLoadingError extends StatelessWidget {
           Image.asset(AppAssets.error, width: 216.w),
           SizedBox(height: 20.h),
           Text(
-            AppStrings.errorLoadingNews,
+            errorMessage,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: AppFonts.bold,
@@ -33,7 +39,7 @@ class PageLoadingError extends StatelessWidget {
             width: 160.w,
             child: PrimaryButton(
               onPressed: onRefreshPressed,
-              text: AppStrings.tryAgain,
+              text: context.tr(AppStrings.tryAgain),
             ),
           ),
         ],

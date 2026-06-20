@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:new_nuntium/core/models/article.dart';
-import 'package:new_nuntium/core/services/storage_service.dart';
-import 'package:new_nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
-import 'package:new_nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
+import 'package:nuntium/core/entities/article.dart';
+import 'package:nuntium/core/models/article_hive_model.dart';
+import 'package:nuntium/core/services/storage_service.dart';
+import 'package:nuntium/features/bookmarks/domain/entity/bookmark_event.dart';
+import 'package:nuntium/features/bookmarks/domain/repository/bookmark_repository.dart';
 
 class BookmarkRepositoryImpl implements BookmarkRepository {
   BookmarkRepositoryImpl(this._storageService);
@@ -16,7 +17,7 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
 
   @override
   Future<void> saveBookmark(Article article) async {
-    await _storageService.saveBookmark(article);
+    await _storageService.saveBookmark(ArticleHiveModel.fromEntity(article));
 
     // Emit ADDED event with the article
     _controller.add(
@@ -41,6 +42,9 @@ class BookmarkRepositoryImpl implements BookmarkRepository {
 
   @override
   List<Article> getSavedArticles() {
-    return _storageService.getAllBookmarks();
+    return _storageService
+        .getAllBookmarks()
+        .map((article) => article.toEntity())
+        .toList();
   }
 }
