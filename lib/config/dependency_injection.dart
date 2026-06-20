@@ -13,7 +13,6 @@ import 'package:nuntium/core/services/language_service.dart';
 import 'package:nuntium/core/services/shared_prefrences.dart';
 import 'package:nuntium/core/services/storage_service.dart';
 
-import 'package:nuntium/features/article_details/presentation/controller/original_article_controller.dart';
 import 'package:nuntium/features/auth/data/data_sources/auth_remote_data_source.dart';
 import 'package:nuntium/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:nuntium/features/auth/domain/repositories/auth_repository.dart';
@@ -409,17 +408,4 @@ void initContentController() {
 void disposeContentControllerPage() {
   Get.delete<AppContentController>();
 }
-
-
-void initOriginalArticle(String articleUrl) {
-  if (Get.isRegistered<OriginalArticleController>()) {
-    Get.delete<OriginalArticleController>();
-  }
-  Get.put(OriginalArticleController(articleUrl));
-}
-
-void disposeOriginalArticlePage() {
-  Get.delete<OriginalArticleController>();
-}
-
 

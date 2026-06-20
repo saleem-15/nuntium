@@ -166,15 +166,9 @@ class RouteGenerator {
         return unDefinedRoute(settings.name);
 
       case Routes.originalArticleView:
-        // 1. Pick the arguments that was sent via Get.toNamed
-        if (settings.arguments is String) {
-          final articleUrl = settings.arguments as String;
-
-          // 2. Inject the arguments in dependency injection method
-          initOriginalArticle(articleUrl);
-        }
+        final articleUrl = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => const OriginalArticleWebView(),
+          builder: (_) => OriginalArticleWebView(url: articleUrl),
         );
 
       case Routes.bookmarksView:
