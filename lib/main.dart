@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
-      child: GetMaterialApp(
+      child: MaterialApp(
         title: 'Nuntium',
         // Translation settings
         localizationsDelegates: context.localizationDelegates,

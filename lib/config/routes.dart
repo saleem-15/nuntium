@@ -190,7 +190,6 @@ class RouteGenerator {
           ),
         );
       case Routes.languageView:
-        initLanguage();
         return MaterialPageRoute(builder: (_) => const LanguageView());
 
       case Routes.changePasswordView:

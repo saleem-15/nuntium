@@ -42,7 +42,7 @@ import 'package:nuntium/features/home/data/repository/news_repository_impl.dart'
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
-import 'package:nuntium/features/language/presentation/controller/language_controller.dart';
+import 'package:nuntium/features/language/presentation/cubit/language_cubit.dart';
 import 'package:nuntium/features/main/cubit/main_cubit.dart';
 import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/features/profile/data/repository/profile_repository_impl.dart';
@@ -93,7 +93,13 @@ Future<void> initApp() async {
   await dotenv.load(fileName: ".env");
   await EasyLocalization.ensureInitialized();
 
-  Get.put(LanguageService(), permanent: true);
+  final languageService = LanguageService();
+  getIt.registerSingleton<LanguageService>(languageService);
+  Get.put(languageService, permanent: true);
+
+  getIt.registerFactory<LanguageCubit>(
+    () => LanguageCubit(getIt<LanguageService>()),
+  );
 
   // local storage dependency
   final storageService = StorageService();
@@ -383,13 +389,7 @@ void disposeForgetPassword() {
   // ForgetPasswordCubit is a factory and disposed by BlocProvider, nothing to unregister here.
 }
 
-void initLanguage() {
-  Get.put(LanguageController());
-}
-
-void disposeLanguagePage() {
-  Get.delete<LanguageController>();
-}
+// Language feature lifecycle is managed via BlocProvider inside LanguageView, no setup needed.
 
 void initChangePassword() {
   // ChangePasswordUseCase is registered in _initAuth() — no action needed.
