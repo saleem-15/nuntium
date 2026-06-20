@@ -87,7 +87,7 @@ class _LoginViewState extends State<LoginView> {
             );
           }
         } else if (state is LoginError) {
-          showErrorSnackBar(state.message);
+          showErrorSnackBar(context, state.message);
         }
       },
       child: ScaffoldWithHeader(

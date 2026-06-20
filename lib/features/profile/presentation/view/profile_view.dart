@@ -52,7 +52,7 @@ class ProfileView extends StatelessWidget {
             }
           });
         } else if (state is ProfileSignOutError) {
-          showErrorSnackBar(state.message);
+          showErrorSnackBar(context, state.message);
         }
       },
       child: SafeArea(

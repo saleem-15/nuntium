@@ -89,7 +89,7 @@ class _SignUpViewState extends State<SignUpView> {
             (route) => false,
           );
         } else if (state is SignUpError) {
-          showErrorSnackBar(state.message);
+          showErrorSnackBar(context, state.message);
         }
       },
       child: ScaffoldWithHeader(

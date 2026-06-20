@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+
 import 'package:nuntium/core/resources/app_assets.dart';
 
 /// A reusable back button widget that supports RTL mirroring and custom actions.
@@ -14,7 +14,7 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed ?? () => Get.back(),
+      onTap: onPressed ?? () => Navigator.maybePop(context),
       child: Container(
         // Transparent background increases the touchable area for better UX
         color: Colors.transparent,

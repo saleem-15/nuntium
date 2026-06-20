@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+
 
 import '../resources/app_strings.dart'; // لاستخدام النصوص المترجمة
 
@@ -9,7 +9,8 @@ class AppValidator {
     if (value == null || value.isEmpty) {
       return AppStrings.requiredField;
     }
-    if (!GetUtils.isEmail(value)) {
+    final emailRegex = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    if (!emailRegex.hasMatch(value)) {
       return AppStrings.invalidEmail;
     }
     return null;
