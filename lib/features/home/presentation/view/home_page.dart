@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+
 import 'package:nuntium/config/routes.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
@@ -206,6 +206,9 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _onArticlePressed(Article article) {
-    Get.toNamed(Routes.articleView, arguments: article);
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).pushNamed(Routes.articleView, arguments: article);
   }
 }
