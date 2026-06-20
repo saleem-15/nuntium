@@ -7,13 +7,12 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:get/route_manager.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/network/api_client.dart';
 import 'package:nuntium/core/network/network_info.dart';
 import 'package:nuntium/core/services/language_service.dart';
 import 'package:nuntium/core/services/shared_prefrences.dart';
 import 'package:nuntium/core/services/storage_service.dart';
-import 'package:nuntium/features/article_details/presentation/controller/article_controller.dart';
+
 import 'package:nuntium/features/article_details/presentation/controller/original_article_controller.dart';
 import 'package:nuntium/features/auth/data/data_sources/auth_remote_data_source.dart';
 import 'package:nuntium/features/auth/data/repositories/auth_repository_impl.dart';
@@ -411,16 +410,6 @@ void disposeContentControllerPage() {
   Get.delete<AppContentController>();
 }
 
-void initArticle(Article article) {
-  if (Get.isRegistered<ArticleController>()) {
-    Get.delete<ArticleController>();
-  }
-  Get.put(ArticleController(article: article));
-}
-
-void disposeArticlePage() {
-  Get.delete<ArticleController>();
-}
 
 void initOriginalArticle(String articleUrl) {
   if (Get.isRegistered<OriginalArticleController>()) {

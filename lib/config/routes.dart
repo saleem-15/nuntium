@@ -5,6 +5,9 @@ import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/core/entities/article.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
 import 'package:nuntium/features/article_details/presentation/view/article_view.dart';
+import 'package:nuntium/features/article_details/presentation/cubit/article_cubit.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
+import 'package:nuntium/features/bookmarks/domain/use_cases/watch_bookmarks_changes_use_case.dart';
 import 'package:nuntium/features/auth/presentation/view/change_password_view.dart';
 import 'package:nuntium/features/auth/presentation/view/forget_password_view.dart';
 import 'package:nuntium/features/auth/presentation/cubit/login_cubit.dart';
@@ -147,14 +150,20 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const HomeView());
 
       case Routes.articleView:
-        // 1. Pick the arguments that was sent via Get.toNamed
         if (settings.arguments is Article) {
           final article = settings.arguments as Article;
-
-          // 2. Inject the arguments in dependency injection method
-          initArticle(article);
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (_) => ArticleCubit(
+                initialArticle: article,
+                toggleBookmarkUseCase: getIt<ToggleBookmarkUseCase>(),
+                watchBookmarksUseCase: getIt<WatchBookmarksChangesUseCase>(),
+              ),
+              child: const ArticleView(),
+            ),
+          );
         }
-        return MaterialPageRoute(builder: (_) => const ArticleView());
+        return unDefinedRoute(settings.name);
 
       case Routes.originalArticleView:
         // 1. Pick the arguments that was sent via Get.toNamed
