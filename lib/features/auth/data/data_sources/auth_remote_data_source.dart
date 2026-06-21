@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nuntium/core/utils/app_logger.dart';
 
-import '../../../../core/errors/exceptions.dart';
+import '/core/env/env.dart';
+import '/core/errors/exceptions.dart';
+import '/core/utils/app_logger.dart';
 
 abstract class AuthRemoteDataSource {
   Future<User> signInWithEmail(String email, String password);
@@ -61,9 +61,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<User> signInWithGoogle() async {
     try {
-      await _googleSignIn.initialize(
-        serverClientId: dotenv.env['SERVER_CLIENT_ID'],
-      );
+      await _googleSignIn.initialize(serverClientId: Env.googleServerClientId);
 
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
@@ -105,7 +103,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final user = _firebaseAuth.currentUser;
       if (user == null) {
-        throw AuthException(message: 'No user logged in', code: 'user-not-found');
+        throw AuthException(
+          message: 'No user logged in',
+          code: 'user-not-found',
+        );
       }
       await user.sendEmailVerification();
     } on FirebaseAuthException catch (e) {

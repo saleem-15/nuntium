@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nuntium/core/network/api_client.dart';
@@ -87,7 +87,7 @@ Future<void> initApp() async {
   await Firebase.initializeApp();
 
   // Load '.env' file which holds the Api Key
-  await dotenv.load(fileName: ".env");
+
   await EasyLocalization.ensureInitialized();
 
   getIt.registerSingleton<LanguageService>(LanguageService());

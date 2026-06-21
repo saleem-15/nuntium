@@ -1,7 +1,7 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../env/env.dart';
 
 class Constants {
-  static String googleServerClientId = dotenv.env['SERVER_CLIENT_ID'] ?? "";
+  static String googleServerClientId = Env.googleServerClientId;
   static const int splashDuration = 3;
   static const resendEmailTimeInSeconds = 30;
 
