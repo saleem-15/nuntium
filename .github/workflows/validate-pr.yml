@@ -34,9 +34,11 @@ jobs:
         run: flutter pub get
 
       - name: Inject Secrets (Mock Fallback)
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
-          if [ -n "${{ secrets.ENV_FILE }}" ]; then
-            echo "${{ secrets.ENV_FILE }}" > .env
+          if [ -n "$ENV_FILE" ]; then
+            echo "$ENV_FILE" > .env
           else
             echo "API_KEY=dummy_api_key_for_pr_validation" > .env
             echo "GOOGLE_SERVER_CLIENT_ID=dummy_google_client_id_for_pr_validation" > .env

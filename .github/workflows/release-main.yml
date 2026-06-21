@@ -46,8 +46,10 @@ jobs:
         run: flutter pub get
 
       - name: Inject Secrets
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
+          echo "$ENV_FILE" > .env
           echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
         shell: bash
 
@@ -72,18 +74,15 @@ jobs:
         run: |
           flutter build apk --release --target-platform android-arm64 --obfuscate --split-debug-info=build/app/outputs/symbols
 
-      - name: Inject Service Account Key
-        run: |
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" > service-account.json
-        shell: bash
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
 
       - name: Upload Crashlytics Symbols
         run: |
           npm install -g firebase-tools
           firebase crashlytics:symbols:upload --app="${{ vars.FIREBASE_APP_ID_ANDROID }}" build/app/outputs/symbols
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: service-account.json
-
       - name: Determine Release Tag
         id: determine_tag
         run: |
