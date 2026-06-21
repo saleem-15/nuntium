@@ -46,20 +46,36 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            val keystoreFile = file("upload-keystore.jks")
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         getByName("release") {
-        // في الكوتلن نستخدم = مع isMinifyEnabled وليس minifyEnabled
-        isMinifyEnabled = true
-        isShrinkResources = true
-        
-        // الأقواس ضرورية في Kotlin
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
-        
-        // التأكد من طريقة استدعاء التوقيع
-        signingConfig = signingConfigs.getByName("debug")
+            // في الكوتلن نستخدم = مع isMinifyEnabled وليس minifyEnabled
+            isMinifyEnabled = true
+            isShrinkResources = true
+            
+            // الأقواس ضرورية في Kotlin
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            
+            // التأكد من طريقة استدعاء التوقيع
+            signingConfig = if (file("upload-keystore.jks").exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
 
         
