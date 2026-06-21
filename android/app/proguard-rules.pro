@@ -1,10 +1,6 @@
-# Flutter Wrapper
--keep class io.flutter.app.** { *; }
--keep class io.flutter.plugin.** { *; }
--keep class io.flutter.util.** { *; }
--keep class io.flutter.view.** { *; }
--keep class io.flutter.** { *; }
--keep class io.flutter.plugins.** { *; }
+# We do not explicitly keep io.flutter.** anymore because Flutter's internal deferred component 
+# classes extend Play Core classes. Keeping them forces R8 to crash looking for missing superclasses!
+# Flutter handles its own keep rules natively.
 
 # Google Sign-In / Play Services
 -keep class com.google.android.gms.** { *; }
