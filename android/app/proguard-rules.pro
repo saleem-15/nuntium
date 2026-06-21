@@ -13,4 +13,3 @@
 # Flutter Deferred Components / Play Core (Stops R8 from failing if Play Core is missing)
 -dontwarn com.google.android.play.core.**
 -dontwarn io.flutter.embedding.engine.deferredcomponents.**
-
