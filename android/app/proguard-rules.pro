@@ -13,3 +13,8 @@
 # Firebase
 -keep class com.google.firebase.** { *; }
 -dontwarn com.google.firebase.**
+
+# Flutter Deferred Components / Play Core (Stops R8 from failing if Play Core is missing)
+-dontwarn com.google.android.play.core.**
+-dontwarn io.flutter.embedding.engine.deferredcomponents.**
+
