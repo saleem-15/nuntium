@@ -1,0 +1,121 @@
+name: "Production Release"
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release_main:
+    name: Build & Release Prod APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set Up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'oracle'
+          java-version: '17'
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.7'
+          channel: 'stable'
+          cache: true
+
+      - name: Cache Gradle
+        uses: actions/cache@v5
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: v1-${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            v1-${{ runner.os }}-gradle-
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Inject Secrets
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          echo "$ENV_FILE" > .env
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
+          
+          # Inject Release Keystore if available
+          if [ -n "${{ secrets.UPLOAD_KEYSTORE_BASE64 }}" ]; then
+            echo "${{ secrets.UPLOAD_KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          fi
+        shell: bash
+
+      - name: Cache Build Runner
+        uses: actions/cache@v5
+        with:
+          path: .dart_tool/build
+          key: build-runner-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}-${{ github.sha }}
+          restore-keys: |
+            build-runner-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}-
+            build-runner-${{ runner.os }}-
+
+      - name: Generate Code (build_runner)
+        run: dart run build_runner build -d
+
+      - name: Run Quality Checks
+        run: |
+          flutter analyze
+          flutter test
+
+      - name: Build Obfuscated APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          flutter build apk --release --target-platform android-arm64 --obfuscate --split-debug-info=build/app/outputs/symbols
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+
+      - name: Upload Crashlytics Symbols
+        run: |
+          npm install -g firebase-tools
+          firebase crashlytics:symbols:upload --app="${{ vars.FIREBASE_APP_ID_ANDROID }}" build/app/outputs/symbols
+      - name: Determine Release Tag
+        id: determine_tag
+        run: |
+          version=$(grep '^version: ' pubspec.yaml | cut -d ' ' -f 2 | tr -d '\r')
+          tag_name="v$version"
+          if git rev-parse "$tag_name" >/dev/null 2>&1; then
+            version="$version-build-${{ github.run_number }}"
+            tag_name="v$version"
+          fi
+          echo "tag=$tag_name" >> $GITHUB_OUTPUT
+          echo "version=$version" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/flutter-apk/app-release.apk"
+          tag: ${{ steps.determine_tag.outputs.tag }}
+          name: "Release ${{ steps.determine_tag.outputs.version }}"
+          body: |
+            ## Nuntium Automated Build 🚀
+            - **Target:** Modern 64-bit devices (arm64-v8a)
+            - **Build Number:** ${{ github.run_number }}
+            - **Commit Message:** ${{ github.event.head_commit.message }}
+            - **Status:** Unsigned (For testing purposes)
+          token: ${{ secrets.GITHUB_TOKEN }}
+

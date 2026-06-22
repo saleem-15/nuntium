@@ -1,0 +1,71 @@
+name: "Validate Codebase"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  validate:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set Up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'oracle'
+          java-version: '17'
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.7'
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Inject Secrets (Mock Fallback)
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          if [ -n "$ENV_FILE" ]; then
+            echo "$ENV_FILE" > .env
+          else
+            echo "API_KEY=dummy_api_key_for_pr_validation" > .env
+            echo "GOOGLE_SERVER_CLIENT_ID=dummy_google_client_id_for_pr_validation" > .env
+          fi
+          
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
+          else
+            mkdir -p android/app
+            echo '{}' > android/app/google-services.json
+          fi
+        shell: bash
+
+      - name: Cache Build Runner
+        uses: actions/cache@v5
+        with:
+          path: .dart_tool/build
+          key: build-runner-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}-${{ github.sha }}
+          restore-keys: |
+            build-runner-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}-
+            build-runner-${{ runner.os }}-
+
+      - name: Generate Code (build_runner)
+        run: dart run build_runner build -d
+
+      - name: Flutter Analyze
+        run: flutter analyze
+
+      - name: Run Tests
+        run: flutter test
