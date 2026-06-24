@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:nuntium/core/constants/constanst.dart';
-import 'package:nuntium/core/models/language.dart';
+import 'package:nuntium/core/localization/language.dart';
 
 class LanguageConfig {
   const LanguageConfig._();

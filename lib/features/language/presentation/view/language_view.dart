@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:nuntium/core/resources/app_strings.dart';
-import 'package:nuntium/core/services/language_config.dart';
+import 'package:nuntium/core/localization/language_config.dart';
 import 'package:nuntium/core/widgets/app_back_button.dart';
 import 'package:nuntium/features/language/presentation/view/language_list_tile.dart';
 
