@@ -10,11 +10,12 @@ class ArticlesLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       // استخدام درجات الرمادي القياسية للـ Shimmer لضمان ظهور التأثير بوضوح
-      baseColor: Colors.grey[300]!, 
+      baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Column(
         children: List.generate(
           3,
+          growable: false,
           (index) => Container(
             width: double.infinity, // لملء العرض المتاح بناءً على الـ Margin
             height: 272.h,
@@ -22,7 +23,8 @@ class ArticlesLoadingIndicator extends StatelessWidget {
               horizontal: 20.w,
             ).copyWith(bottom: 24.h),
             decoration: BoxDecoration(
-              color: AppColors.white, // اللون هنا dummy لكي يعمل الـ Shimmer عليه
+              color:
+                  AppColors.white, // اللون هنا dummy لكي يعمل الـ Shimmer عليه
               borderRadius: BorderRadius.circular(16.r),
             ),
           ),
