@@ -151,14 +151,16 @@ class _HomeViewState extends State<HomeView> {
 
     // First Page Loading
     if (status == HomeStatus.loading && state.articles.isEmpty) {
-      return SliverFillRemaining(child: const ArticlesLoadingIndicator());
+      return SliverToBoxAdapter(child: const ArticlesLoadingIndicator());
+      // return SliverFillRemaining(child: const ArticlesLoadingIndicator());
     }
 
     // First Page Error
     if (status == HomeStatus.error && state.articles.isEmpty) {
       return SliverFillRemaining(
         child: PageLoadingError(
-          errorMessage: state.errorMessage ?? context.tr(AppStrings.errorLoadingNews),
+          errorMessage:
+              state.errorMessage ?? context.tr(AppStrings.errorLoadingNews),
           onRefreshPressed: () {
             context.read<HomeBloc>().add(HomeRefreshRequested());
           },
