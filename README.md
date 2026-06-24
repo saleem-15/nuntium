@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Flutter-3.38-02569B?logo=flutter" alt="Flutter" />
-  <img src="https://img.shields.io/badge/State-BLoC_%2F_Cubit-01579B?logo=data:image/svg+xml;base64," alt="BLoC" />
+  <img src="https://img.shields.io/badge/State-BLoC_%2F_Cubit-01579B" alt="BLoC" />
   <img src="https://img.shields.io/badge/Architecture-Clean-6C3483" alt="Architecture" />
   <img src="https://img.shields.io/badge/Error_Handling-Functional_(Dartz)-27AE60" alt="Dartz" />
   <img src="https://img.shields.io/badge/Firebase-Auth_%7C_Crashlytics-FFCA28?logo=firebase" alt="Firebase" />
