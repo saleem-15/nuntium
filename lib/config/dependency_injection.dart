@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:nuntium/core/network/api_client.dart';
 import 'package:nuntium/core/network/network_info.dart';
-import 'package:nuntium/core/services/language_service.dart';
 import 'package:nuntium/core/services/shared_prefrences.dart';
 import 'package:nuntium/core/services/storage_service.dart';
 
@@ -40,7 +39,6 @@ import 'package:nuntium/features/home/data/repository/news_repository_impl.dart'
 import 'package:nuntium/features/home/domain/repository/news_repository.dart';
 import 'package:nuntium/features/home/domain/use_cases/fetch_news_use_case.dart';
 import 'package:nuntium/features/bookmarks/domain/use_cases/toggle_bookmark_use_case.dart';
-import 'package:nuntium/features/language/presentation/cubit/language_cubit.dart';
 import 'package:nuntium/features/main/cubit/main_cubit.dart';
 import 'package:nuntium/features/onboarding/cubit/onboarding_cubit.dart';
 import 'package:nuntium/features/profile/data/repository/profile_repository_impl.dart';
@@ -89,12 +87,6 @@ Future<void> initApp() async {
   // Load '.env' file which holds the Api Key
 
   await EasyLocalization.ensureInitialized();
-
-  getIt.registerSingleton<LanguageService>(LanguageService());
-
-  getIt.registerFactory<LanguageCubit>(
-    () => LanguageCubit(getIt<LanguageService>()),
-  );
 
   // local storage dependency
   final storageService = StorageService();

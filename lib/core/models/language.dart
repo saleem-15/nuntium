@@ -1,8 +1,8 @@
 class Language {
-  String langCode;
-  String name;
+  final String langCode;
+  final String name;
 
-  Language({
+  const Language({
     required this.langCode,
     required this.name,
   });

@@ -5,7 +5,7 @@ import 'package:nuntium/core/resources/app_assets.dart';
 import 'package:nuntium/core/extensions/theme_extension.dart';
 import 'package:nuntium/core/theme/app_colors.dart';
 import 'package:nuntium/core/theme/app_fonts.dart';
-import 'package:nuntium/features/language/model/language.dart';
+import 'package:nuntium/core/models/language.dart';
 
 class LanguageListTile extends StatelessWidget {
   const LanguageListTile({
