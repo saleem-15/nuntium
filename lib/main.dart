@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nuntium/config/dependency_injection.dart';
 import 'package:nuntium/config/routes.dart';
 import 'package:nuntium/core/resources/app_assets.dart';
-import 'package:nuntium/core/services/language_service.dart';
+import 'package:nuntium/core/services/language_config.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/utils/app_logger.dart';
@@ -15,7 +15,7 @@ import 'core/utils/app_logger.dart';
 Future<void> main() async {
   await initApp();
 
-  // Limit app usage to Portrait mode 
+  // Limit app usage to Portrait mode
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -50,9 +50,9 @@ Future<void> main() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: getIt<LanguageService>().supportedLocales,
+      supportedLocales: LanguageConfig.supportedLocales,
       path: kTranslationPath,
-      fallbackLocale: getIt<LanguageService>().fallBackLocale,
+      fallbackLocale: LanguageConfig.fallBackLocale,
       child: const MyApp(),
     ),
   );
@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
         initialRoute: Routes.splashView,
         builder: (context, child) {
           return Directionality(
-            textDirection: LanguageService.getTextDirection(context),
+            textDirection: LanguageConfig.getTextDirection(context),
             child: child!,
           );
         },
